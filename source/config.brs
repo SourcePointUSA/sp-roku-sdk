@@ -1,0 +1,5 @@
+function LoadConfig()
+        m.site_id = "{site_id}"
+        m.privacy_manager_id = "{privacy_manager_id}"
+        m.dialog_background_image = "{dialog_background_image}"
+end function

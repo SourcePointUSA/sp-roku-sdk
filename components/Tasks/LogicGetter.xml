@@ -1,0 +1,46 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "LogicGetter" extends = "Task" >
+
+  <interface>
+    <field id = "siteId" type = "string" />
+    <field id = "consentData" type = "string" />
+  </interface>
+
+  <script type = "text/brightscript" >
+
+    <![CDATA[
+        sub init()
+            m.top.functionName = "getLogic"
+        end sub
+
+        function getAuthData() as dynamic
+          sec = CreateObject("roRegistrySection", "Authentication")
+          if sec.exists("loggedInUser")
+            ' check for invalid here
+            return sec.read("resolvedConsentUUID")
+          else 
+            urlTransferObj = createObject("roUrlTransfer")
+            di = CreateObject("roDeviceInfo")
+            consentUUID = urlTransferObj.escape(di.GetRIDA())
+            return consentUUID
+          end if
+        end function
+
+        sub getLogic()
+            logic = createObject("roSGNode", "ContentNode")
+            urlTransferObj = createObject("roUrlTransfer")
+            urlTransferObj.SetCertificatesFile("common:/certs/ca-bundle.crt")
+            urlTransferObj.AddHeader("X-Roku-Reserved-Dev-Id", "")
+            urlTransferObj.InitClientCertificates()
+            consentUUID = getAuthData()
+            url = "https://sourcepoint.mgr.consensu.org/consent/v2/" + m.top.siteId + "/logic?consentUUID=" + consentUUID + "&euconsent=%5BEUCONSENT%5D&hasConsentData&consentedToAny&rejectedAny&consentedToAll"
+            urlTransferObj.setUrl(url)
+            logic = urlTransferObj.GetToString()
+            m.top.consentData = logic
+        end sub
+    ]]>
+
+  </script>
+
+</component>

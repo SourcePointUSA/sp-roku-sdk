@@ -1,0 +1,63 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "ConsentSetter" extends = "Task" >
+
+  <interface>
+    <field id = "siteid" type = "string" />
+    <field id = "consent_type" type = "string" />
+    <field id = "status" type = "integer" />
+    <field id = "messageId" type = "string" />
+  </interface>
+
+  <script type = "text/brightscript" >
+
+    <![CDATA[
+
+    sub init()
+      m.top.functionName = "setConsent"
+    end sub
+
+    function getAuthData() as dynamic
+      sec = CreateObject("roRegistrySection", "Authentication")
+      if sec.exists("loggedInUser")
+        ' check for invalid here
+        return sec.read("resolvedConsentUUID")
+      else 
+        urlTransferObj = createObject("roUrlTransfer")
+        di = CreateObject("roDeviceInfo")
+        consentUUID = urlTransferObj.escape(di.GetRIDA())
+        return consentUUID
+      end if
+    end function
+
+    sub setConsent()
+      consent = createObject("roSGNode", "ContentNode")
+      readInternet = createObject("roUrlTransfer")
+      readInternet.SetCertificatesFile("common:/certs/ca-bundle.crt")
+      readInternet.AddHeader("X-Roku-Reserved-Dev-Id", "")
+      readInternet.InitClientCertificates()
+      
+      consentUUID = getAuthData()
+      siteid = m.top.siteid
+
+      if m.top.consent_type = "all"
+        consent_type = "consent-all"
+      end if
+
+      if m.top.consent_type = "none"
+        consent_type = "reject-all"
+      end if
+
+      url = "http://sourcepoint.mgr.consensu.org/consent/v2/" + siteid + "/" + consent_type + "?consentUUID=" + consentUUID + "&euconsent=%5BEUCONSENT%5D" + "&messageId=" + m.top.messageId
+
+      readInternet.setUrl(url)
+      
+      response = readInternet.PostFromString("?consentUUID=" + consentUUID + "&euconsent=%5BEUCONSENT%5D")
+    end sub
+
+
+    ]]>
+
+  </script>
+
+</component>
