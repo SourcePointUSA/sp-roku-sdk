@@ -1,0 +1,51 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "NavigationList" extends = "ListPanel" >
+
+  <interface >
+  </interface>
+
+  <script type = "text/brightscript" >
+
+    <![CDATA[
+
+    sub init()
+      m.top.overhangTitle = "ROKU SP Demo"
+      m.top.panelSize = "narrow"
+      m.top.focusable = true
+      m.top.hasNextPanel = true
+      m.top.isFullScreen = true
+      m.top.leftOnly = true
+      m.top.createNextPanelOnItemFocus = false
+      m.top.selectButtonMovesPanelForward = true
+
+      m.top.list = m.top.findNode("navigationLabelList")
+      navItems = createObject("roSGNode", "ContentNode")
+      privacyManagerNode = navItems.createChild("ContentNode")
+      privacyManagerNode.setField("title", "Privacy Manager")
+      homeNode = navItems.createChild("ContentNode")
+      homeNode.setField("title", "Home")
+      sec = CreateObject("roRegistrySection", "Authentication")
+      if sec.exists("loggedInUser")
+        signOutNode = navItems.createChild("ContentNode")
+        signOutNode.setField("title", "Sign-Out")
+      else 
+        signInNode = navItems.createChild("ContentNode")
+        signInNode.setField("title", "Sign-In")
+      end if
+      m.top.list.content = navItems
+    end sub
+
+    ]]>
+
+  </script>
+
+    <children>
+        <LabelList 
+          id = "navigationLabelList" 
+          vertFocusAnimationStyle = "floatingFocus" />
+    </children>
+
+</component>

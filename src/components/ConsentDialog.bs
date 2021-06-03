@@ -1,3 +1,30 @@
+sub init()
+    ' Please change to following background to whatever we get in the demo.
+    m.top.backgroundURI = m.global.dialog_background_image
+    ' example = m.top.findNode("instructLabel")
+    ' examplerect = example.boundingRect()
+    ' centerx = (1280 - examplerect.width) / 2
+    ' centery = (720 - examplerect.height) / 2
+    ' example.translation = [ centerx, centery ]
+    ' setUpDialogVars()
+    appendListPanel()
+    ' m.top.setFocus(true)
+    m.top.overhang.visible = true
+    sec = CreateObject("roRegistrySection", "Authentication")
+    sec.write("sid", "sids")
+    sec.write("mike1", "auth0|5cb0e5d157125211e7c9351b")
+    sec.write("mike4", "auth0|5cb9bef1f1e2ca119a0e50cf")
+end sub
+
+sub appendListPanel()
+    m.panelset = createObject("roSGNode", "PanelSet")
+    m.top.appendChild(m.panelset)
+    m.navList = createObject("roSGNode", "NavigationList")
+    m.panelset.appendChild(m.navList)
+    m.navList.list.observeField("itemSelected", "reshowNavList")
+    m.navList.setFocus(true)
+end sub
+
 function setUpDialogVars()
   m.readLogicTask = createObject("roSGNode","LogicGetter")
   m.readLogicTask.siteId = m.global.site_id
