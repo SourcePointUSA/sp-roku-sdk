@@ -4,30 +4,51 @@ class SourcepointSdk
     private consentLanguage
     private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
+    private registry
     private sdkPath = "sourcepoint-sdk"
 
     public constants = {
-        hostname: "https://cdn.privacy-mgmt.com",
+        baseEndpoint: "https://cdn.privacy-mgmt.com",
         pathGET: "/wrapper/v2/get_messages",
         pathPOST: "/"
     }
 
-    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, extra = {} as Object)
+    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, optional = {} as Object)
         m.accountId = accountId
         m.propertyHref = propertyHref
         m.legislationsEnabled = legislationsEnabled
 
-        if extra.consentLanguage <> invalid then m.consentLanguage = extra.consentLanguage
-        if extra.env <> invalid then m.campaignEnv = extra.env
-        if extra.hostname <> invalid then m.constants.hostname = extra.hostname
-        if extra.sdkPath <> invalid then m.sdkPath = extra.sdkPath
+        validOptionalProperties = [
+            "authId",
+            "campaignEnv",
+            "consentLanguage",
+            "sdkPath"
+        ]
+
+        for each k in validOptionalProperties
+            if optional[k] <> invalid then
+                m[k] = optional[k]
+            end if
+        end for
+
+        if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
+
+        m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
     end sub
 
-    function get_user_consent() as Dynamic
-
+    public function get_user_consent() as Dynamic
+        getMessageTask = createObject("roSGNode", "GetMessage")
+        getMessageTask.url = m.addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "consentLanguage": m.consentLanguage })
+        getMessageTask.legislationsEnabled = m.legislationsEnabled
+        getMessageTask.localState = m.getLocalState()
+        getMessageTask.control = "RUN"
+        
+        ' m.readLogicTask.siteId = "2932"
+        ' m.readLogicTask.control = "RUN"
+        ' m.readLogicTask.observeField("consentData", "displayMessage")
     end function
 
-    private function add_query_params(uri as String, params as Object) as String
+    private function addQueryParams(uri as String, params as Object) as String
         separator = uri.Instr(0, "?") < 0 ? "?" : "&"
 
         for each k in params
@@ -39,4 +60,16 @@ class SourcepointSdk
 
         return uri
     end function
+
+    private function getLocalState() as String
+        if m.registry.Exists("localState") then
+            return m.registry.read("localState")
+        end if
+
+        return ""
+    end function
+
+    private sub setLocalState(localState)
+        m.registry.write("localState", localState)
+    end sub
 end class

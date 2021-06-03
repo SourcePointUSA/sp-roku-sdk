@@ -1,0 +1,14 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "GetMessage" extends = "Task" >
+
+  <interface>
+    <field id="url" type="string" />
+    <field id="legislationsEnabled" type="array" />
+    <field id="localState" type="string" />
+    <field id="userConsent" type="string" />
+  </interface>
+
+  <script uri="./GetMessage.bs" />
+
+</component>

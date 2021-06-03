@@ -1,0 +1,12 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs" 'TODO - figure out hardcoded 'sourcepoint-sdk' path
+
+sub init()
+    m.top.functionName = "getMessage"
+end sub
+
+sub getMessage()
+    requestBody = {}
+    response = MakeRequest(m.top.url, "POST", requestBody)
+
+    print response
+end sub

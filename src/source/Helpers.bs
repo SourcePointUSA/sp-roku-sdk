@@ -1,0 +1,30 @@
+function MakeRequest(url, method as String, body = {} as Object) as Object
+    request = createObject("roUrlTransfer")
+    request.SetCertificatesFile("common:/certs/ca-bundle.crt")
+    request.AddHeader("X-Roku-Reserved-Dev-Id", "")
+    request.InitClientCertificates()
+    request.setUrl(url)
+
+    ' bloop = {"campaignEnv":"prod","campaigns":{"ccpa":{"alwaysDisplayDNS":false,"targetingParams":invalid},"gdpr":{"targetingParams":invalid}},"accountId":22,"authId":invalid,"consentLanguage":"browserDefault","clientMMSOrigin":"https://cdn.sp-stage.net","hasCSP":true,"includeData":{"localState":{"type":"string"},"actions":{"type":"RecordString"},"customVendorsResponse":{"type":"RecordString"},"cookies":{"type":"RecordString"}},"localState":invalid,"propertyHref":"https://dan2.multicampaign.com","pubData":{},"requestUUID":"e10bb420-a4e9-4de7-81b1-65479384a0e9"}
+
+    if UCase(method) = "GET" then
+        response = request.getToString()
+    else if UCase(method) = "POST" then
+        request.addHeader("Content-Type", "application/json")
+        port = createObject("roMessagePort")
+        request.setPort(port)
+        ' print "hi"
+        ' request.asyncPostFromString(FormatJson(bloop))
+        request.asyncPostFromString(FormatJson(body))
+        response = port.waitMessage(10 * 1000)
+        ' print request
+        ' print response.GetFailureReason()
+    end if 
+
+    try
+        return ParseJson(response)
+    catch error
+        print error
+        return invalid
+    end try
+end function
