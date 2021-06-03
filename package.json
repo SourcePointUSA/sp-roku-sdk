@@ -1,0 +1,27 @@
+{
+  "ropm": {
+    "rootDir": "lib"
+  },
+  "name": "sp-roku-sdk",
+  "description": "SP SDK for ROKU.",
+  "version": "2.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile": "bsc --staging-folder-path lib --root-dir src --create-package false --retain-staging-folder true",
+    "develop": "bsc --watch --deploy --host $ROKU_DEV_HOST --password $ROKU_DEV_PASSWORD",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SourcePointUSA/sp-roku-sdk.git"
+  },
+  "keywords": [
+    "ropm"
+  ],
+  "author": "Sourcepoint",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SourcePointUSA/sp-roku-sdk/issues"
+  },
+  "homepage": "https://github.com/SourcePointUSA/sp-roku-sdk#readme"
+}
