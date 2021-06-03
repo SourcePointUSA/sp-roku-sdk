@@ -1,3 +1,4 @@
 {
-    "rootDir": "test-channel"
+    "rootDir": "test-channel",
+    "retainStagingFolder": true
 }
