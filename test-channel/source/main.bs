@@ -12,6 +12,8 @@ sub showChannelSGScreen()
   scene = screen.CreateScene("Home")
   screen.show()
 
+  m.spSdk = new SourcepointSdk(22, "https://dan.ott.sourcepoint.com", ["ccpa", "gdpr"])
+
   while(true)
     msg = wait(0, m.port)
     msgType = type(msg)
