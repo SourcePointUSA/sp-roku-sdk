@@ -18,7 +18,7 @@ sub showChannelSGScreen()
   m.global.addField("dialog_background_image", "string", true)
   m.global.dialog_background_image = m.dialog_background_image
 
-  scene = screen.CreateScene("ConsentDialog")
+  scene = screen.CreateScene("Main")
   screen.show()
 
   while(true)

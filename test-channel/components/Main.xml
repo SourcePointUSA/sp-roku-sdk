@@ -2,7 +2,7 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "ConsentDialog" extends = "OverhangPanelSetScene">
+<component name = "Main" extends = "OverhangPanelSetScene">
 
-  <script uri="./ConsentDialog.bs" />
+  <script uri="./Main.bs" />
 </component>

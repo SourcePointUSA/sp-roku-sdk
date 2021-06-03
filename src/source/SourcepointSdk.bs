@@ -1,0 +1,14 @@
+class SourcepointSdk
+    private accountId
+    private propertyHref    'TODO : is this what we should use? 
+
+    sub new(accountId as Integer, propertyHref as String)
+        m.accountId = accountId
+        m.propertyHref = propertyHref
+    end sub
+
+    function get_user_consent() as Dynamic
+
+    end function
+
+end class

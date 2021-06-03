@@ -1,0 +1,10 @@
+sub init()
+  ' Please change to following background to whatever we get in the demo.
+  m.top.backgroundURI = m.global.dialog_background_image
+  ' setUpDialogVars()
+  ' appendListPanel()
+  ' m.top.setFocus(true)
+  ' m.top.overhang.visible = true
+  sec = CreateObject("roRegistrySection", "Authentication")
+  sec.write("sid", "sids")
+end sub
