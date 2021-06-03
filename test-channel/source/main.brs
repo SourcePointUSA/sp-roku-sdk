@@ -9,16 +9,7 @@ sub showChannelSGScreen()
   m.port = CreateObject("roMessagePort")
   screen.setMessagePort(m.port)
 
-  LoadConfig()
-  m.global = screen.getGlobalNode()
-  m.global.addField("site_id", "string", true)
-  m.global.site_id = m.site_id
-  m.global.addField("privacy_manager_id", "string", true)
-  m.global.privacy_manager_id = m.privacy_manager_id
-  m.global.addField("dialog_background_image", "string", true)
-  m.global.dialog_background_image = m.dialog_background_image
-
-  scene = screen.CreateScene("Main")
+  scene = screen.CreateScene("Home")
   screen.show()
 
   while(true)

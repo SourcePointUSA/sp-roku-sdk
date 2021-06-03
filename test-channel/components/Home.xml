@@ -2,7 +2,7 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "Main" extends = "OverhangPanelSetScene">
+<component name = "Home" extends = "OverhangPanelSetScene">
 
-  <script uri="./Main.bs" />
+  <script uri="./Home.bs" />
 </component>
