@@ -1,14 +1,42 @@
 class SourcepointSdk
     private accountId
+    private campaignEnv = "prod"
+    private consentLanguage
+    private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
+    private sdkPath = "sourcepoint-sdk"
 
-    sub new(accountId as Integer, propertyHref as String)
+    public constants = {
+        hostname: "https://cdn.privacy-mgmt.com",
+        pathGET: "/wrapper/v2/get_messages",
+        pathPOST: "/"
+    }
+
+    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, extra = {} as Object)
         m.accountId = accountId
         m.propertyHref = propertyHref
+        m.legislationsEnabled = legislationsEnabled
+
+        if extra.consentLanguage <> invalid then m.consentLanguage = extra.consentLanguage
+        if extra.env <> invalid then m.campaignEnv = extra.env
+        if extra.hostname <> invalid then m.constants.hostname = extra.hostname
+        if extra.sdkPath <> invalid then m.sdkPath = extra.sdkPath
     end sub
 
     function get_user_consent() as Dynamic
 
     end function
 
+    private function add_query_params(uri as String, params as Object) as String
+        separator = uri.Instr(0, "?") < 0 ? "?" : "&"
+
+        for each k in params
+            if params[k] <> invalid
+                uri = uri + separator + k + "=" + params[k].Escape()
+                separator = "&"
+            end if
+        end for
+
+        return uri
+    end function
 end class
