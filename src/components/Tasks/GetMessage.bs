@@ -1,5 +1,3 @@
-import "pkg:/source/sourcepoint-sdk/Helpers.bs" 'TODO - figure out hardcoded 'sourcepoint-sdk' path
-
 sub init()
     m.top.functionName = "getMessage"
 end sub
@@ -27,7 +25,5 @@ sub getMessage()
         requestBody.campaigns[l] = {}
     end for
 
-    response = MakeRequest(m.top.url, "POST", requestBody)
-
-    print response
+    makeRequest(m.top.url, "POST", requestBody)
 end sub

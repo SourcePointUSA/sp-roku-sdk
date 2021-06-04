@@ -1,13 +1,14 @@
-function MakeRequest(url, method as String, body = {} as Object) as Object
+sub init()
+    ' pass
+end sub
+
+function _makeRequest(url, method as String, body = {} as Object, retry = true as Boolean) as Object
     request = createObject("roUrlTransfer")
     request.SetCertificatesFile("common:/certs/ca-bundle.crt")
     request.AddHeader("X-Roku-Reserved-Dev-Id", "")
     request.InitClientCertificates()
     request.RetainBodyOnError(true)
     request.SetUrl(url)
-
-    print FormatJson(body)
-    print url
 
     if UCase(method) = "GET" then
         response = request.getToString()
@@ -30,6 +31,10 @@ function MakeRequest(url, method as String, body = {} as Object) as Object
 
     if response.GetResponseCode() = 200 then
         return responseBody
+    else if response.GetResponseCode() = 500 and retry = true then
+        ' sleep for 2 seconds and retry if we hit a 500
+        Sleep(2 * 1000)
+        return _makeRequest(url, method, body, false)
     else if responseBody <> invalid
         print "Request failed with error:"
         print responseBody
@@ -42,6 +47,15 @@ function MakeRequest(url, method as String, body = {} as Object) as Object
     end if
 end function
 
-function MakeRequestUUID() as string
-    return "test"
+function makeRequest(url, method, body)
+    response = _makeRequest(url, method, body)
+
+    print "Hi from request task"
+    print response
+
+    if response = invalid then
+        m.top.userConsent = invalid
+    else
+        ' parse and set user consent
+    endif
 end function

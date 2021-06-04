@@ -35,7 +35,7 @@ class SourcepointSdk
         if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
 
         m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
-        m.requestUUID = MakeRequestUUID()
+        m.requestUUID = m.makeRequestUUID()
     end sub
 
     public function get_user_consent() as Dynamic
@@ -73,6 +73,10 @@ class SourcepointSdk
         end if
 
         return ""
+    end function
+
+    private function makeRequestUUID() as string
+        return "test"
     end function
 
     private sub setLocalState(localState)
