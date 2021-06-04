@@ -25,5 +25,16 @@ sub getMessage()
         requestBody.campaigns[l] = {}
     end for
 
-    makeRequest(m.top.url, "POST", requestBody)
+    response = makeRequest(m.top.url, "POST", requestBody)
+
+    if response <> invalid then
+        messages = []
+        for each c in response.campaigns
+            if c.message <> invalid then
+                messages.push({ message: c.message, messageMetaData: c.messageMetaData })
+            end if
+        end for
+
+        m.top.messages = messages
+    end if 
 end sub

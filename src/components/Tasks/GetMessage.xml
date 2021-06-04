@@ -3,7 +3,11 @@
 <component name = "GetMessage" extends = "RequestTask" >
 
   <interface>
+    <!-- updated for request -->
     <field id="legislationsEnabled" type="array" />
+
+    <!-- updated by response -->
+    <field id="messages" type="array" />
   </interface>
 
   <script uri="./GetMessage.bs" />

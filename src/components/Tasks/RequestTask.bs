@@ -47,7 +47,7 @@ function _makeRequest(url, method as String, body = {} as Object, retry = true a
     end if
 end function
 
-sub makeRequest(url, method, body)
+function makeRequest(url, method, body) as Object
     response = _makeRequest(url, method, body)
 
     if response = invalid then
@@ -55,6 +55,7 @@ sub makeRequest(url, method, body)
         m.top.userConsent = invalid
         m.top.localState = invalid
     else
+        ' TODO parse user consent in the way we want to return it ( mobile TCData? )
         ' parse and set user consent
         userConsent = {}
         for each c in response.campaigns
@@ -66,4 +67,6 @@ sub makeRequest(url, method, body)
         m.top.localState = response.localState
         m.top.userConsent = userConsent
     endif
-end sub
+
+    return response
+end function

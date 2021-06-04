@@ -8,12 +8,15 @@ class SourcepointSdk
     private registry
     private sdkPath = "sourcepoint-sdk"
 
+    private userConsent
+
     public constants = {
         baseEndpoint: "https://cdn.privacy-mgmt.com",
         pathGET: "/wrapper/v2/get_messages",
         pathPOST: "/"
     }
 
+    ' TODO - leglisations enabled should allow for extra configs
     sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, optional = {} as Object)
         m.accountId = accountId
         m.propertyHref = propertyHref
@@ -56,20 +59,22 @@ class SourcepointSdk
 
         getMessageTask.observeFieldScoped("state", port)
 
-        userConsent = invalid
         while true
             msg = wait(1000, port)
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
                 m.setLocalState(getMessageTask.localState)
-                userConsent = getMessageTask.userConsent
+                m.userConsent = getMessageTask.userConsent
                 exit while
             end if
         end while
 
         getMessageTask.unobserveFieldScoped("state")
 
-        ' need to process this and return the correct thing
-        return userConsent
+        if getMessageTask.messages <> invalid and getMessageTask.messages.Count() > 0 then
+            m.showMessages(getMessageTask.messages)
+        end if
+
+        return m.userConsent
     end function
 
     private function addQueryParams(uri as String, params as Object) as String
@@ -99,5 +104,10 @@ class SourcepointSdk
 
     private sub setLocalState(localState)
         m.registry.write("localState", localState)
+    end sub
+
+    private sub showMessages(messages as Object)
+        print "messages to show:"
+        print messages
     end sub
 end class
