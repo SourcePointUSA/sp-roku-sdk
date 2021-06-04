@@ -51,7 +51,25 @@ class SourcepointSdk
 
         getMessageTask.localState = m.getLocalState()
         getMessageTask.control = "RUN"
-        ' m.readLogicTask.observeField("consentData", "displayMessage")
+
+        port = CreateObject("roMessagePort")
+
+        getMessageTask.observeFieldScoped("state", port)
+
+        userConsent = invalid
+        while true
+            msg = wait(1000, port)
+            if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
+                m.setLocalState(getMessageTask.localState)
+                userConsent = getMessageTask.userConsent
+                exit while
+            end if
+        end while
+
+        getMessageTask.unobserveFieldScoped("state")
+
+        ' need to process this and return the correct thing
+        return userConsent
     end function
 
     private function addQueryParams(uri as String, params as Object) as String
