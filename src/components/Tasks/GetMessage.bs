@@ -5,7 +5,28 @@ sub init()
 end sub
 
 sub getMessage()
-    requestBody = {}
+    requestBody = {
+        "accountId": m.top.accountId,
+        "authId": m.top.authId,
+        "campaignEnv": m.top.campaignEnv,
+        "campaigns": {},
+        "clientMMSOrigin": m.top.clientMMSOrigin,
+        "consentLanguage": m.top.consentLanguage,
+        "hasCSP": true, 
+        "includeData": {
+            "localState": { "type": "string" },
+            "customVendorsResponse": { "type": "string" }
+        },
+        "localState": m.top.localState,
+        "propertyHref": m.top.propertyHref,
+        "pubData": m.top.pubData,
+        "requestUUID": m.top.requestUUID
+    }
+
+    for each l in m.top.legislationsEnabled
+        requestBody.campaigns[l] = {}
+    end for
+
     response = MakeRequest(m.top.url, "POST", requestBody)
 
     print response

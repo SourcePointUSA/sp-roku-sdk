@@ -1,5 +1,6 @@
 class SourcepointSdk
     private accountId
+    private env = "stage"
     private campaignEnv = "prod"
     private consentLanguage
     private legislationsEnabled
@@ -34,17 +35,22 @@ class SourcepointSdk
         if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
 
         m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
+        m.requestUUID = MakeRequestUUID()
     end sub
 
     public function get_user_consent() as Dynamic
         getMessageTask = createObject("roSGNode", "GetMessage")
-        getMessageTask.url = m.addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "consentLanguage": m.consentLanguage })
-        getMessageTask.legislationsEnabled = m.legislationsEnabled
+        getMessageTask.url = m.addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
+        getMessageTask.clientMMSOrigin = m.constants.baseEndpoint
+
+        taskKeys = ["accountId", "authId", "campaignEnv", "consentLanguage", "legislationsEnabled", "propertyHref", "pubData", "requestUUID"]
+
+        for each k in taskKeys
+            getMessageTask[k] = m[k]
+        end for
+
         getMessageTask.localState = m.getLocalState()
         getMessageTask.control = "RUN"
-        
-        ' m.readLogicTask.siteId = "2932"
-        ' m.readLogicTask.control = "RUN"
         ' m.readLogicTask.observeField("consentData", "displayMessage")
     end function
 

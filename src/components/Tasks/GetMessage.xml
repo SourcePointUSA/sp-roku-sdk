@@ -4,9 +4,17 @@
 
   <interface>
     <field id="url" type="string" />
+    <field id="accountId" type="integer" />
+    <field id="authId" type="string" />
+    <field id="campaignEnv" type="string" />
+    <field id="consentLanguage" type="string" />
+    <field id="clientMMSOrigin" type="string" />
     <field id="legislationsEnabled" type="array" />
     <field id="localState" type="string" />
-    <field id="userConsent" type="string" />
+    <field id="propertyHref" type="string" />
+    <field id="pubData" type="assocarray" />
+    <field id="requestUUID" type="string" />
+    <field id="userConsent" type="assocarray" />
   </interface>
 
   <script uri="./GetMessage.bs" />
