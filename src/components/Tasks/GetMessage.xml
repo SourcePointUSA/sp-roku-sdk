@@ -8,6 +8,7 @@
 
     <!-- updated by response -->
     <field id="messages" type="array" />
+    <field id="userConsent" type="assocarray" />
   </interface>
 
   <script uri="./GetMessage.bs" />

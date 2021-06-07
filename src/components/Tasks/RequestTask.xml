@@ -18,7 +18,6 @@
     <field id="localState" type="string" />
 
     <!-- updated by response -->
-    <field id="userConsent" type="assocarray" />
   </interface>
 
   <script uri="./RequestTask.bs" />
