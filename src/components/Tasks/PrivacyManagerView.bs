@@ -1,0 +1,7 @@
+sub init()
+    m.top.functionName = "privacyManagerView"
+end sub
+
+sub privacyManagerView()
+
+end sub

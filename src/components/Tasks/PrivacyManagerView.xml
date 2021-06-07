@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "PrivacyManagerView" extends = "RequestTask" >
+
+  <interface>
+    <!-- updated by response -->
+    <field id="categories" type="array" />
+    <field id="vendors" type="array" />
+  </interface>
+
+  <script uri="./PrivacyManagerView.bs" />
+
+</component>
