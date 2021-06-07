@@ -6,6 +6,7 @@ class SourcepointSdk
     private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
     private registry
+    private screen
     private sdkPath = "sourcepoint-sdk"
 
     private userConsent
@@ -18,6 +19,12 @@ class SourcepointSdk
 
     ' TODO - leglisations enabled should allow for extra configs
     sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, optional = {} as Object)
+        ' create screen to 
+        m.screen = CreateObject("roSGScreen")
+        port = CreateObject("roMessagePort")
+        m.screen.setMessagePort(port)
+        scene = m.screen.CreateScene("SpScene")
+
         m.accountId = accountId
         m.propertyHref = propertyHref
         m.legislationsEnabled = legislationsEnabled
@@ -39,9 +46,21 @@ class SourcepointSdk
 
         m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
         m.requestUUID = m.makeRequestUUID()
+
+        ' fetch messages and user consent, and messages
+        m.getUserConsent()
+
+        while(true)
+            msg = wait(0, m.port)
+            msgType = type(msg)
+
+            if msgType = "roSGScreenEvent"
+            if msg.isScreenClosed() then return
+            end if
+        end while
     end sub
 
-    public function get_user_consent() as Dynamic
+    public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
             return m.userConsent
         endif 
@@ -74,9 +93,8 @@ class SourcepointSdk
 
         getMessageTask.unobserveFieldScoped("state")
 
-        if getMessageTask.messages <> invalid and getMessageTask.messages.Count() > 0 then
-            m.showMessages(getMessageTask.messages)
-        end if
+        ' always call show messages, it will show or close our screen
+        m.showMessages(getMessageTask.messages)
 
         return m.userConsent
     end function
@@ -111,7 +129,15 @@ class SourcepointSdk
     end sub
 
     private sub showMessages(messages as Object)
+        ' close screen and return if we have no messages
+        if messages = invalid or messages.Count() = 0 then
+            m.screen.close()
+            return
+        end if
+
         print "messages to show:"
         print messages
+        
+        m.screen.show()
     end sub
 end class

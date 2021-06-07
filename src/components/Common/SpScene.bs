@@ -1,0 +1,10 @@
+sub init()
+    ' m.top.overhang.visible = false
+    ' m.top.panelset.visible = false
+
+    m.currentexample = createObject("roSGNode", "CcpaHome")
+
+    m.top.appendChild(m.currentexample)
+
+    m.currentexample.setFocus(true)
+end sub
