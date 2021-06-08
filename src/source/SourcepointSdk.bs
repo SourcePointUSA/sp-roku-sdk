@@ -25,11 +25,6 @@ class SourcepointSdk
         port = CreateObject("roMessagePort")
         m.screen.setMessagePort(port)
         m.scene = m.screen.CreateScene("SpScene")
-        m.global = m.screen.getGlobalNode()
-
-        m.global.addFields({
-            SpHelper: CreateObject("roSGNode", "SpHelper")
-        })
 
         m.accountId = accountId
         m.propertyHref = propertyHref
@@ -140,9 +135,6 @@ class SourcepointSdk
             m.screen.close()
             return
         end if
-
-        print "messages to show:"
-        print messages
         
         m.screen.show()
     end sub

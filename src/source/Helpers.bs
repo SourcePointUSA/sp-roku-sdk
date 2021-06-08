@@ -1,0 +1,21 @@
+sub updateTranslations(node as object, translationMap as Object)
+    resolutionInfo = m.top.getScene().currentDesignResolution
+
+    for each nodeId in translationMap
+        updateNode = node.findNode(nodeId)
+        if updateNode <> invalid
+            if type(translationMap[nodeId]) = "roFunction"
+                translate = translationMap[nodeId](updateNode, resolutionInfo.width, resolutionInfo.height)
+            else
+                translate = translationMap[nodeId]
+            end if
+
+            if resolutionInfo.resolution = "FHD"
+                translate[0] = translate[0] * 1.5
+                translate[1] = translate[1] * 1.5
+            end if
+            
+            updateNode.translation = translate
+        end if
+    end for
+end sub

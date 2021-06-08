@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "SpTwoCol" extends = "Group" >
+
+  <script uri="./SpTwoCol.bs" />
+
+  <children >
+    <Group>
+        <SimpleLabel id="screen-title" text="Privacy Manager" horizOrigin="left"/>
+    </Group>
+    
+    <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[20]">
+        <Group>
+            <Label width="600" id="screen-title" text="Left Col"/>
+        </Group>
+        <Group>
+            <SimpleLabel id="screen-title" text="Right Col"/>
+        </Group>
+    </LayoutGroup>
+
+  </children>
+
+</component>

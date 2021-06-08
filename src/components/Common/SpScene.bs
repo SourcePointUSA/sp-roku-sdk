@@ -1,8 +1,5 @@
 sub init()
-    ' m.top.overhang.visible = false
-    ' m.top.panelset.visible = false
-
-    m.currentexample = createObject("roSGNode", "CcpaHome")
+    m.currentexample = createObject("roSGNode", "SpTwoCol")
 
     m.top.appendChild(m.currentexample)
 
