@@ -6,6 +6,7 @@ class SourcepointSdk
     private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
     private registry
+    private scene
     private screen
     private sdkPath = "sourcepoint-sdk"
 
@@ -23,7 +24,12 @@ class SourcepointSdk
         m.screen = CreateObject("roSGScreen")
         port = CreateObject("roMessagePort")
         m.screen.setMessagePort(port)
-        scene = m.screen.CreateScene("SpScene")
+        m.scene = m.screen.CreateScene("SpScene")
+        m.global = m.screen.getGlobalNode()
+
+        m.global.addFields({
+            SpHelper: CreateObject("roSGNode", "SpHelper")
+        })
 
         m.accountId = accountId
         m.propertyHref = propertyHref
