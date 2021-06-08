@@ -1,0 +1,13 @@
+<?xml version = "1.0" encoding = "utf-8" ?> 
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "SpHelper" extends = "Node">
+
+    <interface>
+        <function name="updateTranslations" />
+    </interface>
+
+    <script uri="./SpHelper.bs" />
+
+</component>

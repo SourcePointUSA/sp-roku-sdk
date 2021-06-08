@@ -1,0 +1,8 @@
+sub updateTranslations(node as object, translationMap as Object)
+    for each nodeId in translationMap
+        updateNode = node.findNode(nodeId)
+        if updateNode <> invalid
+            updateNode.translation = translationMap[nodeId]
+        end if
+    end for
+end sub
