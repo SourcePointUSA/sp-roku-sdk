@@ -135,7 +135,9 @@ class SourcepointSdk
             m.screen.close()
             return
         end if
-        
+
+        m.scene.messages = messages
+
         m.screen.show()
     end sub
 end class

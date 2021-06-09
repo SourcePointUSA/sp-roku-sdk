@@ -1,7 +1,14 @@
 sub init()
-    m.currentexample = createObject("roSGNode", "SpTwoCol")
+    m.top.observeField("messages", "showMessages")
+end sub
 
-    m.top.appendChild(m.currentexample)
+sub showMessages(event)
+    messages = event.getData()
 
-    m.currentexample.setFocus(true)
+    messageComponent = CreateObject("roSGNode", "SpMessage")
+
+    ' TODO add logic for rendering multiple messages
+    messageComponent.message = messages[0]
+    m.top.appendChild(messageComponent)
+    messageComponent.setFocus(true)
 end sub

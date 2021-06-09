@@ -1,0 +1,32 @@
+sub init()
+    m.top.observeField("message", "showMessage")
+end sub
+
+sub showMessage(event as Object)
+    messageCategoryMap = {
+        "1": "Gdpr",
+        "2": "Ccpa"
+    }
+
+    message = event.getData()
+
+    if message.messageMetadata <> invalid and type(message.messageMetadata.categoryId) = "roInt" then
+        m.messageCategory = messageCategoryMap[message.messageMetadata.categoryId.ToStr()]
+
+        showView("HomeView")
+    else
+        m.top.done = true
+        m.top.error = "Invalid message JSON"
+    endif
+end sub
+
+sub showView(view as String)
+    viewMap = {
+        "HomeView": "HomeView",
+        "PrivacyPolicyView": "PrivacyPolicyView"
+    }
+
+    ccpaMessage = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
+    m.top.appendChild(ccpaMessage)
+    ccpaMessage.setFocus(true)
+end sub

@@ -16,5 +16,4 @@ sub init()
         "col-layout": [0, 200]
     }
     updateTranslations(m.top, translationMap)
-    ' m.global.SpHelper.callFunc("updateTranslations", m.top, translationMap)
 end sub

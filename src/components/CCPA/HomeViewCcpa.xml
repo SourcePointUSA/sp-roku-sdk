@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "HomeViewCcpa" extends = "SpTwoCol" >
+
+  <script uri="./HomeViewCcpa.bs" />
+
+  <children >
+    
+    <!-- <Rectangle 
+      id = "exampleRectangle" 
+      width = "512" 
+      height = "288" 
+      color = "0x1010EBFF"
+      translation = "[400, 400]" >
+
+      </Rectangle> -->
+
+  </children>
+
+</component>

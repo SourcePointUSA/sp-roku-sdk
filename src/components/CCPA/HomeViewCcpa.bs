@@ -1,0 +1,17 @@
+sub init()
+    m.buttons = createObject("roSGNode", "ButtonGroup")
+    testButton = createObject("roSGNode", "Button")
+    testButton.text = "test"
+    testButton.id = "test-button"
+    testButton2 = createObject("roSGNode", "Button")
+    testButton2.text = "test 2"
+    m.buttons.appendChild(testButton)
+    m.buttons.appendChild(testButton2)
+
+    m.top.findNode("col-left").appendChild(m.buttons)
+
+    print m.buttons
+    print m.top.findNode("test-button")
+
+    m.buttons.setFocus(true)
+end sub
