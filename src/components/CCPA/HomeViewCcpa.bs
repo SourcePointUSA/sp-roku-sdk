@@ -1,17 +1,78 @@
 sub init()
-    m.buttons = createObject("roSGNode", "ButtonGroup")
-    testButton = createObject("roSGNode", "Button")
-    testButton.text = "test"
-    testButton.id = "test-button"
-    testButton2 = createObject("roSGNode", "Button")
-    testButton2.text = "test 2"
-    m.buttons.appendChild(testButton)
-    m.buttons.appendChild(testButton2)
+    m.top.observeField("view", "renderView")
+end sub
 
-    m.top.findNode("col-left").appendChild(m.buttons)
+sub renderView(event as Object)
+    componentIdMap = {
+        "AcceptAllButton" : "button_nav_accept_all"
+        "CategoriesDescriptionText": "text_category_description",
+        "CategoriesSubDescriptionText": "text_category_sub_description",
+        "HeaderText": "text_header",
+        "LogoImage": "image_logo",
+        "NavCategoriesButton": "button_nav_categories",
+        "NavPrivacyPolicyButton": "button_nav_privacy_policy",
+        "NavVendorsButton": "button_nav_vendors"
+    }
+    m.components = {}
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
 
-    print m.buttons
-    print m.top.findNode("test-button")
+    view = event.getData()
 
-    m.buttons.setFocus(true)
+    for each component in view.components
+        if componentIdMap[component.id] <> invalid then
+            m.components[componentIdMap[component.id]] = component
+        end if
+    end for
+
+    print "view"
+    print view
+
+    print "components"
+    print m.components
+
+    m.top.findNode("screen-title").text = m.components.text_header.text
+
+    renderLogo()
+    renderNav()
+    renderRightCol()
+
+    m.nav.setFocus(true)
+end sub
+
+sub renderLogo()
+    if m.components.image_logo <> invalid then
+        component = createObject("roSGNode", "Poster")
+        component.id = "image_logo"
+        component.uri = m.components.image_logo.src
+
+        if m.components.image_logo.style.width <> invalid then
+            component.loadWidth = m.components.image_logo.style.width
+        end if 
+
+        m.colLeft.appendChild(component)
+    end if
+end sub
+
+sub renderNav()
+    buttonIds = ["button_nav_accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"]
+    buttonGroup = createObject("roSGNode", "ButtonGroup")
+
+    for each buttonId in buttonIds
+        button = createObject("roSGNode", "Button")
+        button.text = m.components[buttonId].text
+        buttonGroup.appendChild(button)
+    endfor
+
+    m.colLeft.appendChild(buttonGroup)
+    m.nav = buttonGroup
+end sub
+
+sub renderRightCol()
+    description = createObject("roSGNode", "Label")
+    description.text = m.components.text_category_description.text
+    description.wrap = true
+    description.width = 400
+
+    m.colRight.appendChild(description)
 end sub

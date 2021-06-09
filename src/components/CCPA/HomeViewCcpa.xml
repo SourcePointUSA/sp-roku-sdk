@@ -4,19 +4,12 @@
 
 <component name = "HomeViewCcpa" extends = "SpTwoCol" >
 
-  <script uri="./HomeViewCcpa.bs" />
+    <interface>
+        <field id="view" type="assocarray" />
+    </interface>
 
-  <children >
-    
-    <!-- <Rectangle 
-      id = "exampleRectangle" 
-      width = "512" 
-      height = "288" 
-      color = "0x1010EBFF"
-      translation = "[400, 400]" >
+    <script uri="./HomeViewCcpa.bs" />
 
-      </Rectangle> -->
-
-  </children>
+    <children></children>
 
 </component>

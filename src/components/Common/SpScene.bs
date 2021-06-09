@@ -8,7 +8,13 @@ sub showMessages(event)
     messageComponent = CreateObject("roSGNode", "SpMessage")
 
     ' TODO add logic for rendering multiple messages
-    messageComponent.message = messages[0]
+
+    tempMsg = messages[0]
+    messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
+    tempMsg.message.message_json = messageJson
+    messageComponent.message = tempMsg
+
+    ' messageComponent.message = messages[0]
     m.top.appendChild(messageComponent)
     messageComponent.setFocus(true)
 end sub

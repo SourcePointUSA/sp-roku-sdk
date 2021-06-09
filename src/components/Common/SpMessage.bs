@@ -26,7 +26,24 @@ sub showView(view as String)
         "PrivacyPolicyView": "PrivacyPolicyView"
     }
 
-    ccpaMessage = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
-    m.top.appendChild(ccpaMessage)
-    ccpaMessage.setFocus(true)
+    viewObject = getViewObject(view)
+    if viewObject <> invalid then
+        viewComponent = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
+        viewComponent.view = viewObject
+        m.top.appendChild(viewComponent)
+        viewComponent.setFocus(true)
+    else
+        m.top.done = true
+        m.top.error = "Invalid message JSON"
+    end if
 end sub
+
+function getViewObject(view as String) as Object
+    for each component in m.top.message.message.message_json.components
+        if component.id = view
+            return component
+        end if
+    end for
+
+    return invalid
+end function
