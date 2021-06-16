@@ -1,3 +1,16 @@
+function addQueryParams(uri as String, params as Object) as String
+    separator = uri.Instr(0, "?") < 0 ? "?" : "&"
+
+    for each k in params
+        if params[k] <> invalid
+            uri = uri + separator + k + "=" + params[k].ToStr().Escape()
+            separator = "&"
+        end if
+    end for
+
+    return uri
+end function
+
 sub updateTranslations(node as object, translationMap as Object)
     resolutionInfo = m.top.getScene().currentDesignResolution
 

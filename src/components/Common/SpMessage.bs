@@ -28,6 +28,7 @@ end sub
 sub showView(view as String)
     viewMap = {
         "HomeView": "HomeView",
+        "CategoriesView": "CategoriesView",
         "PrivacyPolicyView": "PrivacyPolicyView"
     }
 
@@ -39,7 +40,10 @@ sub showView(view as String)
     viewObject = getViewObject(view)
     if viewObject <> invalid then
         viewComponent = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
+        viewComponent.message = m.message.message
+        viewComponent.messageMetadata = m.message.messageMetadata
         viewComponent.view = viewObject
+
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)

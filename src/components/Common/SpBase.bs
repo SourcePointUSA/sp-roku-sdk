@@ -12,6 +12,7 @@ sub init()
     m.components = {}
     ' m.navViewMap : maps nav button IDs to views they should link to
     ' m.componentIdMap : fills in m.components mapping JSON id to our IDs
+    ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
 end sub
 
 sub mapComponents(view as object)

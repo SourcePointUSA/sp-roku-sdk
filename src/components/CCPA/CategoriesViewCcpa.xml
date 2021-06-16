@@ -2,9 +2,9 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "HomeViewCcpa" extends = "SpBase" >
+<component name = "CategoriesViewCcpa" extends = "SpBase" >
 
-    <script uri="./HomeViewCcpa.bs" />
+    <script uri="./CategoriesViewCcpa.bs" />
 
     <children></children>
 

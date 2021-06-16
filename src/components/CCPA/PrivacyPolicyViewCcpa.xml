@@ -4,10 +4,6 @@
 
 <component name = "PrivacyPolicyViewCcpa" extends = "SpBase" >
 
-    <interface>
-        <field id="view" type="assocarray" />
-    </interface>
-
     <script uri="./PrivacyPolicyViewCcpa.bs" />
 
     <children></children>

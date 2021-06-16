@@ -3,6 +3,9 @@
 <component name = "PrivacyManagerView" extends = "RequestTask" >
 
   <interface>
+    <!-- updated for request -->
+    <field id="vendorList" type="string" />
+
     <!-- updated by response -->
     <field id="categories" type="array" />
     <field id="vendors" type="array" />

@@ -1,6 +1,6 @@
 sub init()
     m.componentIdMap = {
-        "AcceptAllButton" : "button_nav_accept_all"
+        "AcceptAllButton" : "accept_all"
         "CategoriesDescriptionText": "text_category_description",
         "CategoriesSubDescriptionText": "text_category_sub_description",
         "HeaderText": "text_header",
@@ -10,7 +10,7 @@ sub init()
         "NavVendorsButton": "button_nav_vendors"
     }
     m.navViewMap = {
-        "button_nav_categories": "PrivacyPolicyView",
+        "button_nav_categories": "CategoriesView",
         "button_nav_privacy_policy": "PrivacyPolicyView",
         "button_nav_vendors": "PrivacyPolicyView"
     }
@@ -28,7 +28,7 @@ sub renderView(event as Object)
     m.top.findNode("screen-title").text = m.components.text_header.text
 
     renderLogo()
-    renderNav(["button_nav_accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
+    renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
     renderRightCol()
 
     m.nav.setFocus(true)

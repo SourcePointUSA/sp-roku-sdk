@@ -4,6 +4,12 @@
 
 <component name = "SpBase" extends = "Group" >
 
+  <interface>
+      <field id="message" type="assocarray" />
+      <field id="messageMetadata" type="assocarray" />
+      <field id="view" type="assocarray" />
+  </interface>
+
   <script uri="./SpBase.bs" />
 
   <children >

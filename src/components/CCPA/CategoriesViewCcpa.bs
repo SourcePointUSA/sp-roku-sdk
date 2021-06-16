@@ -1,0 +1,38 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.componentIdMap = {
+        "SaveButton": "save_and_exit",
+    }
+    m.navViewMap = {
+        "save_and_exit": "HomeView",
+    }
+    
+    m.top.observeField("message", "getPrivacyManagerViewData")
+    m.top.observeField("view", "renderView")
+end sub
+
+sub getPrivacyManagerViewData(event as Object)
+    message = event.getData()
+    
+    m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+    ' ?siteId=2371&vendorListId=5f8849a6a2286368091c12b3&consentLanguage=EN
+    m.privacyManagerViewTask.url = addQueryParams(
+        m.global.config.baseEndpoint + "consent/tcfv2/privacy-manager/privacy-manager-view",
+        {
+            "consentLanguage": m.global.config.consentLanguage,
+            "siteId": m.global.config.accountId,
+            ' "vendorListId": 
+        }
+    )
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderNav(["save_and_exit"])
+end sub

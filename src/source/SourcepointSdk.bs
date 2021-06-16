@@ -48,6 +48,14 @@ class SourcepointSdk
         m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
         m.requestUUID = m.makeRequestUUID()
 
+        m.global = m.screen.getGlobalNode()
+        m.global.addField("config", "assocarray", true)
+        m.global.config = {
+            "accountId": m.accountId,
+            "baseEndpoint" : m.constants.baseEndpoint,
+            "consentLanguage" : m.consentLanguage
+        }
+
         ' fetch messages and user consent, and messages
         m.getUserConsent()
 
@@ -67,7 +75,7 @@ class SourcepointSdk
         endif 
 
         getMessageTask = createObject("roSGNode", "GetMessage")
-        getMessageTask.url = m.addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
+        getMessageTask.url = addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
         getMessageTask.clientMMSOrigin = m.constants.baseEndpoint
 
         taskKeys = ["accountId", "authId", "campaignEnv", "consentLanguage", "legislationsEnabled", "propertyHref", "pubData", "requestUUID"]
@@ -98,19 +106,6 @@ class SourcepointSdk
         m.showMessages(getMessageTask.messages)
 
         return m.userConsent
-    end function
-
-    private function addQueryParams(uri as String, params as Object) as String
-        separator = uri.Instr(0, "?") < 0 ? "?" : "&"
-
-        for each k in params
-            if params[k] <> invalid
-                uri = uri + separator + k + "=" + params[k].Escape()
-                separator = "&"
-            end if
-        end for
-
-        return uri
     end function
 
     private function getLocalState() as String

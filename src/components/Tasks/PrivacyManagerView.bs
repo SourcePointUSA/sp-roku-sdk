@@ -3,5 +3,5 @@ sub init()
 end sub
 
 sub privacyManagerView()
-
+    ' consent/tcfv2/privacy-manager/privacy-manager-view?siteId=2371&vendorListId=5f8849a6a2286368091c12b3&consentLanguage=EN
 end sub
