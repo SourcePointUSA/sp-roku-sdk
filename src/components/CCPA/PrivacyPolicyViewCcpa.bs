@@ -1,3 +1,31 @@
 sub init()
-    print "hi from privacy policy init sub"
+    m.componentIdMap = {
+        "BackButton": "button_nav_back",
+        "Body": "privacy_policy_body"
+    }
+    m.navViewMap = {
+        "button_nav_back": "HomeView",
+    }
+    
+    m.top.observeField("view", "renderView")
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderNav(["button_nav_back"])
+
+    description = createObject("roSGNode", "ScrollableText")
+    description.text = m.components.privacy_policy_body.text
+    description.width = 640
+    description.height = 200
+
+    m.colRight.appendChild(description)
+
+    description.setFocus(true)
+    m.rightColFocus = description
 end sub

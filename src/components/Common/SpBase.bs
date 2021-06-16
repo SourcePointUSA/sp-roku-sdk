@@ -1,0 +1,59 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    translationMap = {
+        "screen-title": function(node, sWidth, sHeight) as Object
+            return [(sWidth - node.boundingRect().width)/2, 0] 
+        end function,
+        "col-layout": [0, 50]
+    }
+    updateTranslations(m.top, translationMap)
+
+    m.components = {}
+    ' m.navViewMap : maps nav button IDs to views they should link to
+    ' m.componentIdMap : fills in m.components mapping JSON id to our IDs
+end sub
+
+sub mapComponents(view as object)
+    if m.componentIdMap <> invalid then
+        for each component in view.components
+            if m.componentIdMap[component.id] <> invalid then
+                m.components[m.componentIdMap[component.id]] = component
+            end if
+        end for
+    end if
+end sub
+
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
+
+    if m.navViewMap <> invalid and m.navViewMap[selectedButton.id] <> invalid then
+        m.top.getParent().changeView = m.navViewMap[selectedButton.id]
+    end if
+end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "left" and press = true and m.nav <> invalid then
+        m.nav.setFocus(true)
+        return true
+    else if key = "right" and press = true and m.rightColFocus <> invalid then
+        m.rightColFocus.setFocus(true)
+    end if 
+
+    return false
+end function
+
+sub renderNav(buttonIds)
+    buttonGroup = createObject("roSGNode", "ButtonGroup")
+
+    for each buttonId in buttonIds
+        button = createObject("roSGNode", "Button")
+        button.id = buttonId
+        button.text = m.components[buttonId].text
+        buttonGroup.appendChild(button)
+    endfor
+
+    m.colLeft.appendChild(buttonGroup)
+    m.nav = buttonGroup
+    m.nav.observeField("buttonSelected", "observeNav")
+end sub

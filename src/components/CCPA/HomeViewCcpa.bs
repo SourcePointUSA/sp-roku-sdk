@@ -1,14 +1,5 @@
 sub init()
-    m.top.observeField("view", "renderView")
-end sub
-
-
-sub observeNav(event as Object)
-    m.top.getParent().changeView = "PrivacyPolicyView"
-end sub
-
-sub renderView(event as Object)
-    componentIdMap = {
+    m.componentIdMap = {
         "AcceptAllButton" : "button_nav_accept_all"
         "CategoriesDescriptionText": "text_category_description",
         "CategoriesSubDescriptionText": "text_category_sub_description",
@@ -18,22 +9,26 @@ sub renderView(event as Object)
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors"
     }
-    m.components = {}
+    m.navViewMap = {
+        "button_nav_categories": "PrivacyPolicyView",
+        "button_nav_privacy_policy": "PrivacyPolicyView",
+        "button_nav_vendors": "PrivacyPolicyView"
+    }
+
+    m.top.observeField("view", "renderView")
+end sub
+
+sub renderView(event as Object)
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
 
     view = event.getData()
-
-    for each component in view.components
-        if componentIdMap[component.id] <> invalid then
-            m.components[componentIdMap[component.id]] = component
-        end if
-    end for
+    mapComponents(view)
 
     m.top.findNode("screen-title").text = m.components.text_header.text
 
     renderLogo()
-    renderNav()
+    renderNav(["button_nav_accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
     renderRightCol()
 
     m.nav.setFocus(true)
@@ -52,22 +47,6 @@ sub renderLogo()
 
         m.colLeft.appendChild(component)
     end if
-end sub
-
-sub renderNav()
-    buttonIds = ["button_nav_accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"]
-    buttonGroup = createObject("roSGNode", "ButtonGroup")
-
-    for each buttonId in buttonIds
-        button = createObject("roSGNode", "Button")
-        button.id = buttonId
-        button.text = m.components[buttonId].text
-        buttonGroup.appendChild(button)
-    endfor
-
-    m.colLeft.appendChild(buttonGroup)
-    m.nav = buttonGroup
-    m.nav.observeField("buttonSelected", "observeNav")
 end sub
 
 sub renderRightCol()

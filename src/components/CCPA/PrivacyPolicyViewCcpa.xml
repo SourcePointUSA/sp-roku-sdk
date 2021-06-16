@@ -2,7 +2,7 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "PrivacyPolicyViewCcpa" extends = "SpTwoCol" >
+<component name = "PrivacyPolicyViewCcpa" extends = "SpBase" >
 
     <interface>
         <field id="view" type="assocarray" />
