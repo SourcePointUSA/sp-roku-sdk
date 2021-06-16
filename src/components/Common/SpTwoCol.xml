@@ -12,10 +12,10 @@
     </Group>
     
     <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[20]">
-        <Group id="col-left">
+        <LayoutGroup id="col-left" layoutDirection="vert" itemSpacings="[20]">
             <!-- <Label id="screen-title" text="Left Col"/> -->
         </Group>
-        <Group id="col-right">
+        <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
             <!-- <SimpleLabel id="screen-title" text="Right Col"/> -->
         </Group>
     </LayoutGroup>
