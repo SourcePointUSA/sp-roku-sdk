@@ -5,6 +5,7 @@
 <component name = "SpMessage" extends = "Group">
 
     <interface>
+        <field id="changeView" type="string" />
         <field id="message" type="assocarray" />
         <field id="done" type="boolean" />
         <field id="error" type="string" />

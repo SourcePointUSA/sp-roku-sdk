@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "PrivacyPolicyViewCcpa" extends = "SpTwoCol" >
+
+    <interface>
+        <field id="view" type="assocarray" />
+    </interface>
+
+    <script uri="./PrivacyPolicyViewCcpa.bs" />
+
+    <children></children>
+
+</component>

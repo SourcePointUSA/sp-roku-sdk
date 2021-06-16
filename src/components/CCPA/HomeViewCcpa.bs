@@ -2,6 +2,11 @@ sub init()
     m.top.observeField("view", "renderView")
 end sub
 
+
+sub observeNav(event as Object)
+    m.top.getParent().changeView = "PrivacyPolicyView"
+end sub
+
 sub renderView(event as Object)
     componentIdMap = {
         "AcceptAllButton" : "button_nav_accept_all"
@@ -24,12 +29,6 @@ sub renderView(event as Object)
             m.components[componentIdMap[component.id]] = component
         end if
     end for
-
-    print "view"
-    print view
-
-    print "components"
-    print m.components
 
     m.top.findNode("screen-title").text = m.components.text_header.text
 
@@ -61,19 +60,21 @@ sub renderNav()
 
     for each buttonId in buttonIds
         button = createObject("roSGNode", "Button")
+        button.id = buttonId
         button.text = m.components[buttonId].text
         buttonGroup.appendChild(button)
     endfor
 
     m.colLeft.appendChild(buttonGroup)
     m.nav = buttonGroup
+    m.nav.observeField("buttonSelected", "observeNav")
 end sub
 
 sub renderRightCol()
     description = createObject("roSGNode", "Label")
     description.text = m.components.text_category_description.text
     description.wrap = true
-    description.width = 400
+    description.width = 640
 
     m.colRight.appendChild(description)
 end sub

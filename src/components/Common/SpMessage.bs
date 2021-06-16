@@ -1,5 +1,10 @@
 sub init()
+    m.top.observeField("changeView", "changeView")
     m.top.observeField("message", "showMessage")
+end sub
+
+sub changeView(event as object)
+    showView(event.getData())
 end sub
 
 sub showMessage(event as Object)
@@ -8,10 +13,10 @@ sub showMessage(event as Object)
         "2": "Ccpa"
     }
 
-    message = event.getData()
+    m.message = event.getData()
 
-    if message.messageMetadata <> invalid and type(message.messageMetadata.categoryId) = "roInt" then
-        m.messageCategory = messageCategoryMap[message.messageMetadata.categoryId.ToStr()]
+    if m.message.messageMetadata <> invalid and type(m.message.messageMetadata.categoryId) = "roInt" then
+        m.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
 
         showView("HomeView")
     else
@@ -26,10 +31,16 @@ sub showView(view as String)
         "PrivacyPolicyView": "PrivacyPolicyView"
     }
 
+    if m.currentView <> invalid then
+        m.top.removeChild(m.currentView)
+        m.currentView = invalid
+    end if 
+
     viewObject = getViewObject(view)
     if viewObject <> invalid then
         viewComponent = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
         viewComponent.view = viewObject
+        m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)
     else
@@ -39,7 +50,7 @@ sub showView(view as String)
 end sub
 
 function getViewObject(view as String) as Object
-    for each component in m.top.message.message.message_json.components
+    for each component in m.message.message.message_json.components
         if component.id = view
             return component
         end if
