@@ -8,6 +8,9 @@ sub init()
     m.navViewMap = {
         "save_and_exit": "HomeView",
     }
+
+    m.categories = {}
+    m.vendors = {}
     
     getPrivacyManagerViewData()
     m.top.observeField("view", "renderView")
@@ -19,20 +22,16 @@ sub getPrivacyManagerViewData()
     m.privacyManagerViewTask.messageCategory = 2
     m.privacyManagerViewTask.propertyId = m.global.config.propertyId
     m.privacyManagerViewTask.control = "RUN"
-    m.privacyManagerViewTask.observeField("state", "renderRightCol")
+    m.privacyManagerViewTask.observeField("state", "setCategoryData")
 end sub
 
-sub renderRightCol(event as Object)
-    print event.getData()
-    print m.privacyManagerViewTask.categories
-    print m.privacyManagerViewTask.vendors
-
+sub renderRightCol()
     buttonGroup = createObject("roSGNode", "ButtonGroup")
 
-    for each category in m.privacyManagerViewTask.categories
+    for each categoryId in m.categories
         button = createObject("roSGNode", "Button")
-        button.id = category._id
-        button.text = category.name
+        button.id = categoryId
+        button.text = m.categories[categoryId].name
         buttonGroup.appendChild(button)
     endfor
 
@@ -55,4 +54,18 @@ sub renderView(event as Object)
     ' TODO add loader to the right col until it is rendered
 
     m.nav.setFocus(true)
+end sub
+
+sub setCategoryData(event as Object)
+    eventStatus = event.getData()
+
+    if eventStatus = "stop" or eventStatus = "done" then
+        for each category in m.privacyManagerViewTask.categories
+            m.categories[category._id] = category
+        end for
+
+        m.vendors = m.privacyManagerViewTask.vendors
+
+        renderRightCol()
+    end if
 end sub

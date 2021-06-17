@@ -25,6 +25,7 @@ sub mapComponents(view as object)
     end if
 end sub
 
+' TODO - add logic to handle "choice action" buttons
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
