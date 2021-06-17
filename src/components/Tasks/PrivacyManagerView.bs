@@ -1,7 +1,28 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
 sub init()
     m.top.functionName = "privacyManagerView"
 end sub
 
 sub privacyManagerView()
-    ' consent/tcfv2/privacy-manager/privacy-manager-view?siteId=2371&vendorListId=5f8849a6a2286368091c12b3&consentLanguage=EN
+    if m.top.messageCategory = 1 then
+        url = m.global.config.baseEndpoint + "/consent/tcfv2/privacy-manager/privacy-manager-view"
+    else if m.top.messageCategory = 2 then
+        url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
+    end if 
+
+    url = addQueryParams(
+        url,
+        {
+            "consentLanguage": m.top.consentLanguage,
+            "siteId": m.top.propertyId
+        }
+    )
+
+    response = makeRequest(url, "GET")
+
+    if response <> invalid then
+        m.top.categories = response.categories
+        m.top.vendors = response.vendors
+    end if
 end sub

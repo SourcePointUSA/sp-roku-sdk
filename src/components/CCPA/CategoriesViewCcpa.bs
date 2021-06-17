@@ -2,29 +2,44 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
     m.componentIdMap = {
+        "LogoImage": "image_logo",
         "SaveButton": "save_and_exit",
     }
     m.navViewMap = {
         "save_and_exit": "HomeView",
     }
     
-    m.top.observeField("message", "getPrivacyManagerViewData")
+    getPrivacyManagerViewData()
     m.top.observeField("view", "renderView")
 end sub
 
-sub getPrivacyManagerViewData(event as Object)
-    message = event.getData()
-    
+' TODO cache responses 
+sub getPrivacyManagerViewData()
     m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
-    ' ?siteId=2371&vendorListId=5f8849a6a2286368091c12b3&consentLanguage=EN
-    m.privacyManagerViewTask.url = addQueryParams(
-        m.global.config.baseEndpoint + "consent/tcfv2/privacy-manager/privacy-manager-view",
-        {
-            "consentLanguage": m.global.config.consentLanguage,
-            "siteId": m.global.config.accountId,
-            ' "vendorListId": 
-        }
-    )
+    m.privacyManagerViewTask.messageCategory = 2
+    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+    m.privacyManagerViewTask.control = "RUN"
+    m.privacyManagerViewTask.observeField("state", "renderRightCol")
+end sub
+
+sub renderRightCol(event as Object)
+    print event.getData()
+    print m.privacyManagerViewTask.categories
+    print m.privacyManagerViewTask.vendors
+
+    buttonGroup = createObject("roSGNode", "ButtonGroup")
+
+    for each category in m.privacyManagerViewTask.categories
+        button = createObject("roSGNode", "Button")
+        button.id = category._id
+        button.text = category.name
+        buttonGroup.appendChild(button)
+    endfor
+
+    m.colRight.appendChild(buttonGroup)
+    m.rightColFocus = buttonGroup
+    ' m.nav = buttonGroup
+    ' m.nav.observeField("buttonSelected", "observeNav")
 end sub
 
 sub renderView(event as Object)
@@ -34,5 +49,10 @@ sub renderView(event as Object)
     view = event.getData()
     mapComponents(view)
 
+    renderLogo()
     renderNav(["save_and_exit"])
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.nav.setFocus(true)
 end sub

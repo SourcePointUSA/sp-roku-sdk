@@ -28,6 +28,8 @@ sub getMessage()
     response = makeRequest(m.top.url, "POST", requestBody)
 
     if response <> invalid then
+        m.top.propertyId = response.propertyId
+
         messages = []
         for each c in response.campaigns
             if c.message <> invalid then

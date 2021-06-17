@@ -2,7 +2,7 @@ sub init()
     ' pass
 end sub
 
-function _makeRequest(url, method as String, body = {} as Object, retry = true as Boolean) as Object
+function _makeRequest(url as String, method as String, body = {} as Object, retry = true as Boolean) as Object
     request = createObject("roUrlTransfer")
     request.SetCertificatesFile("common:/certs/ca-bundle.crt")
     request.AddHeader("X-Roku-Reserved-Dev-Id", "")
@@ -10,15 +10,15 @@ function _makeRequest(url, method as String, body = {} as Object, retry = true a
     request.RetainBodyOnError(true)
     request.SetUrl(url)
 
+    port = createObject("roMessagePort")
+    request.setPort(port)
     if UCase(method) = "GET" then
-        response = request.getToString()
+        request.asyncGetToString()
     else if UCase(method) = "POST" then
         request.addHeader("Content-Type", "application/json")
-        port = createObject("roMessagePort")
-        request.setPort(port)
         request.asyncPostFromString(FormatJson(body))
-        response = port.waitMessage(10 * 1000)
     end if 
+    response = port.waitMessage(10 * 1000)
 
     responseBody = invalid
 
@@ -47,7 +47,7 @@ function _makeRequest(url, method as String, body = {} as Object, retry = true a
     end if
 end function
 
-function makeRequest(url, method, body) as Object
+function makeRequest(url as String, method as String, body = {} as Object) as Object
     response = _makeRequest(url, method, body)
 
     if response = invalid then

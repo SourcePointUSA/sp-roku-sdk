@@ -34,21 +34,6 @@ sub renderView(event as Object)
     m.nav.setFocus(true)
 end sub
 
-sub renderLogo()
-    if m.components.image_logo <> invalid then
-        component = createObject("roSGNode", "Poster")
-        component.id = "image_logo"
-        ' component.uri = m.components.image_logo.src
-        component.uri = "https://media-exp1.licdn.com/dms/image/C4E0BAQFSFMjK4tO6Ow/company-logo_200_200/0/1568325424638?e=2159024400&v=beta&t=BKtCl52Mz2EsyJeOP6zGmLURWT1aez1cJhKKiI9MzYU"
-
-        if m.components.image_logo.style.width <> invalid then
-            component.loadWidth = m.components.image_logo.style.width
-        end if 
-
-        m.colLeft.appendChild(component)
-    end if
-end sub
-
 sub renderRightCol()
     description = createObject("roSGNode", "Label")
     description.text = m.components.text_category_description.text

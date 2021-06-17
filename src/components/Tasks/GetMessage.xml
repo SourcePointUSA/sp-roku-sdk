@@ -5,6 +5,7 @@
   <interface>
     <!-- updated for request -->
     <field id="legislationsEnabled" type="array" />
+    <field id="propertyId" type="integer" />
 
     <!-- updated by response -->
     <field id="messages" type="array" />

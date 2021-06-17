@@ -4,6 +4,8 @@
 
   <interface>
     <!-- updated for request -->
+    <field id="messageCategory" type="integer" />
+    <field id="propertyId" type="integer" />
     <field id="vendorList" type="string" />
 
     <!-- updated by response -->

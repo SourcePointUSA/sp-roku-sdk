@@ -1,7 +1,8 @@
 sub init()
     m.componentIdMap = {
         "BackButton": "button_nav_back",
-        "Body": "privacy_policy_body"
+        "Body": "privacy_policy_body",
+        "LogoImage": "image_logo",
     }
     m.navViewMap = {
         "button_nav_back": "HomeView",
@@ -17,6 +18,7 @@ sub renderView(event as Object)
     view = event.getData()
     mapComponents(view)
 
+    renderLogo()
     renderNav(["button_nav_back"])
 
     description = createObject("roSGNode", "ScrollableText")

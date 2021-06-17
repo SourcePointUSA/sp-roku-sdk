@@ -5,6 +5,7 @@ class SourcepointSdk
     private consentLanguage
     private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
+    private propertyId
     private registry
     private scene
     private screen
@@ -13,7 +14,7 @@ class SourcepointSdk
     private userConsent
 
     public constants = {
-        baseEndpoint: "https://cdn.privacy-mgmt.com",
+        baseEndpoint: "https://cdn.sp-stage.net",
         pathGET: "/wrapper/v2/get_messages",
         pathPOST: "/"
     }
@@ -96,6 +97,7 @@ class SourcepointSdk
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
                 m.setLocalState(getMessageTask.localState)
                 m.userConsent = getMessageTask.userConsent
+                m.setPropertyId(getMessageTask.propertyId)
                 exit while
             end if
         end while
@@ -134,5 +136,12 @@ class SourcepointSdk
         m.scene.messages = messages
 
         m.screen.show()
+    end sub
+
+    private sub setPropertyId(propertyId as Integer)
+        m.propertyId = propertyId
+        globalConfig = m.global.config
+        globalConfig.propertyId = propertyId
+        m.global.config = globalConfig
     end sub
 end class
