@@ -12,7 +12,7 @@ sub init()
     m.navViewMap = {
         "button_nav_categories": "CategoriesView",
         "button_nav_privacy_policy": "PrivacyPolicyView",
-        "button_nav_vendors": "PrivacyPolicyView"
+        "button_nav_vendors": "VendorsView"
     }
 
     m.top.observeField("view", "renderView")

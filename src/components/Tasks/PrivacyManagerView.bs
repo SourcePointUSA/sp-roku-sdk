@@ -24,11 +24,15 @@ sub privacyManagerView()
     if response <> invalid then
         data = {
             categories: {},
-            vendors: response.vendors
+            vendors: {}
         }
 
         for each category in response.categories
             data.categories[category._id] = category
+        end for
+
+        for each vendor in response.vendors
+            data.vendors[vendor._id] = vendor
         end for
 
         m.top.data = data

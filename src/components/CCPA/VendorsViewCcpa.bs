@@ -1,15 +1,14 @@
 sub init()
     m.componentIdMap = {
+        "AcceptAllButton" : "accept_all",
         "LogoImage": "image_logo",
         "SaveButton": "save_and_exit",
     }
     m.navViewMap = {
+        "accept_all": "HomeView",
         "save_and_exit": "HomeView",
     }
 
-    m.categories = {}
-    m.vendors = {}
-    
     getPrivacyManagerViewData(renderRightCol)
     m.top.observeField("view", "renderView")
 end sub
@@ -18,10 +17,10 @@ sub renderRightCol()
     ' TODO this should probably be a lablel list
     buttonGroup = createObject("roSGNode", "ButtonGroup")
 
-    for each categoryId in m.privacyManagerViewData.categories
+    for each vendorId in m.privacyManagerViewData.vendors
         button = createObject("roSGNode", "Button")
-        button.id = categoryId
-        button.text = m.privacyManagerViewData.categories[categoryId].name
+        button.id = vendorId
+        button.text = m.privacyManagerViewData.vendors[vendorId].name
         buttonGroup.appendChild(button)
     endfor
 
@@ -39,7 +38,7 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["save_and_exit"])
+    renderNav(["accept_all", "save_and_exit"])
 
     ' TODO add loader to the right col until it is rendered
 

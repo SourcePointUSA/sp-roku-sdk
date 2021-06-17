@@ -29,7 +29,8 @@ sub showView(view as String)
     viewMap = {
         "HomeView": "HomeView",
         "CategoriesView": "CategoriesView",
-        "PrivacyPolicyView": "PrivacyPolicyView"
+        "PrivacyPolicyView": "PrivacyPolicyView",
+        "VendorsView": "VendorsView"
     }
 
     if m.currentView <> invalid then
