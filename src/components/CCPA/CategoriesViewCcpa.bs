@@ -12,26 +12,18 @@ sub init()
     m.categories = {}
     m.vendors = {}
     
-    getPrivacyManagerViewData()
+    getPrivacyManagerViewData(renderRightCol)
     m.top.observeField("view", "renderView")
 end sub
 
-' TODO cache responses 
-sub getPrivacyManagerViewData()
-    m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
-    m.privacyManagerViewTask.messageCategory = 2
-    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
-    m.privacyManagerViewTask.control = "RUN"
-    m.privacyManagerViewTask.observeField("state", "setCategoryData")
-end sub
-
 sub renderRightCol()
+    ' TODO this should probably be a lablel list
     buttonGroup = createObject("roSGNode", "ButtonGroup")
 
-    for each categoryId in m.categories
+    for each categoryId in m.privacyManagerViewData.categories
         button = createObject("roSGNode", "Button")
         button.id = categoryId
-        button.text = m.categories[categoryId].name
+        button.text = m.privacyManagerViewData.categories[categoryId].name
         buttonGroup.appendChild(button)
     endfor
 
@@ -54,18 +46,4 @@ sub renderView(event as Object)
     ' TODO add loader to the right col until it is rendered
 
     m.nav.setFocus(true)
-end sub
-
-sub setCategoryData(event as Object)
-    eventStatus = event.getData()
-
-    if eventStatus = "stop" or eventStatus = "done" then
-        for each category in m.privacyManagerViewTask.categories
-            m.categories[category._id] = category
-        end for
-
-        m.vendors = m.privacyManagerViewTask.vendors
-
-        renderRightCol()
-    end if
 end sub

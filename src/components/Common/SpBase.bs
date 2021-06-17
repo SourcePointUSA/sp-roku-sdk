@@ -15,6 +15,20 @@ sub init()
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
 end sub
 
+' TODO cache responses 
+sub getPrivacyManagerViewData(callbackFn)
+    m.pmvCallback = callbackFn
+    if m.privacyManagerViewData = invalid then
+        m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+        m.privacyManagerViewTask.messageCategory = 2
+        m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+        m.privacyManagerViewTask.control = "RUN"
+        m.privacyManagerViewTask.observeField("state", "setCategoryData")
+    else
+        m.pmvCallback()
+    end if
+end sub
+
 sub mapComponents(view as object)
     if m.componentIdMap <> invalid then
         for each component in view.components
@@ -73,4 +87,16 @@ sub renderNav(buttonIds)
     m.colLeft.appendChild(buttonGroup)
     m.nav = buttonGroup
     m.nav.observeField("buttonSelected", "observeNav")
+end sub
+
+sub setCategoryData(event as Object)
+    eventStatus = event.getData()
+
+    if eventStatus = "stop" or eventStatus = "done" then
+        m.privacyManagerViewData = m.privacyManagerViewTask.data
+
+        if m.pmvCallback <> invalid then
+            m.pmvCallback()
+        end if
+    end if
 end sub

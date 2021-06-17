@@ -22,7 +22,15 @@ sub privacyManagerView()
     response = makeRequest(url, "GET")
 
     if response <> invalid then
-        m.top.categories = response.categories
-        m.top.vendors = response.vendors
+        data = {
+            categories: {},
+            vendors: response.vendors
+        }
+
+        for each category in response.categories
+            data.categories[category._id] = category
+        end for
+
+        m.top.data = data
     end if
 end sub
