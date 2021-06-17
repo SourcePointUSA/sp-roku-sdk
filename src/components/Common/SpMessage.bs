@@ -7,6 +7,15 @@ sub changeView(event as object)
     showView(event.getData())
 end sub
 
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "back" and press = true then
+        if m.currentView <> invalid and m.currentView.id <> "HomeView" then
+            showView("HomeView")
+        end if
+        return true
+    end if 
+end function
+
 sub showMessage(event as Object)
     messageCategoryMap = {
         "1": "Gdpr",
@@ -41,6 +50,7 @@ sub showView(view as String)
     viewObject = getViewObject(view)
     if viewObject <> invalid then
         viewComponent = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
+        viewComponent.id = viewMap[view]
         viewComponent.message = m.message.message
         viewComponent.messageMetadata = m.message.messageMetadata
         viewComponent.view = viewObject
