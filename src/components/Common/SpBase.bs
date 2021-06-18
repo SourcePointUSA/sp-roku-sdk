@@ -18,7 +18,7 @@ end sub
 sub changeView(viewName as String, viewData = invalid as Object)
     spMessage = m.top.getParent()
     spMessage.changeView = viewName
-    spMessage.changeViewData = {}
+    spMessage.changeViewData = viewData
 end sub
 
 ' TODO cache responses 
