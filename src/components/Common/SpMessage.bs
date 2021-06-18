@@ -1,16 +1,24 @@
 sub init()
     m.top.observeField("changeView", "changeView")
     m.top.observeField("message", "showMessage")
+
+    m.viewHistory = []
 end sub
 
 sub changeView(event as object)
     showView(event.getData())
 end sub
 
+sub goBack()
+    ' TODO grab view from viewHistory and show it
+    ' TODO "cache" views ? keep them in memory once rendered ?
+    showView("HomeView")
+end sub
+
 function onKeyEvent(key as String, press as Boolean) as Boolean
     if key = "back" and press = true then
         if m.currentView <> invalid and m.currentView.id <> "HomeView" then
-            showView("HomeView")
+            goBack()
         end if
         return true
     end if 
@@ -41,6 +49,14 @@ sub showView(view as String)
         "PrivacyPolicyView": "PrivacyPolicyView",
         "VendorsView": "VendorsView"
     }
+
+    if view = "HomeView" then
+        ' reset history when we go back Home
+        m.viewHistory = []
+    else 
+        ' add to History if we're going deeper
+        m.viewHistory.push(m.currentView)
+    end if
 
     if m.currentView <> invalid then
         m.top.removeChild(m.currentView)

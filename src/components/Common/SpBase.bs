@@ -15,6 +15,12 @@ sub init()
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
 end sub
 
+sub changeView(viewName as String, viewData = invalid as Object)
+    spMessage = m.top.getParent()
+    spMessage.changeView = viewName
+    spMessage.changeViewData = {}
+end sub
+
 ' TODO cache responses 
 sub getPrivacyManagerViewData(callbackFn)
     m.pmvCallback = callbackFn
@@ -44,7 +50,7 @@ sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
     if m.navViewMap <> invalid and m.navViewMap[selectedButton.id] <> invalid then
-        m.top.getParent().changeView = m.navViewMap[selectedButton.id]
+        changeView(m.navViewMap[selectedButton.id])
     end if
 end sub
 
