@@ -6,13 +6,13 @@ sub init()
 end sub
 
 sub changeView(event as object)
-    showView(event.getData())
+    showView(event.getData(), m.top.changeViewDataExtra)
 end sub
 
 sub goBack()
     ' TODO grab view from viewHistory and show it
     ' TODO "cache" views ? keep them in memory once rendered ?
-    showView("HomeView")
+    m.top.changeView = "HomeView"
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
@@ -42,15 +42,16 @@ sub showMessage(event as Object)
     endif
 end sub
 
-sub showView(view as String)
+sub showView(viewName as String, viewDataExtra = invalid as Object)
     viewMap = {
         "HomeView": "HomeView",
         "CategoriesView": "CategoriesView",
+        "CategoryDetailsView": "CategoryView",
         "PrivacyPolicyView": "PrivacyPolicyView",
         "VendorsView": "VendorsView"
     }
 
-    if view = "HomeView" then
+    if viewName = "HomeView" then
         ' reset history when we go back Home
         m.viewHistory = []
     else 
@@ -63,24 +64,27 @@ sub showView(view as String)
         m.currentView = invalid
     end if 
 
-    viewObject = getViewObject(view)
-    if viewObject <> invalid then
-        viewComponent = CreateObject("roSGNode", viewMap[view] + m.messageCategory)
-        viewComponent.id = viewMap[view]
+    viewData = getViewData(viewName)
+    if viewData <> invalid then
+        print "showing view: " + viewName
+        viewComponent = CreateObject("roSGNode", viewMap[viewName] + m.messageCategory)
+        viewComponent.id = viewMap[viewName]
         viewComponent.message = m.message.message
         viewComponent.messageMetadata = m.message.messageMetadata
-        viewComponent.view = viewObject
+        viewComponent.view = viewData
+        viewComponent.viewDataExtra = viewDataExtra
 
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)
     else
+        print "error showing: " + viewName
         m.top.done = true
         m.top.error = "Invalid message JSON"
     end if
 end sub
 
-function getViewObject(view as String) as Object
+function getViewData(view as String) as Object
     for each component in m.message.message.message_json.components
         if component.id = view
             return component

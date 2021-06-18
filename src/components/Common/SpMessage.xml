@@ -6,7 +6,7 @@
 
     <interface>
         <field id="changeView" type="string" />
-        <field id="changeViewData" type="assocarray" />
+        <field id="changeViewDataExtra" type="assocarray" />
 
         <field id="message" type="assocarray" />
         <field id="done" type="boolean" />

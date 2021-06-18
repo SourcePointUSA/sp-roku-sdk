@@ -1,6 +1,7 @@
 sub init()
     m.componentIdMap = {
         "AcceptAllButton" : "accept_all",
+        "HeaderText": "text_header",
         "LogoImage": "image_logo",
         "SaveButton": "save_and_exit",
     }

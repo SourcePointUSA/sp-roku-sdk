@@ -25,8 +25,6 @@ sub renderView(event as Object)
     view = event.getData()
     mapComponents(view)
 
-    m.top.findNode("screen-title").text = m.components.text_header.text
-
     renderLogo()
     renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
     renderRightCol()

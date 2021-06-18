@@ -2,6 +2,7 @@ sub init()
     m.componentIdMap = {
         "BackButton": "button_nav_back",
         "Body": "privacy_policy_body",
+        "HeaderText": "text_header",
         "LogoImage": "image_logo",
     }
     m.navViewMap = {

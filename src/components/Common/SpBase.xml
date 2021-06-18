@@ -8,6 +8,7 @@
       <field id="message" type="assocarray" />
       <field id="messageMetadata" type="assocarray" />
       <field id="view" type="assocarray" />
+      <field id="viewDataExtra" type="assocarray" />
   </interface>
 
   <script uri="./SpBase.bs" />

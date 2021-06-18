@@ -1,37 +1,41 @@
 sub init()
     m.componentIdMap = {
+        "HeaderText": "text_header",
         "LogoImage": "image_logo",
         "SaveButton": "save_and_exit",
     }
     m.navViewMap = {
         "save_and_exit": "HomeView",
     }
-
-    m.categories = {}
-    m.vendors = {}
     
     getPrivacyManagerViewData(renderRightCol)
     m.top.observeField("view", "renderView")
 end sub
 
+sub observeCategoryList(event as Object)
+    'CategoryDetailsView
+    item = m.categoryList.content.getChild(event.getData())
+
+    changeView("CategoryDetailsView", m.privacyManagerViewData.categories[item.id])
+end sub
+
 sub renderRightCol()
-    labelList = createObject("roSGNode", "LabelList")
+    m.categoryList = createObject("roSGNode", "LabelList")
     rootContentNode = createObject("roSGNode", "ContentNode")
 
     for each categoryId in m.privacyManagerViewData.categories
         contentNode = createObject("roSGNode", "ContentNode")
         contentNode.id = categoryId
         contentNode.title = m.privacyManagerViewData.categories[categoryId].name
-        print contentNode
         rootContentNode.appendChild(contentNode)
     endfor
 
-    labelList.content = rootContentNode
+    m.categoryList.content = rootContentNode
 
-    m.colRight.appendChild(labelList)
-    m.rightColFocus = labelList
+    m.colRight.appendChild(m.categoryList)
+    m.rightColFocus = m.categoryList
     ' m.nav = buttonGroup
-    ' m.nav.observeField("buttonSelected", "observeNav")
+    m.categoryList.observeField("itemSelected", "observeCategoryList")
 end sub
 
 sub renderView(event as Object)

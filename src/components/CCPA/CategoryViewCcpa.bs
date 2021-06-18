@@ -1,0 +1,60 @@
+sub init()
+    print "category view"
+
+    m.componentIdMap = {
+        "HeaderText": "text_header",
+        "LogoImage": "image_logo",
+        "OnButton": "button_on",
+        "OffButton": "button_off",
+    }
+    m.navViewMap = {
+        "save_and_exit": "HomeView",
+    }
+
+    m.top.observeField("view", "renderView")
+    m.top.observeField("viewDataExtra", "renderRightCol")
+    m.top.observeField("vendorType", "renderRightCol")
+end sub
+
+sub renderRightCol(event as Object)
+    print "render right col:"
+    print event.getData()
+    categoryData = event.getData()
+
+    if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
+        vendors = categoryData.requiringConsentVendors
+    else 
+        vendors = categoryData.legIntVendors
+    end if
+
+    m.vendorList = createObject("roSGNode", "LabelList")
+    rootContentNode = createObject("roSGNode", "ContentNode")
+
+    for each vendor in vendors
+        contentNode = createObject("roSGNode", "ContentNode")
+        contentNode.id = vendor._id
+        contentNode.title = vendor.name
+        rootContentNode.appendChild(contentNode)
+    endfor
+
+    m.vendorList.content = rootContentNode
+
+    m.colRight.appendChild(m.vendorList)
+    m.rightColFocus = m.vendorList
+    ' m.vendorList.observeField("itemSelected", "observeCategoryList")
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(["button_on", "button_off"])
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.nav.setFocus(true)
+end sub
