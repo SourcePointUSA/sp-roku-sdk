@@ -15,18 +15,21 @@ sub init()
 end sub
 
 sub renderRightCol()
-    ' TODO this should probably be a lablel list
-    buttonGroup = createObject("roSGNode", "ButtonGroup")
+    labelList = createObject("roSGNode", "LabelList")
+    rootContentNode = createObject("roSGNode", "ContentNode")
 
     for each categoryId in m.privacyManagerViewData.categories
-        button = createObject("roSGNode", "Button")
-        button.id = categoryId
-        button.text = m.privacyManagerViewData.categories[categoryId].name
-        buttonGroup.appendChild(button)
+        contentNode = createObject("roSGNode", "ContentNode")
+        contentNode.id = categoryId
+        contentNode.title = m.privacyManagerViewData.categories[categoryId].name
+        print contentNode
+        rootContentNode.appendChild(contentNode)
     endfor
 
-    m.colRight.appendChild(buttonGroup)
-    m.rightColFocus = buttonGroup
+    labelList.content = rootContentNode
+
+    m.colRight.appendChild(labelList)
+    m.rightColFocus = labelList
     ' m.nav = buttonGroup
     ' m.nav.observeField("buttonSelected", "observeNav")
 end sub
