@@ -5,7 +5,7 @@
 <component name = "SpMessage" extends = "Group">
 
     <interface>
-        <field id="changeView" type="string" />
+        <field id="changeView" type="string" alwaysNotify="true"/>
         <field id="changeViewDataExtra" type="assocarray" />
 
         <field id="message" type="assocarray" />

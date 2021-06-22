@@ -12,7 +12,20 @@ end sub
 sub goBack()
     ' TODO grab view from viewHistory and show it
     ' TODO "cache" views ? keep them in memory once rendered ?
-    m.top.changeView = "HomeView"
+    if m.viewHistory.count() > 0 then
+        previousView = m.viewHistory.pop()
+
+        if m.currentView <> invalid then
+            m.top.removeChild(m.currentView)
+            m.currentView = invalid
+        end if 
+        
+        m.currentView = previousView
+        m.top.appendChild(previousView)
+        previousView.setFocus(true)
+    else
+        m.top.changeView = "HomeView"
+    end if
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
