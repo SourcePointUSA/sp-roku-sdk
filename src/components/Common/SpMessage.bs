@@ -61,7 +61,8 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         "CategoriesView": "CategoriesView",
         "CategoryDetailsView": "CategoryView",
         "PrivacyPolicyView": "PrivacyPolicyView",
-        "VendorsView": "VendorsView"
+        "VendorsView": "VendorsView",
+        "VendorDetails": "VendorView"
     }
 
     if viewName = "HomeView" then
@@ -82,6 +83,9 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         print "showing view: " + viewName
         viewComponent = CreateObject("roSGNode", viewMap[viewName] + m.messageCategory)
         viewComponent.id = viewMap[viewName]
+
+        ' this order is important for observers 
+        ' (a viewDataExtra observer will have access to all of the before)
         viewComponent.message = m.message.message
         viewComponent.messageMetadata = m.message.messageMetadata
         viewComponent.view = viewData

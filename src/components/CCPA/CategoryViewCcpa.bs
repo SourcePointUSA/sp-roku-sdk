@@ -1,16 +1,9 @@
 sub init()
-    m.navViewMap = {
-        "save_and_exit": "HomeView",
-    }
-
     m.top.observeField("view", "renderView")
     m.top.observeField("viewDataExtra", "renderRightCol")
-    m.top.observeField("vendorType", "renderRightCol")
 end sub
 
 sub renderRightCol(event as Object)
-    print "render right col:"
-    print event.getData()
     categoryData = event.getData()
 
     if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
@@ -33,7 +26,6 @@ sub renderRightCol(event as Object)
 
     m.colRight.appendChild(m.vendorList)
     m.rightColFocus = m.vendorList
-    ' m.vendorList.observeField("itemSelected", "observeCategoryList")
 end sub
 
 sub renderView(event as Object)

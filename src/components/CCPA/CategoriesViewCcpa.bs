@@ -29,7 +29,6 @@ sub renderRightCol()
 
     m.colRight.appendChild(m.categoryList)
     m.rightColFocus = m.categoryList
-    ' m.nav = buttonGroup
     m.categoryList.observeField("itemSelected", "observeCategoryList")
 end sub
 

@@ -103,10 +103,12 @@ sub renderNav(buttonIds)
     buttonGroup = createObject("roSGNode", "ButtonGroup")
 
     for each buttonId in buttonIds
-        button = createObject("roSGNode", "Button")
-        button.id = buttonId
-        button.text = m.components[buttonId].text
-        buttonGroup.appendChild(button)
+        if m.components[buttonId] <> invalid then
+            button = createObject("roSGNode", "Button")
+            button.id = buttonId
+            button.text = m.components[buttonId].text
+            buttonGroup.appendChild(button)
+        end if
     endfor
 
     m.colLeft.appendChild(buttonGroup)

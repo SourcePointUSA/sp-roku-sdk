@@ -1,0 +1,38 @@
+sub init()
+    ' m.top.observeField("view", "renderView")
+    m.top.observeField("viewDataExtra", "renderView")
+end sub
+
+sub renderRightCol(vendorData)
+    m.top.findNode("screen-title").text = vendorData.name
+
+    m.categoryList = createObject("roSGNode", "LabelList")
+    rootContentNode = createObject("roSGNode", "ContentNode")
+
+    for each purpose in vendorData.purposes
+        contentNode = createObject("roSGNode", "ContentNode")
+        contentNode.title = purpose
+        rootContentNode.appendChild(contentNode)
+    endfor
+
+    m.categoryList.content = rootContentNode
+
+    m.colRight.appendChild(m.categoryList)
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+    
+    view = m.top.view
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(["button_on", "button_off"])
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.nav.setFocus(true)
+
+    renderRightCol(event.getData())
+end sub

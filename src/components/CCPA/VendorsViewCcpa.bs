@@ -14,21 +14,28 @@ sub init()
     m.top.observeField("view", "renderView")
 end sub
 
+sub observeVendorList(event as Object)
+    item = m.vendorList.content.getChild(event.getData())
+
+    changeView("VendorDetails", m.privacyManagerViewData.vendors[item.id])
+end sub
+
 sub renderRightCol()
-    ' TODO this should probably be a lablel list
-    buttonGroup = createObject("roSGNode", "ButtonGroup")
+    m.vendorList = createObject("roSGNode", "LabelList")
+    rootContentNode = createObject("roSGNode", "ContentNode")
 
     for each vendorId in m.privacyManagerViewData.vendors
-        button = createObject("roSGNode", "Button")
-        button.id = vendorId
-        button.text = m.privacyManagerViewData.vendors[vendorId].name
-        buttonGroup.appendChild(button)
+        contentNode = createObject("roSGNode", "ContentNode")
+        contentNode.id = vendorId
+        contentNode.title = m.privacyManagerViewData.vendors[vendorId].name
+        rootContentNode.appendChild(contentNode)
     endfor
 
-    m.colRight.appendChild(buttonGroup)
-    m.rightColFocus = buttonGroup
-    ' m.nav = buttonGroup
-    ' m.nav.observeField("buttonSelected", "observeNav")
+    m.vendorList.content = rootContentNode
+
+    m.colRight.appendChild(m.vendorList)
+    m.rightColFocus = m.vendorList
+    m.vendorList.observeField("itemSelected", "observeVendorList")
 end sub
 
 sub renderView(event as Object)
