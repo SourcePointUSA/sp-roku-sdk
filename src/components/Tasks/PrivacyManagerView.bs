@@ -9,6 +9,8 @@ sub privacyManagerView()
         url = m.global.config.baseEndpoint + "/consent/tcfv2/privacy-manager/privacy-manager-view"
     else if m.top.messageCategory = 2 then
         url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
+    else
+        return
     end if 
 
     url = addQueryParams(

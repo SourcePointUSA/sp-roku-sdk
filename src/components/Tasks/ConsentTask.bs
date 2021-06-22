@@ -1,0 +1,45 @@
+' import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.functionName = "postConsent"
+end sub
+
+sub postConsent()
+    url = m.global.config.baseEndpoint + "/wrapper/v2/messages/choice/"
+    if m.top.messageCategory = 1 then
+        url = url + "gdpr/"
+    else if m.top.messageCategory = 2 then
+        url = url + "ccpa/"
+    else
+        return
+    end if 
+
+    if m.top.action = "accept" then
+        url = url + "11"
+    else if m.top.action = "reject" then
+        url = url + "13"
+    else 
+        return
+    end if
+
+    url = addQueryParams(url, { env: m.global.config.env })
+
+    body = {
+        "authId": m.global.config.authId,
+        "requestUUID": m.global.config.requestUUID,
+        "localState": getLocalState(),
+        "includeData": { 
+            "customVendorsResponse": { "type": "RecordString"}
+        }
+    }
+
+    if m.top.saveAndExitVariables <> invalid then
+        body.pmSaveAndExitVariables = m.top.saveAndExitVariables
+    end if
+
+    response = makeRequest(url, "POST", body)
+
+    if response <> invalid then
+        m.top.userConsent = response.userConsent
+    end if
+end sub

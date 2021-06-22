@@ -37,11 +37,11 @@ sub changeView(viewName as String, viewData = invalid as Object)
 end sub
 
 ' TODO cache responses 
-sub getPrivacyManagerViewData(callbackFn)
+sub getPrivacyManagerViewData(callbackFn, messageCategoryId)
     m.pmvCallback = callbackFn
     if m.privacyManagerViewData = invalid then
         m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
-        m.privacyManagerViewTask.messageCategory = 2
+        m.privacyManagerViewTask.messageCategory = messageCategoryId
         m.privacyManagerViewTask.propertyId = m.global.config.propertyId
         m.privacyManagerViewTask.control = "RUN"
         m.privacyManagerViewTask.observeField("state", "setCategoryData")
@@ -49,6 +49,10 @@ sub getPrivacyManagerViewData(callbackFn)
         m.pmvCallback()
     end if
 end sub
+
+function getPmSaveAndExitVariables() as Object
+    return {}
+end function
 
 sub mapComponents(view as object)
     if m.componentIdMap <> invalid then
@@ -66,6 +70,21 @@ sub observeNav(event as Object)
 
     if m.navViewMap <> invalid and m.navViewMap[selectedButton.id] <> invalid then
         changeView(m.navViewMap[selectedButton.id])
+    else
+        consentTask = createObject("roSGNode", "ConsentTask")
+        consentTask.messageCategory = m.top.messageMetadata.categoryId
+
+        if selectedButton.id = "accept_all" then
+            consentTask.action = "accept"
+        else if selectedButton.id = "reject_all" then
+            consentTask.action = "reject"
+        else if selectedButton.id = "save_and_exit" then
+            consentTask.action = "save_and_exit"
+            consentTask.saveAndExitVariables = getPmSaveAndExitVariables()
+        end if 
+
+        consentTask.control = "RUN"
+        consentTask.observeField("state", "setConsent")
     end if
 end sub
 
@@ -126,4 +145,8 @@ sub setCategoryData(event as Object)
             m.pmvCallback()
         end if
     end if
+end sub
+
+sub setConsent(event as Object)
+    print "consent request done"
 end sub

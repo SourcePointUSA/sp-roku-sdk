@@ -6,6 +6,8 @@ end sub
 sub renderRightCol(event as Object)
     categoryData = event.getData()
 
+    m.top.findNode("screen-title").text = categoryData.name
+
     if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
         vendors = categoryData.requiringConsentVendors
     else 

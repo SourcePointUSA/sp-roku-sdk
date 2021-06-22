@@ -4,6 +4,8 @@
 
     <interface>
         <field id="vendorType" type="string" />
+
+        <field id="categoryId" type="string" />
     </interface>
 
     <script uri="./CategoryViewCcpa.bs" />

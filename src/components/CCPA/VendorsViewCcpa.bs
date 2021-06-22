@@ -10,7 +10,7 @@ sub init()
         "save_and_exit": "HomeView",
     }
 
-    getPrivacyManagerViewData(renderRightCol)
+    getPrivacyManagerViewData(renderRightCol, 2)
     m.top.observeField("view", "renderView")
 end sub
 

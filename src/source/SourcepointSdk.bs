@@ -1,12 +1,12 @@
 class SourcepointSdk
     private accountId
+    private authId
     private env = "stage"
     private campaignEnv = "prod"
     private consentLanguage
     private legislationsEnabled
     private propertyHref    'TODO : is this what we should use? 
     private propertyId
-    private registry
     private scene
     private screen
     private sdkPath = "sourcepoint-sdk"
@@ -46,15 +46,17 @@ class SourcepointSdk
 
         if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
 
-        m.registry = CreateObject("roRegistrySection", "SourcepointSdk")
         m.requestUUID = m.makeRequestUUID()
 
         m.global = m.screen.getGlobalNode()
         m.global.addField("config", "assocarray", true)
         m.global.config = {
             "accountId": m.accountId,
+            "authId": m.authId,
             "baseEndpoint" : m.constants.baseEndpoint,
-            "consentLanguage" : m.consentLanguage
+            "consentLanguage" : m.consentLanguage,
+            "env": m.env,
+            "requestUUID": m.makeRequestUUID()
         }
 
         ' fetch messages and user consent, and messages
@@ -85,7 +87,7 @@ class SourcepointSdk
             getMessageTask[k] = m[k]
         end for
 
-        getMessageTask.localState = m.getLocalState()
+        getMessageTask.localState = getLocalState()
         getMessageTask.control = "RUN"
 
         port = CreateObject("roMessagePort")
@@ -95,7 +97,6 @@ class SourcepointSdk
         while true
             msg = wait(1000, port)
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
-                m.setLocalState(getMessageTask.localState)
                 m.userConsent = getMessageTask.userConsent
                 m.setPropertyId(getMessageTask.propertyId)
                 exit while
@@ -110,21 +111,9 @@ class SourcepointSdk
         return m.userConsent
     end function
 
-    private function getLocalState() as String
-        if m.registry.Exists("localState") then
-            return m.registry.read("localState")
-        end if
-
-        return ""
-    end function
-
     private function makeRequestUUID() as string
         return "test"
     end function
-
-    private sub setLocalState(localState)
-        m.registry.write("localState", localState)
-    end sub
 
     private sub showMessages(messages as Object)
         ' close screen and return if we have no messages

@@ -11,6 +11,22 @@ function addQueryParams(uri as String, params as Object) as String
     return uri
 end function
 
+function getLocalState() as String
+    registry = CreateObject("roRegistrySection", "SourcepointSdk")
+    if registry.Exists("localState") then
+        return registry.read("localState")
+    end if
+
+    return ""
+end function
+
+sub setLocalState(localState)
+    registry = CreateObject("roRegistrySection", "SourcepointSdk")
+
+    registry.write("localState", localState)
+    registry.flush()
+end sub
+
 sub updateTranslations(node as object, translationMap as Object)
     resolutionInfo = m.top.getScene().currentDesignResolution
 

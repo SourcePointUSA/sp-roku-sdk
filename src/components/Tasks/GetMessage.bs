@@ -48,7 +48,6 @@ sub getMessage()
             end if
         end for
 
-        m.top.localState = response.localState
         m.top.userConsent = userConsent
     end if 
 end sub
