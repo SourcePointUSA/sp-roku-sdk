@@ -102,7 +102,7 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
 end sub
 
 function getViewData(view as String) as Object
-    for each component in m.message.message.message_json.components
+    for each component in m.message.message.message_json.children
         if component.id = view
             return component
         end if

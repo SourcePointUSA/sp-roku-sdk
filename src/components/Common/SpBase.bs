@@ -52,7 +52,7 @@ end sub
 
 sub mapComponents(view as object)
     if m.componentIdMap <> invalid then
-        for each component in view.components
+        for each component in view.children
             if m.componentIdMap[component.id] <> invalid then
                 m.components[m.componentIdMap[component.id]] = component
             end if
@@ -82,7 +82,7 @@ end function
 
 sub renderLogo()
     if m.components.text_header <> invalid then
-        m.top.findNode("screen-title").text = m.components.text_header.text
+        m.top.findNode("screen-title").text = m.components.text_header.settings.text
     end if
 
     if m.components.image_logo <> invalid then
@@ -91,8 +91,8 @@ sub renderLogo()
         ' component.uri = m.components.image_logo.src
         component.uri = "https://media-exp1.licdn.com/dms/image/C4E0BAQFSFMjK4tO6Ow/company-logo_200_200/0/1568325424638?e=2159024400&v=beta&t=BKtCl52Mz2EsyJeOP6zGmLURWT1aez1cJhKKiI9MzYU"
 
-        if m.components.image_logo.style.width <> invalid then
-            component.loadWidth = m.components.image_logo.style.width
+        if m.components.image_logo.settings.style.width <> invalid then
+            component.loadWidth = m.components.image_logo.settings.style.width
         end if 
 
         m.colLeft.appendChild(component)
@@ -106,7 +106,7 @@ sub renderNav(buttonIds)
         if m.components[buttonId] <> invalid then
             button = createObject("roSGNode", "Button")
             button.id = buttonId
-            button.text = m.components[buttonId].text
+            button.text = m.components[buttonId].settings.text
             buttonGroup.appendChild(button)
         end if
     endfor

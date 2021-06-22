@@ -17,7 +17,7 @@ sub renderView(event as Object)
     renderNav(["button_nav_back"])
 
     description = createObject("roSGNode", "ScrollableText")
-    description.text = m.components.privacy_policy_body.text
+    description.text = m.components.privacy_policy_body.settings.text
     description.width = 640
     description.height = 200
 
