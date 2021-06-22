@@ -1,14 +1,4 @@
 sub init()
-    m.componentIdMap = {
-        "AcceptAllButton" : "accept_all"
-        "CategoriesDescriptionText": "text_category_description",
-        "CategoriesSubDescriptionText": "text_category_sub_description",
-        "HeaderText": "text_header",
-        "LogoImage": "image_logo",
-        "NavCategoriesButton": "button_nav_categories",
-        "NavPrivacyPolicyButton": "button_nav_privacy_policy",
-        "NavVendorsButton": "button_nav_vendors"
-    }
     m.navViewMap = {
         "button_nav_categories": "CategoriesView",
         "button_nav_privacy_policy": "PrivacyPolicyView",

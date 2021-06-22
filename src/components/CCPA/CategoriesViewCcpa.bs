@@ -1,9 +1,4 @@
 sub init()
-    m.componentIdMap = {
-        "HeaderText": "text_header",
-        "LogoImage": "image_logo",
-        "SaveButton": "save_and_exit",
-    }
     m.navViewMap = {
         "save_and_exit": "HomeView",
     }

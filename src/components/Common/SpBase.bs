@@ -9,6 +9,21 @@ sub init()
     }
     updateTranslations(m.top, translationMap)
 
+    m.componentIdMap = {
+        "AcceptAllButton" : "accept_all",
+        "Body": "privacy_policy_body",
+        "BackButton": "button_nav_back",
+        "CategoriesDescriptionText": "text_category_description",
+        "CategoriesSubDescriptionText": "text_category_sub_description",
+        "HeaderText": "text_header",
+        "LogoImage": "image_logo",
+        "OnButton": "button_on",
+        "OffButton": "button_off",
+        "NavCategoriesButton": "button_nav_categories",
+        "NavPrivacyPolicyButton": "button_nav_privacy_policy",
+        "NavVendorsButton": "button_nav_vendors",
+        "SaveButton": "save_and_exit",
+    }
     m.components = {}
     ' m.navViewMap : maps nav button IDs to views they should link to
     ' m.componentIdMap : fills in m.components mapping JSON id to our IDs

@@ -1,12 +1,4 @@
 sub init()
-    print "category view"
-
-    m.componentIdMap = {
-        "HeaderText": "text_header",
-        "LogoImage": "image_logo",
-        "OnButton": "button_on",
-        "OffButton": "button_off",
-    }
     m.navViewMap = {
         "save_and_exit": "HomeView",
     }
