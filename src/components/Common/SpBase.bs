@@ -49,10 +49,6 @@ sub getPrivacyManagerViewData(callbackFn, messageCategoryId)
     end if
 end sub
 
-function getPmSaveAndExitVariables() as Object
-    return {}
-end function
-
 sub mapComponents(view as object)
     if m.componentIdMap <> invalid then
         for each component in view.children
@@ -79,7 +75,7 @@ sub observeNav(event as Object)
             consentTask.action = "reject"
         else if selectedButton.id = "save_and_exit" then
             consentTask.action = "save_and_exit"
-            consentTask.saveAndExitVariables = getPmSaveAndExitVariables()
+            consentTask.saveAndExitVariables = m.top.userConsentNode.callFunc("getSaveAndExitVariables")
         end if 
 
         consentTask.control = "RUN"

@@ -41,6 +41,10 @@ function _makeRequest(url as String, method as String, body = {} as Object, retr
         print "Request failed with error:"
         print responseBody
         print response.GetFailureReason()
+        print "=========================="
+        print url
+        print FormatJson(body)
+        print "=========================="
         return invalid
     else
         print "Request failed with no response body"

@@ -3,15 +3,27 @@ sub init()
     m.top.observeField("viewDataExtra", "renderRightCol")
 end sub
 
-sub renderRightCol(event as Object)
-    categoryData = event.getData()
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
 
-    m.top.findNode("screen-title").text = categoryData.name
+    if selectedButton.id = "button_on" then
+        m.top.userConsentNode.acceptCategory = m.categoryData._id
+    else if selectedButton.id = "button_off" then
+        m.top.userConsentNode.rejectCategory = m.categoryData._id
+    end if 
+
+    changeView("_go_back_")
+end sub
+
+sub renderRightCol(event as Object)
+    m.categoryData = event.getData()
+
+    m.top.findNode("screen-title").text = m.categoryData.name
 
     if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
-        vendors = categoryData.requiringConsentVendors
+        vendors = m.categoryData.requiringConsentVendors
     else 
-        vendors = categoryData.legIntVendors
+        vendors = m.categoryData.legIntVendors
     end if
 
     m.vendorList = createObject("roSGNode", "LabelList")

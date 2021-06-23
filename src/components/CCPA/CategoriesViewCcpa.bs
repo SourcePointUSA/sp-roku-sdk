@@ -1,6 +1,6 @@
 sub init()
     m.navViewMap = {
-        "save_and_exit": "HomeView",
+        ' "save_and_exit": "HomeView",
     }
     
     m.top.observeField("view", "renderView")

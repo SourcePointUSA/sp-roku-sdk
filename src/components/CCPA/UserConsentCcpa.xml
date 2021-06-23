@@ -3,14 +3,11 @@
 <component name = "UserConsentCcpa" extends = "Node" >
 
     <interface>
-        <function name="getPrivacyManagerViewData" />
+        <function name="getSaveAndExitVariables" />
 
         <field id="privacyManagerViewTask" type="node" />
         <field id="userConsent" type="assocarray" />
-        <field id="privacyManagerViewData" type="assocarray" />
-        
-        <field id="rejectedCategories" type="assocarray" />
-        <field id="rejectedVendors" type="assocarray" />
+        <field id="messageId" type="integer" />
 
         <field id="acceptCategory" type="string" />
         <field id="acceptVendor" type="string" />

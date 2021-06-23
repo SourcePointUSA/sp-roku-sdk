@@ -7,7 +7,7 @@ sub init()
     }
     m.navViewMap = {
         "accept_all": "HomeView",
-        "save_and_exit": "HomeView",
+        ' "save_and_exit": "HomeView",
     }
 
     m.top.observeField("view", "renderView")
@@ -39,7 +39,7 @@ end sub
 
 sub renderView(event as Object)
     getPrivacyManagerViewData(renderRightCol, 2)
-    
+
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
 

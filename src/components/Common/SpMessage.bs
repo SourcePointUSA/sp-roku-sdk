@@ -6,7 +6,12 @@ sub init()
 end sub
 
 sub changeView(event as object)
-    showView(event.getData(), m.top.changeViewDataExtra)
+    viewName = event.getData()
+    if viewName = "_go_back_" then
+        goBack()
+    else
+        showView(viewName, m.top.changeViewDataExtra)
+    end if
 end sub
 
 sub goBack()
@@ -52,6 +57,7 @@ sub showMessage(event as Object)
         m.userConsentNode = createObject("roSGNode", "UserConsent" + m.messageCategory)
         m.userConsentNode.userConsent = m.top.userConsent
         m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
+        m.userConsentNode.messageId = m.message.messageMetadata.messageId
 
         showView("HomeView")
     else

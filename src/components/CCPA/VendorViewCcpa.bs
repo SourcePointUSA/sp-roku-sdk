@@ -1,15 +1,26 @@
 sub init()
-    ' m.top.observeField("view", "renderView")
     m.top.observeField("viewDataExtra", "renderView")
 end sub
 
-sub renderRightCol(vendorData)
-    m.top.findNode("screen-title").text = vendorData.name
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
+
+    if selectedButton.id = "button_on" then
+        m.top.userConsentNode.acceptVendor = m.vendorData._id
+    else if selectedButton.id = "button_off" then
+        m.top.userConsentNode.rejectVendor = m.vendorData._id
+    end if 
+
+    changeView("_go_back_")
+end sub
+
+sub renderRightCol()
+    m.top.findNode("screen-title").text = m.vendorData.name
 
     m.categoryList = createObject("roSGNode", "LabelList")
     rootContentNode = createObject("roSGNode", "ContentNode")
 
-    for each purpose in vendorData.purposes
+    for each purpose in m.vendorData.purposes
         contentNode = createObject("roSGNode", "ContentNode")
         contentNode.title = purpose
         rootContentNode.appendChild(contentNode)
@@ -34,5 +45,7 @@ sub renderView(event as Object)
 
     m.nav.setFocus(true)
 
-    renderRightCol(event.getData())
+    m.vendorData = event.getData()
+
+    renderRightCol()
 end sub
