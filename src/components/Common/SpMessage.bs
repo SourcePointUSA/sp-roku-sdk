@@ -56,8 +56,9 @@ sub showMessage(event as Object)
         m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
         m.userConsentNode = createObject("roSGNode", "UserConsent" + m.messageCategory)
         m.userConsentNode.userConsent = m.top.userConsent
-        m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
+        ' m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
         m.userConsentNode.messageId = m.message.messageMetadata.messageId
+        m.privacyManagerViewTask.userConsentNode = m.userConsentNode
 
         showView("HomeView")
     else

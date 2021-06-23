@@ -8,6 +8,8 @@
     <field id="propertyId" type="integer" />
     <field id="vendorList" type="string" />
 
+    <field id="userConsentNode" type="node" />
+
     <!-- updated by response -->
     <field id="data" type="assocarray" />
   </interface>

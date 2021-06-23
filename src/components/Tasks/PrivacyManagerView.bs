@@ -42,6 +42,6 @@ sub privacyManagerView()
             data.vendors[vendor._id] = vendor
         end for
 
-        m.top.data = data
+        m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", data)
     end if
 end sub

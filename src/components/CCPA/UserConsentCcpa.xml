@@ -3,6 +3,7 @@
 <component name = "UserConsentCcpa" extends = "Node" >
 
     <interface>
+        <function name="addConsentToPmvData" />
         <function name="getSaveAndExitVariables" />
 
         <field id="privacyManagerViewTask" type="node" />
