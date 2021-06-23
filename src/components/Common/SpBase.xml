@@ -9,6 +9,9 @@
       <field id="messageMetadata" type="assocarray" />
       <field id="view" type="assocarray" />
       <field id="viewDataExtra" type="assocarray" />
+
+      <field id="privacyManagerViewTask" type="node" />
+      <field id="userConsentNode" type="node" />
   </interface>
 
   <script uri="./SpBase.bs" />

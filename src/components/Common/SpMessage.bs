@@ -45,12 +45,13 @@ sub showMessage(event as Object)
 
     m.message = event.getData()
 
-    privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
-    privacyManagerViewTask.id = "privacy-manager-view-task"
-    m.top.appendChild(privacyManagerViewTask)
-
     if m.message.messageMetadata <> invalid and type(m.message.messageMetadata.categoryId) = "roInt" then
         m.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
+
+        m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+        m.userConsentNode = createObject("roSGNode", "UserConsent" + m.messageCategory)
+        m.userConsentNode.userConsent = m.top.userConsent
+        m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
 
         showView("HomeView")
     else
@@ -85,16 +86,8 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
     viewData = getViewData(viewName)
     if viewData <> invalid then
         print "showing view: " + viewName
-        viewComponent = CreateObject("roSGNode", viewMap[viewName] + m.messageCategory)
-        viewComponent.id = viewMap[viewName]
-
-        ' this order is important for observers 
-        ' (a viewDataExtra observer will have access to all of the before)
-        viewComponent.message = m.message.message
-        viewComponent.messageMetadata = m.message.messageMetadata
-        viewComponent.view = viewData
-        viewComponent.viewDataExtra = viewDataExtra
-
+        
+        viewComponent = createViewComponent(viewMap[viewName] + m.messageCategory, viewMap[viewName], viewData, viewDataExtra)
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)
@@ -104,6 +97,22 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         m.top.error = "Invalid message JSON"
     end if
 end sub
+
+function createViewComponent(componentName, viewId, viewData, viewDataExtra) as Object
+    viewComponent = CreateObject("roSGNode", componentName)
+    viewComponent.id = viewId
+
+    ' this order is important for observers 
+    ' (a viewDataExtra observer will have access to all of the before)
+    viewComponent.privacyManagerViewTask = m.privacyManagerViewTask
+    viewComponent.userConsentNode = m.userConsentNode
+    viewComponent.message = m.message.message
+    viewComponent.messageMetadata = m.message.messageMetadata
+    viewComponent.view = viewData
+    viewComponent.viewDataExtra = viewDataExtra
+
+    return viewComponent
+end function
 
 function getViewData(view as String) as Object
     for each component in m.message.message.message_json.children

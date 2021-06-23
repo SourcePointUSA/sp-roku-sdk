@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "UserConsentCcpa" extends = "Node" >
+
+    <interface>
+        <function name="getPrivacyManagerViewData" />
+
+        <field id="privacyManagerViewTask" type="node" />
+        <field id="userConsent" type="assocarray" />
+        <field id="privacyManagerViewData" type="assocarray" />
+        
+        <field id="rejectedCategories" type="assocarray" />
+        <field id="rejectedVendors" type="assocarray" />
+
+        <field id="acceptCategory" type="string" />
+        <field id="acceptVendor" type="string" />
+        <field id="rejectCategory" type="string" />
+        <field id="rejectVendor" type="string" />
+    </interface>
+
+    <script uri="./UserConsentCcpa.bs" />
+
+    <children></children>
+
+</component>

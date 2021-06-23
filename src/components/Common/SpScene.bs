@@ -6,12 +6,12 @@ sub showMessages(event)
     messages = event.getData()
 
     messageComponent = CreateObject("roSGNode", "SpMessage")
-
     ' TODO add logic for rendering multiple messages
 
     tempMsg = messages[0]
     messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
     tempMsg.message.message_json = messageJson
+    messageComponent.userConsent = m.top.userConsent.ccpa
     messageComponent.message = tempMsg
 
     ' messageComponent.message = messages[0]

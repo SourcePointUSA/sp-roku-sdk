@@ -1,0 +1,38 @@
+sub init()
+    m.top.observeField("acceptCategory", "acceptCategory")
+    m.top.observeField("acceptVendor", "acceptVendor")
+    m.top.observeField("rejectCategory", "rejectCategory")
+    m.top.observeField("rejectVendor", "rejectVendor")
+end sub
+
+sub acceptCategory(event as Object)
+
+end sub
+
+sub acceptVendor(event as Object)
+
+end sub
+
+sub getPrivacyManagerViewData(messageCategoryId)
+    m.privacyManagerViewTask = m.top.privacyManagerViewTask
+    m.privacyManagerViewTask.messageCategory = messageCategoryId
+    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+    m.privacyManagerViewTask.control = "RUN"
+    m.privacyManagerViewTask.observeField("state", "setCategoryData")
+end sub
+
+sub rejectCategory(event as Object)
+
+end sub
+
+sub rejectVendor(event as Object)
+
+end sub
+
+sub setCategoryData(event as Object)
+    eventStatus = event.getData()
+
+    if eventStatus = "stop" or eventStatus = "done" then
+        m.top.privacyManagerViewData = m.privacyManagerViewTask.data
+    end if
+end sub

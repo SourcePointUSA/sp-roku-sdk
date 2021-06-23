@@ -122,6 +122,7 @@ class SourcepointSdk
             return
         end if
 
+        m.scene.userConsent = m.userConsent
         m.scene.messages = messages
 
         m.screen.show()

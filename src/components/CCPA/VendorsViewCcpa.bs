@@ -10,7 +10,6 @@ sub init()
         "save_and_exit": "HomeView",
     }
 
-    getPrivacyManagerViewData(renderRightCol, 2)
     m.top.observeField("view", "renderView")
 end sub
 
@@ -39,6 +38,8 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
+    getPrivacyManagerViewData(renderRightCol, 2)
+    
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
 
