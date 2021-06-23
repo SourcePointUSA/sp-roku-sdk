@@ -45,6 +45,10 @@ sub showMessage(event as Object)
 
     m.message = event.getData()
 
+    privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+    privacyManagerViewTask.id = "privacy-manager-view-task"
+    m.top.appendChild(privacyManagerViewTask)
+
     if m.message.messageMetadata <> invalid and type(m.message.messageMetadata.categoryId) = "roInt" then
         m.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
 

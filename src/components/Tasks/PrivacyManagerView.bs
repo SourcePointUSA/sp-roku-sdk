@@ -5,6 +5,11 @@ sub init()
 end sub
 
 sub privacyManagerView()
+    ' don't re-retrieve data
+    if m.top.data <> invalid then
+        return
+    end if 
+
     if m.top.messageCategory = 1 then
         url = m.global.config.baseEndpoint + "/consent/tcfv2/privacy-manager/privacy-manager-view"
     else if m.top.messageCategory = 2 then

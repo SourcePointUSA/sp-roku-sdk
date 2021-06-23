@@ -40,7 +40,7 @@ end sub
 sub getPrivacyManagerViewData(callbackFn, messageCategoryId)
     m.pmvCallback = callbackFn
     if m.privacyManagerViewData = invalid then
-        m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+        m.privacyManagerViewTask = m.top.getParent().findNode("privacy-manager-view-task")
         m.privacyManagerViewTask.messageCategory = messageCategoryId
         m.privacyManagerViewTask.propertyId = m.global.config.propertyId
         m.privacyManagerViewTask.control = "RUN"
