@@ -1,20 +1,40 @@
 sub init()
-    m.top.observeField("messages", "showMessages")
+    m.top.observeField("activeCampaign", "showMessage")
+    m.top.observeField("messages", "incrementCampaign")
 end sub
 
-sub showMessages(event)
-    messages = event.getData()
+sub showMessage()
+    if m.currentMessage <> invalid then
+        m.currentMessage.removeChild()
+        m.currentMessage = invalid
+    end if
 
-    messageComponent = CreateObject("roSGNode", "SpMessage")
-    ' TODO add logic for rendering multiple messages
+    m.currentMessage = CreateObject("roSGNode", "SpMessage")
+    messages = m.top.messages
+    message = messages[m.top.activeCampaign]
 
-    tempMsg = messages[0]
-    messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
-    tempMsg.message.message_json = messageJson
-    messageComponent.userConsent = m.top.userConsent.ccpa
-    messageComponent.message = tempMsg
+    if message <> invalid then
+        ' TODO - remove this 
+        messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
+        message.message.message_json = messageJson
 
-    ' messageComponent.message = messages[0]
-    m.top.appendChild(messageComponent)
-    messageComponent.setFocus(true)
+        m.currentMessage.userConsent = m.top.userConsent.ccpa
+        m.currentMessage.message = message
+
+        m.top.appendChild(m.currentMessage)
+        m.currentMessage.setFocus(true)
+    else 
+        ' signal that we're done, return consent
+    end if
+end sub
+
+sub incrementCampaign()
+    activeCampaign = m.top.activeCampaign
+    if activeCampaign = invalid then
+        activeCampaign = 0
+    else 
+        activeCampaign = activeCampaign + 1
+    end if
+
+    m.top.activeCampaign = activeCampaign
 end sub
