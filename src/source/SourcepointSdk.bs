@@ -106,7 +106,7 @@ class SourcepointSdk
         getMessageTask.unobserveFieldScoped("state")
 
         ' always call show messages, it will show or close our screen
-        m.showMessages(getMessageTask.messages)
+        m.showMessages(getMessageTask.campaigns)
 
         return m.userConsent
     end function
@@ -115,15 +115,14 @@ class SourcepointSdk
         return "test"
     end function
 
-    private sub showMessages(messages as Object)
+    private sub showMessages(campaigns as Object)
         ' close screen and return if we have no messages
-        if messages = invalid or messages.Count() = 0 then
+        if campaigns = invalid or campaigns.Count() = 0 then
             m.screen.close()
             return
         end if
 
-        m.scene.userConsent = m.userConsent
-        m.scene.messages = messages
+        m.scene.campaigns = campaigns
 
         m.screen.show()
     end sub

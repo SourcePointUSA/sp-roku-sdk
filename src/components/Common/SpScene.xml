@@ -6,8 +6,7 @@
 
     <interface>
         <field id="activeCampaign" type="integer" value="-1" />
-        <field id="messages" type="array" />
-        <field id="userConsent" type="assocarray" />
+        <field id="campaigns" type="array" />
     </interface>
 
     <script uri="./SpScene.bs" />

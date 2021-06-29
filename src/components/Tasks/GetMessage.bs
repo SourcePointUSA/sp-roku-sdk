@@ -30,14 +30,14 @@ sub getMessage()
     if response <> invalid then
         m.top.propertyId = response.propertyId
 
-        messages = []
+        campaigns = []
         for each c in response.campaigns
             if c.message <> invalid then
-                messages.push({ message: c.message, messageMetaData: c.messageMetaData })
+                campaigns.push(c)
             end if
         end for
 
-        m.top.messages = messages
+        m.top.campaigns = campaigns
 
         ' TODO parse user consent in the way we want to return it ( mobile TCData? )
         ' parse and set user consent

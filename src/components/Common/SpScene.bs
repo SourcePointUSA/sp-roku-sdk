@@ -1,6 +1,6 @@
 sub init()
     m.top.observeField("activeCampaign", "showMessage")
-    m.top.observeField("messages", "incrementCampaign")
+    m.top.observeField("campaigns", "incrementCampaign")
 end sub
 
 sub showMessage()
@@ -10,16 +10,16 @@ sub showMessage()
     end if
 
     m.currentMessage = CreateObject("roSGNode", "SpMessage")
-    messages = m.top.messages
-    message = messages[m.top.activeCampaign]
+    campaigns = m.top.campaigns
+    campaign = campaigns[m.top.activeCampaign]
 
-    if message <> invalid then
+    if campaign <> invalid then
         ' TODO - remove this 
         messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
-        message.message.message_json = messageJson
+        campaign.message.message_json = messageJson
 
-        m.currentMessage.userConsent = m.top.userConsent.ccpa
-        m.currentMessage.message = message
+        m.currentMessage.userConsent = campaign.userConsent
+        m.currentMessage.message = campaign
 
         m.top.appendChild(m.currentMessage)
         m.currentMessage.setFocus(true)
