@@ -3,29 +3,14 @@ sub init()
     m.top.observeField("campaigns", "incrementCampaign")
 end sub
 
-sub showMessage()
+sub closeMessage()
     if m.currentMessage <> invalid then
-        m.currentMessage.removeChild()
+        m.top.removeChild(m.currentMessage)
+        m.currentMessage.unobserveField("done")
         m.currentMessage = invalid
     end if
 
-    m.currentMessage = CreateObject("roSGNode", "SpMessage")
-    campaigns = m.top.campaigns
-    campaign = campaigns[m.top.activeCampaign]
-
-    if campaign <> invalid then
-        ' TODO - remove this 
-        messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
-        campaign.message.message_json = messageJson
-
-        m.currentMessage.userConsent = campaign.userConsent
-        m.currentMessage.message = campaign
-
-        m.top.appendChild(m.currentMessage)
-        m.currentMessage.setFocus(true)
-    else 
-        ' signal that we're done, return consent
-    end if
+    incrementCampaign()
 end sub
 
 sub incrementCampaign()
@@ -37,4 +22,25 @@ sub incrementCampaign()
     end if
 
     m.top.activeCampaign = activeCampaign
+end sub
+
+sub showMessage()
+    m.currentMessage = CreateObject("roSGNode", "SpMessage")
+    campaigns = m.top.campaigns
+    campaign = campaigns[m.top.activeCampaign]
+
+    if campaign <> invalid then
+        ' TODO - remove this 
+        messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
+        campaign.message.message_json = messageJson
+
+        m.currentMessage.observeField("done", "closeMessage")
+        m.currentMessage.userConsent = campaign.userConsent
+        m.currentMessage.message = campaign
+
+        m.top.appendChild(m.currentMessage)
+        m.currentMessage.setFocus(true)
+    else 
+        ' signal that we're done, return consent
+    end if
 end sub

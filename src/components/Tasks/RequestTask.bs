@@ -57,8 +57,7 @@ function makeRequest(url as String, method as String, body = {} as Object) as Ob
     response = _makeRequest(url, method, body)
 
     if response = invalid then
-        ' if we errored, reset consent and localstate
-        m.top.userConsent = invalid
+        ' if we errored, reset localstate
         setLocalState(invalid)
     else if response.localState <> invalid then
         setLocalState(response.localState)

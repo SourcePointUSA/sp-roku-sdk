@@ -79,7 +79,7 @@ sub observeNav(event as Object)
         end if 
 
         consentTask.control = "RUN"
-        consentTask.observeField("state", "setConsent")
+        consentTask.observeField("userConsent", "setConsent")
     end if
 end sub
 
@@ -143,5 +143,6 @@ sub setCategoryData(event as Object)
 end sub
 
 sub setConsent(event as Object)
-    print "consent request done"
+    spMessage = m.top.getParent()
+    spMessage.done = true
 end sub

@@ -44,7 +44,4 @@ sub postConsent()
     if response <> invalid then
         m.top.userConsent = response.userConsent
     end if
-
-    print "consent request should be done"
-    print response
 end sub
