@@ -24,7 +24,7 @@ end sub
 
 sub renderRightCol()
     description = createObject("roSGNode", "Label")
-    description.text = m.components.text_category_description.text
+    description.text = m.components.text_publisher_description.settings.text
     description.wrap = true
     description.width = 640
 

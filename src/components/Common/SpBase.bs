@@ -3,7 +3,7 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 sub init()
     translationMap = {
         "screen-title": function(node, sWidth, sHeight) as Object
-            return [(sWidth - node.boundingRect().width)/2, 0] 
+            return [sWidth/2, 0] 
         end function,
         "col-layout": [0, 50]
     }
@@ -22,6 +22,7 @@ sub init()
         "NavCategoriesButton": "button_nav_categories",
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
+        "PublisherDescription": "text_publisher_description",
         "SaveButton": "save_and_exit",
     }
     m.components = {}
@@ -102,13 +103,16 @@ sub renderLogo()
     if m.components.image_logo <> invalid then
         component = createObject("roSGNode", "Poster")
         component.id = "image_logo"
-        ' component.uri = m.components.image_logo.src
-        component.uri = "https://media-exp1.licdn.com/dms/image/C4E0BAQFSFMjK4tO6Ow/company-logo_200_200/0/1568325424638?e=2159024400&v=beta&t=BKtCl52Mz2EsyJeOP6zGmLURWT1aez1cJhKKiI9MzYU"
 
         if m.components.image_logo.settings.style.width <> invalid then
+            component.loadDisplayMode = "limitSize"
             component.loadWidth = m.components.image_logo.settings.style.width
+            component.loadHeight = 540
         end if 
 
+        component.uri = m.components.image_logo.settings.url
+        ' TODO - set this to something for loading
+        ' component.loadingBitmapUri = 
         m.colLeft.appendChild(component)
     end if
 end sub
