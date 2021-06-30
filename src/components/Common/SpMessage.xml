@@ -11,9 +11,12 @@
 
         <!-- Updated by Parent -->
         <field id="message" type="assocarray" />
+
+        <!-- Updated by Both -->
         <field id="userConsent" type="assocarray" />
 
         <!-- Updated by SpMessage -->
+        <field id="messageCategory" type="string" />
         <field id="done" type="boolean" />
         <field id="error" type="string" />
     </interface>

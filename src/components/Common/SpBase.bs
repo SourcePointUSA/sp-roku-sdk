@@ -144,5 +144,6 @@ end sub
 
 sub setConsent(event as Object)
     spMessage = m.top.getParent()
+    spMessage.userConsent = event.getData()
     spMessage.done = true
 end sub

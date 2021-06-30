@@ -39,7 +39,7 @@ sub getMessage()
 
         m.top.campaigns = campaigns
 
-        ' TODO parse user consent in the way we want to return it ( mobile TCData? )
+        ' TODO format userConsent with a helper?
         ' parse and set user consent
         userConsent = {}
         for each c in response.campaigns

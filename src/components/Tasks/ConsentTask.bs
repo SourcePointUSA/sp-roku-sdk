@@ -42,6 +42,7 @@ sub postConsent()
     response = makeRequest(url, "POST", body)
 
     if response <> invalid then
+        ' TODO format userConsent with a helper?
         m.top.userConsent = response.userConsent
     end if
 end sub

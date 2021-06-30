@@ -51,10 +51,10 @@ sub showMessage(event as Object)
     m.message = event.getData()
 
     if m.message.messageMetadata <> invalid and type(m.message.messageMetadata.categoryId) = "roInt" then
-        m.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
+        m.top.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
 
         m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
-        m.userConsentNode = createObject("roSGNode", "UserConsent" + m.messageCategory)
+        m.userConsentNode = createObject("roSGNode", "UserConsent" + m.top.messageCategory)
         m.userConsentNode.userConsent = m.top.userConsent
         ' m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
         m.userConsentNode.messageId = m.message.messageMetadata.messageId
@@ -94,7 +94,7 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
     if viewData <> invalid then
         print "showing view: " + viewName
         
-        viewComponent = createViewComponent(viewMap[viewName] + m.messageCategory, viewMap[viewName], viewData, viewDataExtra)
+        viewComponent = createViewComponent(viewMap[viewName] + m.top.messageCategory, viewMap[viewName], viewData, viewDataExtra)
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)

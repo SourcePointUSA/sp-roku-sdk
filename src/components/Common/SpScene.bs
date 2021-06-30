@@ -1,12 +1,14 @@
 sub init()
     m.top.observeField("activeCampaign", "showMessage")
     m.top.observeField("campaigns", "incrementCampaign")
+    m.userConsent = {}
 end sub
 
 sub closeMessage()
     if m.currentMessage <> invalid then
         m.top.removeChild(m.currentMessage)
         m.currentMessage.unobserveField("done")
+        m.userConsent[m.currentMessage.messageCategory] = m.currentMessage.userConsent
         m.currentMessage = invalid
     end if
 
@@ -42,5 +44,6 @@ sub showMessage()
         m.currentMessage.setFocus(true)
     else 
         ' signal that we're done, return consent
+        m.top.userConsent = m.userConsent
     end if
 end sub
