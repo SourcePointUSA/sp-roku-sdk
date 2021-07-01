@@ -1,0 +1,14 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.observeField("settings", "render")
+end sub
+
+sub render(event as Object)
+    settings = event.getData()
+
+    if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
+        m.top.color = colorConvert(settings.style.font.color)
+    end if
+    m.top.text = settings.text
+end sub

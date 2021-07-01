@@ -2,7 +2,7 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "SpBase" extends = "Group" >
+<component name = "SpBase" extends = "Group">
 
   <interface>
       <field id="message" type="assocarray" />
@@ -16,9 +16,9 @@
 
   <script uri="./SpBase.bs" />
 
-  <children >
+  <children>
     <Group>
-        <SimpleLabel id="screen-title" text="Privacy Manager" horizOrigin="center"/>
+        <SpNativeText id="screen-title" text="Privacy Manager" horizOrigin="center"/>
     </Group>
     
     <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[20]">

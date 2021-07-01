@@ -23,10 +23,11 @@ sub renderView(event as Object)
 end sub
 
 sub renderRightCol()
-    description = createObject("roSGNode", "Label")
-    description.text = m.components.text_publisher_description.settings.text
+    description = createObject("roSGNode", "Sp" + m.components.text_publisher_description.type)
+    description.settings = m.components.text_publisher_description.settings
     description.wrap = true
     description.width = 640
+    
 
     m.colRight.appendChild(description)
 end sub

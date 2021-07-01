@@ -1,0 +1,24 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.observeField("settings", "render")
+end sub
+
+sub render(event as Object)
+    settings = event.getData()
+
+    m.top.text = settings.text
+    m.top.iconUri = ""
+    m.top.focusedIconUri = ""
+
+    if settings.style <> invalid and settings.style <> invalid then
+        if settings.style.onFocusTextColor <> invalid then
+            m.top.focusedTextColor = settings.style.onFocusTextColor
+        end if
+        if settings.style.onUnfocusTextColor <> invalid then
+            m.top.textColor = settings.style.onUnfocusTextColor
+        end if
+    '     m.top.color = colorConvert(settings.style.font.color)
+    end if
+    ' m.top.text = settings.text
+end sub

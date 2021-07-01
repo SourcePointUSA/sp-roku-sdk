@@ -11,6 +11,15 @@ function addQueryParams(uri as String, params as Object) as String
     return uri
 end function
 
+' Convert html hex to roku hex
+function colorConvert(color as String) as String
+    if color <> invalid then
+        return color.replace("#", "0x") + "FF"
+    end if
+
+    return color
+end function
+
 function getLocalState() as String
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
     if registry.Exists("localState") then
@@ -27,24 +36,46 @@ sub setLocalState(localState)
     registry.flush()
 end sub
 
-sub updateTranslations(node as object, translationMap as Object)
+sub scalePixelDimensions(node as object, scaleMap as Object)
     resolutionInfo = m.top.getScene().currentDesignResolution
 
-    for each nodeId in translationMap
+    for each nodeId in scaleMap
         updateNode = node.findNode(nodeId)
         if updateNode <> invalid
-            if type(translationMap[nodeId]) = "roFunction"
-                translate = translationMap[nodeId](updateNode, resolutionInfo.width, resolutionInfo.height)
+            if type(scaleMap[nodeId]) = "roFunction"
+                dims = scaleMap[nodeId](updateNode, resolutionInfo.width, resolutionInfo.height)
             else
-                translate = translationMap[nodeId]
+                dims = scaleMap[nodeId]
             end if
 
-            if resolutionInfo.resolution = "FHD"
-                translate[0] = translate[0] * 1.5
-                translate[1] = translate[1] * 1.5
-            end if
+            for i = 0 to (dims.count() - 1) step 1
+                if dims[i] <> invalid and dims[i] > 0 then
+                    dims[i] = scalePixelDimension(dims[i], resolutionInfo)
+                end if
+            end for
             
-            updateNode.translation = translate
+            if dims[0] <> invalid and dims[1] <> invalid then
+                updateNode.translation = [dims[0], dims[1]]
+            end if 
+
+            if dims[2] <> invalid then
+                updateNode.width = dims[2]
+            end if
+            if dims[3] <> invalid then
+                updateNode.width = dims[3]
+            end if
         end if
     end for
 end sub
+
+function scalePixelDimension(value as Float, resolutionInfo = invalid as Object) as Float
+    if resolutionInfo = invalid then
+        resolutionInfo = m.top.getScene().currentDesignResolution
+    end if
+
+    if resolutionInfo.resolution = "FHD"
+        return value * 1.5
+    end if
+
+    return value
+end function

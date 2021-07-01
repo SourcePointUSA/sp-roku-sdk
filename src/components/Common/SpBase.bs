@@ -3,11 +3,11 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 sub init()
     translationMap = {
         "screen-title": function(node, sWidth, sHeight) as Object
-            return [sWidth/2, 0] 
+            return [1180/2, 0] 
         end function,
         "col-layout": [0, 50]
     }
-    updateTranslations(m.top, translationMap)
+    scalePixelDimensions(m.top, translationMap)
 
     m.componentIdMap = {
         "AcceptAllButton" : "accept_all",
@@ -29,6 +29,8 @@ sub init()
     ' m.navViewMap : maps nav button IDs to views they should link to
     ' m.componentIdMap : fills in m.components mapping JSON id to our IDs
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
+
+    m.top.translation=[scalePixelDimension(50),scalePixelDimension(50)]
 end sub
 
 sub changeView(viewName as String, viewData = invalid as Object)
@@ -51,6 +53,7 @@ sub getPrivacyManagerViewData(callbackFn, messageCategoryId)
 end sub
 
 sub mapComponents(view as object)
+    m.components.view = view
     if m.componentIdMap <> invalid then
         for each component in view.children
             if m.componentIdMap[component.id] <> invalid then
@@ -95,9 +98,20 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
     return false
 end function
 
+sub renderBase()
+    if m.components.view.settings.style.backgroundColor <> invalid then
+        spScene = m.top.getScene()
+        spScene.backgroundUri = ""
+        spScene.backgroundColor = colorConvert(m.components.view.settings.style.backgroundColor)
+    end if 
+end sub
+
 sub renderLogo()
+    renderBase()
+
     if m.components.text_header <> invalid then
-        m.top.findNode("screen-title").text = m.components.text_header.settings.text
+        m.top.findNode("screen-title").settings = m.components.text_header.settings
+        ' m.top.findNode("screen-title").text = m.components.text_header.settings.text
     end if
 
     if m.components.image_logo <> invalid then
@@ -122,9 +136,9 @@ sub renderNav(buttonIds)
 
     for each buttonId in buttonIds
         if m.components[buttonId] <> invalid then
-            button = createObject("roSGNode", "Button")
+            button = createObject("roSGNode", "SpNativeButton")
+            button.settings = m.components[buttonId].settings
             button.id = buttonId
-            button.text = m.components[buttonId].settings.text
             buttonGroup.appendChild(button)
         end if
     endfor
