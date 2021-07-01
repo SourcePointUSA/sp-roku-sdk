@@ -26,7 +26,7 @@ sub renderRightCol()
     description = createObject("roSGNode", "SpNativeText")
     description.settings = m.components.text_publisher_description.settings
     description.textComponent.wrap = true
-    description.textComponent.width = 640
+    description.textComponent.width = m.colRightWidth
     
     m.colRight.appendChild(description)
 end sub

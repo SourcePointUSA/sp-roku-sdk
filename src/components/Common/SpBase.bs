@@ -1,10 +1,17 @@
 import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
+    usableWidth = scalePixelDimension(1180)
+    m.colLeftWidth = usableWidth / 2
+    m.colRightWidth = usableWidth / 2
+    
     translationMap = {
-        "screen-title": function(node, sWidth, sHeight) as Object
-            return [1180/2, 0] 
-        end function,
+        "col-left-width-holder": [0,0,m.colLeftWidth,0],
+        "col-right-width-holder": [0,0,m.colRightWidth,0],
+        "screen-title": [usableWidth/2, 0],
+        ' "screen-title": function(node, sWidth, sHeight) as Object
+        '     return [1180/2, 0] 
+        ' end function,
         "col-layout": [0, 50]
     }
     scalePixelDimensions(m.top, translationMap)

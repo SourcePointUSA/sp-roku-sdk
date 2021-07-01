@@ -18,14 +18,16 @@
 
   <children>
     <Group>
-        <SpNativeText id="screen-title" text="Privacy Manager" componentName="SimpleLabel"/>
+        <SpNativeText id="screen-title" componentName="SimpleLabel"/>
     </Group>
     
-    <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[20]">
-        <LayoutGroup id="col-left" layoutDirection="vert" itemSpacings="[20]">
-        </Group>
+    <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
+        <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
+            <Rectangle id="col-left-width-holder" width="700" height="0" />
+        </LayoutGroup>
         <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
-        </Group>
+            <Rectangle id="col-right-width-holder" height="0" />
+        </LayoutGroup>
     </LayoutGroup>
 
   </children>

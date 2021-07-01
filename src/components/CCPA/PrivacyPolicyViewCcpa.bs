@@ -19,11 +19,11 @@ sub renderView(event as Object)
     description = createObject("roSGNode", "SpNativeText")
     description.componentName = "ScrollableText"
     description.settings = m.components.privacy_policy_body.settings
-    description.textComponent.width = 640
+    description.textComponent.width = m.colRightWidth
     description.textComponent.height = 200
 
     m.colRight.appendChild(description)
 
-    description.setFocus(true)
+    description.textComponent.setFocus(true)
     m.rightColFocus = description.textComponent
 end sub

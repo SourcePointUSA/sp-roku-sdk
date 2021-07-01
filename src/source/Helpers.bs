@@ -62,7 +62,7 @@ sub scalePixelDimensions(node as object, scaleMap as Object)
                 updateNode.width = dims[2]
             end if
             if dims[3] <> invalid then
-                updateNode.width = dims[3]
+                updateNode.height = dims[3]
             end if
         end if
     end for
