@@ -18,15 +18,13 @@
 
   <children>
     <Group>
-        <SpNativeText id="screen-title" text="Privacy Manager" horizOrigin="center"/>
+        <SpNativeText id="screen-title" text="Privacy Manager" componentName="SimpleLabel"/>
     </Group>
     
     <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[20]">
         <LayoutGroup id="col-left" layoutDirection="vert" itemSpacings="[20]">
-            <!-- <Label id="screen-title" text="Left Col"/> -->
         </Group>
         <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
-            <!-- <SimpleLabel id="screen-title" text="Right Col"/> -->
         </Group>
     </LayoutGroup>
 

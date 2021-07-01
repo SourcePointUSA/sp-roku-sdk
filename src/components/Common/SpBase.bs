@@ -111,6 +111,7 @@ sub renderLogo()
 
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
+        m.top.findNode("screen-title").textComponent.horizOrigin = "center"
         ' m.top.findNode("screen-title").text = m.components.text_header.settings.text
     end if
 

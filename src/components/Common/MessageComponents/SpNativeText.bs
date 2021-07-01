@@ -5,10 +5,16 @@ sub init()
 end sub
 
 sub render(event as Object)
+    componentName = m.top.componentName
     settings = event.getData()
 
+    textComponent = createObject("roSGNode", componentName)
+
     if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
-        m.top.color = colorConvert(settings.style.font.color)
+        textComponent.color = colorConvert(settings.style.font.color)
     end if
-    m.top.text = settings.text
+    textComponent.text = settings.text
+
+    m.top.textComponent = textComponent
+    m.top.appendChild(textComponent)
 end sub
