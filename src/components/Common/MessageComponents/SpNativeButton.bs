@@ -1,24 +1,61 @@
 import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
+    ' reset default look and feel
+    m.top.iconUri = ""
+    m.top.focusedIconUri = ""
+    m.top.focusBitmapUri = " "          ' note space here, empty string is the default and does not override...
+    m.top.focusFootprintBitmapUri = " "
     m.top.observeField("settings", "render")
+    m.top.observeField("buttonFocused", "updateBackground")
+
+    ' TODO: add our defaults
+    m.focusBackgroundColor = ""
+    m.unFocusBackgroundColor = ""
+    m.textColor = ""
 end sub
 
 sub render(event as Object)
     settings = event.getData()
 
     m.top.text = settings.text
-    m.top.iconUri = ""
-    m.top.focusedIconUri = ""
 
     if settings.style <> invalid and settings.style <> invalid then
         if settings.style.onFocusTextColor <> invalid then
-            m.top.focusedTextColor = settings.style.onFocusTextColor
+            m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
         end if
         if settings.style.onUnfocusTextColor <> invalid then
-            m.top.textColor = settings.style.onUnfocusTextColor
+            m.textColor = colorConvert(settings.style.onUnfocusTextColor)
         end if
-    '     m.top.color = colorConvert(settings.style.font.color)
+        if settings.style.onFocusBackgroundColor <> invalid then
+            m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
+        end if
+        if settings.style.onUnfocusBackgroundColor <> invalid then
+            m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
+        end if
     end if
-    ' m.top.text = settings.text
+
+    m.top.textColor = m.textColor
+    m.top.focusedTextColor = m.focusedTextColor
+
+    bg = createObject("roSGNode", "Rectangle")
+    ' bg.id = "button_background"
+    bg.height = scalePixelDimension(64)
+    bg.width = 0
+    bg.color = m.unFocusBackgroundColor
+
+    m.top.backgroundRect = bg
+    m.top.insertChild(bg, 0)
+end sub
+
+sub updateBackground(event as Object)
+    focused = event.getData()
+
+    if focused = true then
+        m.top.textColor = m.focusedTextColor
+        m.top.backgroundRect.color = m.focusBackgroundColor
+    else
+        m.top.textColor = m.textColor
+        m.top.backgroundRect.color = m.unFocusBackgroundColor
+    end if
 end sub

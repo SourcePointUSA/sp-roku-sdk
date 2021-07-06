@@ -140,16 +140,17 @@ sub renderLogo()
 end sub
 
 sub renderNav(buttonIds)
-    buttonGroup = createObject("roSGNode", "ButtonGroup")
-
+    buttons = []
     for each buttonId in buttonIds
         if m.components[buttonId] <> invalid then
-            button = createObject("roSGNode", "SpNativeButton")
-            button.settings = m.components[buttonId].settings
+            button = m.components[buttonId]
             button.id = buttonId
-            buttonGroup.appendChild(button)
+            buttons.push(button)
         end if
-    endfor
+    end for
+
+    buttonGroup = createObject("roSGNode", "SpButtonGroup")
+    buttonGroup.buttonComponents = buttons
 
     m.colLeft.appendChild(buttonGroup)
     m.nav = buttonGroup
