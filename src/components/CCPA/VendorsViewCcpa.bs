@@ -1,10 +1,4 @@
 sub init()
-    m.componentIdMap = {
-        "AcceptAllButton" : "accept_all",
-        "HeaderText": "text_header",
-        "LogoImage": "image_logo",
-        "SaveButton": "save_and_exit",
-    }
     m.navViewMap = {
         "accept_all": "HomeView",
         ' "save_and_exit": "HomeView",
@@ -20,17 +14,39 @@ sub observeVendorList(event as Object)
 end sub
 
 sub renderRightCol()
-    m.vendorList = createObject("roSGNode", "LabelList")
-    rootContentNode = createObject("roSGNode", "ContentNode")
+    m.vendorList = createObject("roSGNode", "SpButtonGroup")
 
+    buttons = []
     for each vendorId in m.privacyManagerViewData.vendors
-        contentNode = createObject("roSGNode", "ContentNode")
-        contentNode.id = vendorId
-        contentNode.title = m.privacyManagerViewData.vendors[vendorId].name
-        rootContentNode.appendChild(contentNode)
-    endfor
+        buttonSettings = { settings: {} } 
+        buttonSettings.settings.append(m.components.button_vendor.settings)
+        buttonSettings.id = vendorId
+        buttonSettings.settings.text = m.privacyManagerViewData.vendors[vendorId].name
 
-    m.vendorList.content = rootContentNode
+        ' print m.privacyManagerViewData.vendors[vendorId].name
+
+        buttons.push(buttonSettings)
+    end for
+
+    m.vendorList.buttonComponentName = "SpToggleButton"
+    m.vendorList.buttonComponents = buttons
+
+    for each b in buttons
+        print b.settings.text
+    end for
+
+
+    ' m.vendorList = createObject("roSGNode", "LabelList")
+    ' rootContentNode = createObject("roSGNode", "ContentNode")
+
+    ' for each vendorId in m.privacyManagerViewData.vendors
+    '     contentNode = createObject("roSGNode", "ContentNode")
+    '     contentNode.id = vendorId
+    '     contentNode.title = m.privacyManagerViewData.vendors[vendorId].name
+    '     rootContentNode.appendChild(contentNode)
+    ' endfor
+
+    ' m.vendorList.content = rootContentNode
 
     m.colRight.appendChild(m.vendorList)
     m.rightColFocus = m.vendorList

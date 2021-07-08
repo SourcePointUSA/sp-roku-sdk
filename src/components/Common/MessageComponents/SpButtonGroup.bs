@@ -13,7 +13,7 @@ sub render(event as Object)
     maxWidth = 0
 
     for each button in buttons
-        buttonComponent = createObject("roSGNode", "SpNativeButton")
+        buttonComponent = createObject("roSGNode", m.top.buttonComponentName)
         buttonComponent.settings = button.settings
         buttonComponent.id = button.id
         m.top.appendChild(buttonComponent)

@@ -10,9 +10,10 @@ sub init()
     m.top.observeField("buttonFocused", "updateBackground")
 
     ' TODO: add our defaults
-    m.focusBackgroundColor = ""
-    m.unFocusBackgroundColor = ""
-    m.textColor = ""
+    m.focusBackgroundColor = "0xFFFFFFFF"
+    m.unFocusBackgroundColor = "0xFFFFFFFF"
+    m.focusedTextColor = "0x000000FF"
+    m.textColor = "0x000000FF"
 end sub
 
 sub render(event as Object)

@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "SpToggleButton" extends = "SpNativeButton" >
+
+    <interface>
+        <!-- <field id="componentName" type="string" value="Label" />
+        <field id="settings" type="assocarray" />
+        <field id="textComponent" type="node" /> -->
+    </interface>
+
+    <script uri="./SpToggleButton.bs" />
+
+    <children></children>
+
+</component>

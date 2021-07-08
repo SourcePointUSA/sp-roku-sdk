@@ -4,6 +4,7 @@
 
     <interface>
         <field id="buttonComponents" type="array" />
+        <field id="buttonComponentName" type="string" value="SpNativeButton" />
     </interface>
 
     <script uri="./SpButtonGroup.bs" />
