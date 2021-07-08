@@ -74,7 +74,7 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         "CategoryDetailsView": "CategoryView",
         "PrivacyPolicyView": "PrivacyPolicyView",
         "VendorsView": "VendorsView",
-        "VendorDetails": "VendorView"
+        "VendorDetailsView": "VendorView"
     }
 
     if viewName = "HomeView" then
