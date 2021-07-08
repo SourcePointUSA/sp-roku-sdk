@@ -672,7 +672,9 @@
                          "color": "#060606"
                       },
                       "onFocusBackgroundColor": "#ffffff",
-                      "onUnfocusBackgroundColor": "#f1f2f6"
+                      "onUnfocusBackgroundColor": "#f1f2f6",
+                      "onFocusTextColor": "#000000",
+                      "onUnfocusTextColor": "#ffffff"
                    }
                 }
              }
@@ -939,6 +941,8 @@
                          "fontWeight": "400",
                          "fontFamily": "arial, helvetica, sans-serif"
                       },
+                      "onFocusTextColor": "#000000",
+                      "onUnfocusTextColor": "#ffffff",
                       "onFocusBackgroundColor": "#ffffff",
                       "onUnfocusBackgroundColor": "#f1f2f6"
                    }

@@ -1,0 +1,54 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.itemComponentName = "SpButtonListButton"
+    m.top.observeField("buttonComponents", "render")
+    m.top.observeField("itemFocused", "focusButton")
+    m.top.observeField("itemUnfocused", "unFocusButton")
+
+    m.buttonNodes = createObject("roSGNode", "ContentNode")
+end sub
+
+sub render(event as Object)
+    buttons = event.getData()
+
+    buttonHeight = scalePixelDimension(64)
+    width = 100
+    if m.top.width <> invalid then
+        width = m.top.width
+    end if
+
+    m.top.itemSize = [width, buttonHeight]
+
+    for each button in buttons
+        buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
+        buttonContentNode.settings = button.settings
+        buttonContentNode.id = button.id
+        buttonContentNode.height = buttonHeight
+
+        m.buttonNodes.appendChild(buttonContentNode)
+    end for
+
+    m.top.content = m.buttonNodes
+end sub
+
+sub focusButton(event as Object)
+    index = event.getData()
+
+    setFocus(index, true)
+end sub
+
+sub setFocus(index as Integer, focused as Boolean)
+    if index <> invalid then
+        buttonCn = m.buttonNodes.getChild(index)
+        if buttonCn <> invalid then
+            buttonCn.focused = focused
+        end if 
+    end if
+end sub
+
+sub unFocusButton(event as Object)
+    index = event.getData()
+
+    setFocus(index, false)
+end sub

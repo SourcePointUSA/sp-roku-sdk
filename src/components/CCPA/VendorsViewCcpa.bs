@@ -8,13 +8,18 @@ sub init()
 end sub
 
 sub observeVendorList(event as Object)
-    item = m.vendorList.content.getChild(event.getData())
+    index = event.getData()
 
-    changeView("VendorDetails", m.privacyManagerViewData.vendors[item.id])
+    if index <> invalid then
+        item = m.vendorList.buttonComponents[index]
+        changeView("VendorDetailsView", m.privacyManagerViewData.vendors[item.id])
+    end if
 end sub
 
 sub renderRightCol()
-    m.vendorList = createObject("roSGNode", "SpButtonGroup")
+    m.vendorList = createObject("roSGNode", "SpButtonList")
+    m.vendorList.width = m.colRightWidth
+    ' m.vendorList = createObject("roSGNode", "SpButtonGroup")
 
     buttons = []
     for each vendorId in m.privacyManagerViewData.vendors
@@ -23,30 +28,11 @@ sub renderRightCol()
         buttonSettings.id = vendorId
         buttonSettings.settings.text = m.privacyManagerViewData.vendors[vendorId].name
 
-        ' print m.privacyManagerViewData.vendors[vendorId].name
-
         buttons.push(buttonSettings)
     end for
 
-    m.vendorList.buttonComponentName = "SpToggleButton"
+    ' m.vendorList.buttonComponentName = "SpToggleButton"
     m.vendorList.buttonComponents = buttons
-
-    for each b in buttons
-        print b.settings.text
-    end for
-
-
-    ' m.vendorList = createObject("roSGNode", "LabelList")
-    ' rootContentNode = createObject("roSGNode", "ContentNode")
-
-    ' for each vendorId in m.privacyManagerViewData.vendors
-    '     contentNode = createObject("roSGNode", "ContentNode")
-    '     contentNode.id = vendorId
-    '     contentNode.title = m.privacyManagerViewData.vendors[vendorId].name
-    '     rootContentNode.appendChild(contentNode)
-    ' endfor
-
-    ' m.vendorList.content = rootContentNode
 
     m.colRight.appendChild(m.vendorList)
     m.rightColFocus = m.vendorList

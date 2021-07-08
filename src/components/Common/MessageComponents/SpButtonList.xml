@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "SpButtonList" extends = "MarkupList" >
+
+    <interface>
+        <field id="buttonComponents" type="array" />
+        <field id="buttonComponentName" type="string" value="SpNativeButton" />
+        <field id="width" type="integer" />
+    </interface>
+
+    <script uri="./SpButtonList.bs" />
+
+    <children></children>
+
+</component>

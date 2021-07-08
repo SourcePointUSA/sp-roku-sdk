@@ -17,18 +17,20 @@ end sub
 sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
-    m.categoryList = createObject("roSGNode", "LabelList")
-    rootContentNode = createObject("roSGNode", "ContentNode")
+    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+        m.categoryList = createObject("roSGNode", "LabelList")
+        rootContentNode = createObject("roSGNode", "ContentNode")
 
-    for each purpose in m.vendorData.purposes
-        contentNode = createObject("roSGNode", "ContentNode")
-        contentNode.title = purpose
-        rootContentNode.appendChild(contentNode)
-    endfor
+        for each purpose in m.vendorData.purposes
+            contentNode = createObject("roSGNode", "ContentNode")
+            contentNode.title = purpose
+            rootContentNode.appendChild(contentNode)
+        endfor
 
-    m.categoryList.content = rootContentNode
+        m.categoryList.content = rootContentNode
 
-    m.colRight.appendChild(m.categoryList)
+        m.colRight.appendChild(m.categoryList)
+    end if
 end sub
 
 sub renderView(event as Object)
