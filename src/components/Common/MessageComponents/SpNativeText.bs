@@ -16,7 +16,7 @@ sub render(event as Object)
     textComponent.text = settings.text
 
     if settings.style.font <> invalid then
-        if componentName = "Label" or componentName = "ScrollableText" then
+        if componentName = "Label" or componentName = "ScrollingLabel" or componentName = "ScrollableText" then
             font = createFont(settings.style.font)
             textComponent.font = font
         else if componentName = "SimpleLabel" then

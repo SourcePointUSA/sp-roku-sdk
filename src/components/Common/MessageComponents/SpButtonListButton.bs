@@ -15,21 +15,15 @@ sub render(event as Object)
     m.top.id = content.id
 
     ' defaults
-    m.button_label.fontUri="font:SystemFontFile"
     if content.focused = true then
         m.textColor = "0x000000FF"
-        ' This crashes my roku:
-        ' m.button_label.fontUri="font:BoldSystemFontFile"
     else
         m.textColor = "0xFFFFFFFF"
     end if
 
+    m.button_label.settings = settings
+
     if settings.style <> invalid and settings.style <> invalid then
-        if settings.style.font <> invalid then
-            if settings.style.font.fontSize <> invalid then
-                m.button_label.fontSize = settings.style.font.fontSize
-            end if
-        end if
         if content.focused = true and settings.style.onFocusTextColor <> invalid then
             m.textColor = colorConvert(settings.style.onFocusTextColor)
         else if content.focused = false and settings.style.onUnfocusTextColor <> invalid then
@@ -43,9 +37,9 @@ sub render(event as Object)
         ' end if
     end if
 
-    m.button_label.color = m.textColor
-    m.button_label.translation = [0, content.height / 2]
-    m.button_label.text = settings.text
+    m.button_label.textComponent.color = m.textColor
+    m.button_label.textComponent.vertAlign = "center"
+    m.button_label.textComponent.height = content.height
 end sub
 
 sub onFocus(event as Object)
