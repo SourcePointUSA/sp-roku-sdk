@@ -6,6 +6,8 @@ sub init()
 
     m.button_background = m.top.findNode("button_background")
     m.button_label = m.top.findNode("button_label")
+
+    m.buttonTextSpacing = scalePixelDimension(15)
 end sub
 
 sub render(event as Object)
@@ -37,9 +39,79 @@ sub render(event as Object)
         ' end if
     end if
 
+    if content.carat <> "" and m.caratNode = invalid then
+        addCarat(content)
+    end if
+
+    if content.on <> invalid and settings.onText <> invalid and settings.offText <> invalid and m.onOffNode = invalid then
+        addOnOff(content, settings)
+    end if
+
+    ' if settings.customText <> invalid then
+    '     addCustomText(content, settings)
+    ' end if
+    
+
     m.button_label.textComponent.color = m.textColor
     m.button_label.textComponent.vertAlign = "center"
     m.button_label.textComponent.height = content.height
+    m.button_label.textComponent.maxWidth = content.width * .6
+
+    if m.caratNode <> invalid then
+        m.caratNode.color = m.textColor
+    end if
+    if m.customText <> invalid then
+        m.customText.color = m.textColor
+    end if
+    if m.onOffNode <> invalid then
+        m.onOffNode.color = m.textColor
+    end if
+end sub
+
+sub addCarat(content as Object)
+    m.caratNode = createObject("roSGNode", "SimpleLabel")
+    m.caratNode.fontUri = "font:SystemFontFile"
+    m.caratNode.fontSize = m.button_label.textComponent.font.size
+    m.caratNode.text = content.carat
+    m.caratNode.horizOrigin = "right"
+    m.caratNode.vertOrigin = "center"
+    m.caratNode.translation = [content.width, content.height / 2]
+    m.top.appendChild(m.caratNode)
+end sub
+
+sub addCustomText(content as Object, settings as Object)
+    m.customText = createObject("roSGNode", "SimpleLabel")
+    m.customText.text = settings.customText
+    m.customText.fontUri = "font:SystemFontFile"
+    m.customText.fontSize = m.button_label.textComponent.font.size
+    
+    rightOffset = 0
+    if m.onOffNode <> invalid then
+        rightOffset = m.onOffNode.boundingRect().x - m.buttonTextSpacing
+    end if 
+    m.customText.horizOrigin = "right"
+    m.customText.vertOrigin = "center"
+    m.customText.translation = [rightOffset, content.height / 2]
+    m.top.appendChild(m.customText)
+end sub
+
+sub addOnOff(content as Object, settings as Object)
+    m.onOffNode = createObject("roSGNode", "SimpleLabel")
+    m.onOffNode.fontUri = "font:SystemFontFile"
+    m.onOffNode.fontSize = m.button_label.textComponent.font.size
+    if content.on = true then
+        m.onOffNode.text = settings.onText
+    else
+        m.onOffNode.text = settings.offText
+    endif
+    rightOffset = 0
+    if m.caratNode <> invalid then
+        rightOffset = m.caratNode.boundingRect().x - m.buttonTextSpacing
+    end if 
+    m.onOffNode.horizOrigin = "right"
+    m.onOffNode.vertOrigin = "center"
+    m.onOffNode.translation = [rightOffset, content.height / 2]
+    m.top.appendChild(m.onOffNode)
 end sub
 
 sub onFocus(event as Object)

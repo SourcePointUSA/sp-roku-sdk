@@ -25,6 +25,11 @@ sub render(event as Object)
         buttonContentNode.settings = button.settings
         buttonContentNode.id = button.id
         buttonContentNode.height = buttonHeight
+        buttonContentNode.width = width
+        
+        if button.on <> invalid then
+            buttonContentNode.on = button.on
+        end if
 
         m.buttonNodes.appendChild(buttonContentNode)
     end for
