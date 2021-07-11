@@ -94,9 +94,6 @@ sub rejectVendor(event as Object)
 end sub
 
 function getSaveAndExitVariables() as Object
-    print m.rejectedVendors
-    print m.rejectedCategories
-
     return {
         "lan": m.global.config.consentLanguage,
         "privacyManagerId": m.top.messageId.toStr(),
