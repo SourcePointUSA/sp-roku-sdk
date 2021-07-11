@@ -15,6 +15,22 @@ sub render(event as Object)
     end if
     textComponent.text = settings.text
 
+    if settings.style.font <> invalid then
+        if componentName = "Label" or componentName = "ScrollableText" then
+            font = createFont(settings.style.font)
+            textComponent.font = font
+        else if componentName = "SimpleLabel" then
+            if settings.style.font.fontWeight <> invalid and settings.style.font.fontWeight = "700" then
+                textComponent.fontUri = "font:BoldSystemFontFile"
+            else
+                textComponent.fontUri = "font:SystemFontFile"
+            end if
+            if settings.style.font.fontSize <> invalid then
+                textComponent.fontSize = settings.style.font.fontSize
+            end if
+        end if
+    end if
+
     m.top.textComponent = textComponent
     m.top.appendChild(textComponent)
 end sub

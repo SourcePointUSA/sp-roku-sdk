@@ -15,12 +15,13 @@ sub render(event as Object)
     m.top.id = content.id
 
     ' defaults
+    m.button_label.fontUri="font:SystemFontFile"
     if content.focused = true then
         m.textColor = "0x000000FF"
-        m.button_label.fontUri="font:BoldSystemFontFile"
+        ' This crashes my roku:
+        ' m.button_label.fontUri="font:BoldSystemFontFile"
     else
         m.textColor = "0xFFFFFFFF"
-        m.button_label.fontUri="font:SystemFontFile"
     end if
 
     if settings.style <> invalid and settings.style <> invalid then

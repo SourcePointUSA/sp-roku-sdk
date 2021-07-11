@@ -36,6 +36,14 @@ sub render(event as Object)
         end if
     end if
 
+    if settings.style.font <> invalid then
+        m.top.textFont = createFont(settings.style.font)
+        focusedTextSettings = {}
+        focusedTextSettings.append(settings.style.font)
+        focusedTextSettings.append({fontWeight: "700"})
+        m.top.focusedTextFont = createFont(focusedTextSettings)
+    end if
+
     m.top.textColor = m.textColor
     m.top.focusedTextColor = m.focusedTextColor
 

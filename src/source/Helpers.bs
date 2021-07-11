@@ -11,6 +11,22 @@ function addQueryParams(uri as String, params as Object) as String
     return uri
 end function
 
+function createFont(fontSettings as Object) as Object
+    font = CreateObject("roSGNode", "Font")
+
+    if fontSettings.fontWeight <> invalid and fontSettings.fontWeight = "700" then
+        font.uri = "font:BoldSystemFontFile"
+    else
+        font.uri = "font:SystemFontFile"
+    end if
+
+    if fontSettings.fontSize <> invalid then
+        font.size = fontSettings.fontSize
+    end if
+
+    return font
+end function
+
 ' Convert html hex to roku hex
 function colorConvert(color as String) as String
     if color <> invalid then
