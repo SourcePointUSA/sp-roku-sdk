@@ -17,7 +17,8 @@ end sub
 sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
-    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+
+    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 and m.vendorData.purposes[0] <> invalid then
         m.categoryList = createObject("roSGNode", "LabelList")
         rootContentNode = createObject("roSGNode", "ContentNode")
 

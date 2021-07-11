@@ -18,8 +18,7 @@ end sub
 
 sub renderRightCol()
     m.vendorList = createObject("roSGNode", "SpButtonList")
-    m.vendorList.width = m.colRightWidth
-    ' m.vendorList = createObject("roSGNode", "SpButtonGroup")
+    m.vendorList.width = m.colRightWidth - scalePixelDimension(50)
 
     buttons = []
     for each vendorId in m.privacyManagerViewData.vendors
