@@ -2,6 +2,7 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
     m.top.observeField("settings", "render")
+    m.top.observeField("text", "renderText")
 end sub
 
 sub render(event as Object)
@@ -33,4 +34,10 @@ sub render(event as Object)
 
     m.top.textComponent = textComponent
     m.top.appendChild(textComponent)
+end sub
+
+sub renderText(event as Object)
+    text = event.getData()
+
+    m.top.textComponent.text = text
 end sub

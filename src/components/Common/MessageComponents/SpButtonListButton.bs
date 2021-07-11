@@ -8,28 +8,30 @@ sub init()
     m.button_label = m.top.findNode("button_label")
 
     m.buttonTextSpacing = scalePixelDimension(15)
+    m.rendered = false
 end sub
 
 sub render(event as Object)
     content = event.getData()
     settings = content.settings
 
-    m.top.id = content.id
+    if m.rendered = true then
+        renderTextColor(content.focused)
+        return
+    else
+        m.rendered = true
+    end if 
 
     ' defaults
-    if content.focused = true then
-        m.textColor = "0x000000FF"
-    else
-        m.textColor = "0xFFFFFFFF"
-    end if
-
-    m.button_label.settings = settings
-
+    m.textColor = "0x000000FF"
+    m.focusedTextColor = "0xFFFFFFFF"
+    
     if settings.style <> invalid and settings.style <> invalid then
-        if content.focused = true and settings.style.onFocusTextColor <> invalid then
-            m.textColor = colorConvert(settings.style.onFocusTextColor)
-        else if content.focused = false and settings.style.onUnfocusTextColor <> invalid then
+        if settings.style.onUnfocusTextColor <> invalid then
             m.textColor = colorConvert(settings.style.onUnfocusTextColor)
+        end if
+        if settings.style.onFocusTextColor <> invalid then
+            m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
         end if
         ' if settings.style.onFocusBackgroundColor <> invalid then
         '     m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
@@ -38,6 +40,9 @@ sub render(event as Object)
         '     m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
         ' end if
     end if
+
+    m.top.id = content.id
+    m.button_label.settings = settings
 
     if content.carat <> "" and m.caratNode = invalid then
         addCarat(content)
@@ -52,19 +57,29 @@ sub render(event as Object)
     ' end if
     
 
-    m.button_label.textComponent.color = m.textColor
     m.button_label.textComponent.vertAlign = "center"
     m.button_label.textComponent.height = content.height
-    m.button_label.textComponent.maxWidth = content.width * .6
+    m.button_label.textComponent.width = content.width * .6
+
+    renderTextColor(content.focused)
+end sub
+
+sub renderTextColor(focused as Boolean)
+    if focused = true then
+        textColor = m.focusedTextColor
+    else
+        textColor = m.textColor
+    end if 
+    m.button_label.textComponent.color = textColor
 
     if m.caratNode <> invalid then
-        m.caratNode.color = m.textColor
+        m.caratNode.color = textColor
     end if
     if m.customText <> invalid then
-        m.customText.color = m.textColor
+        m.customText.color = textColor
     end if
     if m.onOffNode <> invalid then
-        m.onOffNode.color = m.textColor
+        m.onOffNode.color = textColor
     end if
 end sub
 

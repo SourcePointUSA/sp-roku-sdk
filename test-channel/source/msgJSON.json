@@ -674,7 +674,7 @@
                       "onFocusBackgroundColor": "#ffffff",
                       "onUnfocusBackgroundColor": "#f1f2f6",
                       "onFocusTextColor": "#000000",
-                      "onUnfocusTextColor": "#ffffff"
+                      "onUnfocusTextColor": "#FF0000"
                    }
                 }
              }

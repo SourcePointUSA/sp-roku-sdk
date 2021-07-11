@@ -10,7 +10,7 @@
 
     <children>
         <Rectangle id="button_background" />
-        <SpNativeText id="button_label" componentName="ScrollingLabel" />
+        <SpNativeText id="button_label" componentName="Label" />
     </children>
 
 </component>

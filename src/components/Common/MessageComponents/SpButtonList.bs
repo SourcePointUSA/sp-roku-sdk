@@ -19,6 +19,7 @@ sub render(event as Object)
     end if
 
     m.top.itemSize = [width, buttonHeight]
+    m.top.numRows = 8
 
     for each button in buttons
         buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
@@ -26,7 +27,7 @@ sub render(event as Object)
         buttonContentNode.id = button.id
         buttonContentNode.height = buttonHeight
         buttonContentNode.width = width
-        
+
         if button.on <> invalid then
             buttonContentNode.on = button.on
         end if
