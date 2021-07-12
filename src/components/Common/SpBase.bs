@@ -52,11 +52,18 @@ sub changeView(viewName as String, viewData = invalid as Object)
 end sub
 
 sub getPrivacyManagerViewData(messageCategoryId)
-    m.privacyManagerViewTask = m.top.privacyManagerViewTask
-    m.privacyManagerViewTask.messageCategory = messageCategoryId
-    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
-    m.privacyManagerViewTask.control = "RUN"
-    m.privacyManagerViewTask.observeField("state", "setPmvData")
+    if m.privacyManagerViewTask = invalid then
+        ' if we haven't created the task create it and run it
+        m.privacyManagerViewTask = m.top.privacyManagerViewTask
+        m.privacyManagerViewTask.messageCategory = messageCategoryId
+        m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+        m.privacyManagerViewTask.control = "RUN"
+        m.privacyManagerViewTask.observeField("state", "setPmvData")
+        m.privacyManagerViewTask.observeField("data", "setPmvData")
+    else
+        ' else we already have the data, another view is asking for it
+        setPmvData()
+    end if
 end sub
 
 sub mapComponents(view as object)
