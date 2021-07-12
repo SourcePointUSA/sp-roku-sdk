@@ -39,6 +39,8 @@ sub init()
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
 
     m.top.translation=[scalePixelDimension(50),scalePixelDimension(50)]
+
+    m.top.observeField("focusedChild", "trackFocusedChild")
 end sub
 
 sub changeView(viewName as String, viewData = invalid as Object)
@@ -97,9 +99,12 @@ end sub
 function onKeyEvent(key as String, press as Boolean) as Boolean
     if key = "left" and press = true and m.nav <> invalid then
         m.nav.setFocus(true)
+        m.previouslyFocusedChild = m.nav
         return true
     else if key = "right" and press = true and m.rightColFocus <> invalid then
         m.rightColFocus.setFocus(true)
+        m.previouslyFocusedChild = m.rightColFocus
+        return true
     end if 
 
     return false
@@ -155,6 +160,7 @@ sub renderNav(buttonIds)
     m.colLeft.appendChild(buttonGroup)
     m.nav = buttonGroup
     m.nav.observeField("buttonSelected", "observeNav")
+    m.previouslyFocusedChild = m.nav
 end sub
 
 sub setCategoryData(event as Object)
@@ -165,4 +171,15 @@ sub setConsent(event as Object)
     spMessage = m.top.getParent()
     spMessage.userConsent = event.getData()
     spMessage.done = true
+end sub
+
+' Focus previously focused element if this view was just focused
+sub trackFocusedChild(event as Object)
+    focusedChild = event.getData()
+
+    if focusedChild <> invalid and m.previouslyFocusedChild <> invalid then
+        if m.top.hasFocus() = true then
+            m.previouslyFocusedChild.setFocus(true)
+        end if
+    end if
 end sub
