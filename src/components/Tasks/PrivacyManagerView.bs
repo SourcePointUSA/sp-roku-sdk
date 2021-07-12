@@ -6,6 +6,7 @@ sub init()
 end sub
 
 sub addUcnObserver()
+    m.top.unObserveField("userConsentNode")
     m.top.userConsentNode.observeField("consentChanged", "updateData")
 end sub
 

@@ -10,10 +10,10 @@
         <field id="userConsent" type="assocarray" />
         <field id="messageId" type="integer" />
 
-        <field id="acceptCategory" type="string" />
-        <field id="acceptVendor" type="string" />
-        <field id="rejectCategory" type="string" />
-        <field id="rejectVendor" type="string" />
+        <field id="acceptCategory" type="string" alwaysNotify="true"/>
+        <field id="acceptVendor" type="string" alwaysNotify="true"/>
+        <field id="rejectCategory" type="string" alwaysNotify="true"/>
+        <field id="rejectVendor" type="string" alwaysNotify="true"/>
 
         <field id="consentChanged" type="assocarray" />
     </interface>
