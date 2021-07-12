@@ -22,7 +22,7 @@ sub init()
         "BackButton": "button_nav_back",
         "CategoriesDescriptionText": "text_category_description",
         "CategoriesSubDescriptionText": "text_category_sub_description",
-        "HeaderText": "text_header",
+        "Header": "text_header",
         "LogoImage": "image_logo",
         "OnButton": "button_on",
         "OffButton": "button_off",
@@ -50,15 +50,11 @@ sub changeView(viewName as String, viewData = invalid as Object)
 end sub
 
 sub getPrivacyManagerViewData(messageCategoryId)
-    if m.top.privacyManagerViewData = invalid then
-        m.privacyManagerViewTask = m.top.privacyManagerViewTask
-        m.privacyManagerViewTask.messageCategory = messageCategoryId
-        m.privacyManagerViewTask.propertyId = m.global.config.propertyId
-        m.privacyManagerViewTask.control = "RUN"
-        m.privacyManagerViewTask.observeField("data", "setCategoryData")
-    else
-        m.pmvCallback()
-    end if
+    m.privacyManagerViewTask = m.top.privacyManagerViewTask
+    m.privacyManagerViewTask.messageCategory = messageCategoryId
+    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+    m.privacyManagerViewTask.control = "RUN"
+    m.privacyManagerViewTask.observeField("state", "setPmvData")
 end sub
 
 sub mapComponents(view as object)
@@ -124,7 +120,6 @@ sub renderLogo()
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
         m.top.findNode("screen-title").textComponent.horizOrigin = "center"
-        ' m.top.findNode("screen-title").text = m.components.text_header.settings.text
     end if
 
     if m.components.image_logo <> invalid then
@@ -163,8 +158,10 @@ sub renderNav(buttonIds)
     m.previouslyFocusedChild = m.nav
 end sub
 
-sub setCategoryData(event as Object)
-    m.top.privacyManagerViewData = event.getData()
+sub setPmvData(event as Object)
+    if event.getData() = "stop" then
+        m.top.privacyManagerViewData = m.privacyManagerViewTask.data
+    end if
 end sub
 
 sub setConsent(event as Object)

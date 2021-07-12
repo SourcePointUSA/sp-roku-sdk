@@ -43,11 +43,15 @@ function addConsentToPmvData(privacyManagerViewData as Object) as Object
     end for
 
     for each categoryId in m.rejectedCategories
-        privacyManagerViewData.categories[categoryId]["__enabled"] = false
+        if privacyManagerViewData.categories[categoryId] <> invalid then 
+            privacyManagerViewData.categories[categoryId]["__enabled"] = false
+        end if
     end for
 
     for each vendorId in m.rejectedVendors
-        privacyManagerViewData.vendors[vendorId]["__enabled"] = false
+        if privacyManagerViewData.vendors[vendorId] <> invalid then 
+            privacyManagerViewData.vendors[vendorId]["__enabled"] = false
+        end if
     end for
 
     return privacyManagerViewData

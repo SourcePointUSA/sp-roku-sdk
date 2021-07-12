@@ -8,7 +8,7 @@ sub observeCategoryList(event as Object)
     'CategoryDetailsView
     item = m.categoryList.content.getChild(event.getData())
 
-    changeView("CategoryDetailsView", m.privacyManagerViewData.categories[item.id])
+    changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
 end sub
 
 sub renderRightCol()
@@ -21,10 +21,10 @@ sub renderRightCol()
     m.categoryList = createObject("roSGNode", "LabelList")
     rootContentNode = createObject("roSGNode", "ContentNode")
 
-    for each categoryId in m.privacyManagerViewData.categories
+    for each categoryId in m.top.privacyManagerViewData.categories
         contentNode = createObject("roSGNode", "ContentNode")
         contentNode.id = categoryId
-        contentNode.title = m.privacyManagerViewData.categories[categoryId].name
+        contentNode.title = m.top.privacyManagerViewData.categories[categoryId].name
         rootContentNode.appendChild(contentNode)
     endfor
 

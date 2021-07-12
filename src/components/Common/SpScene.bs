@@ -32,10 +32,6 @@ sub showMessage()
     campaign = campaigns[m.top.activeCampaign]
 
     if campaign <> invalid then
-        ' TODO - remove this 
-        messageJson = ParseJson(ReadAsciiFile("pkg:/source/msgJSON.json"))
-        campaign.message.message_json = messageJson
-
         m.currentMessage.observeField("done", "closeMessage")
         m.currentMessage.userConsent = campaign.userConsent
         m.currentMessage.message = campaign
