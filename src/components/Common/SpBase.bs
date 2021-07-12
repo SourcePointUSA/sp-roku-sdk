@@ -31,8 +31,10 @@ sub init()
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
         "PublisherDescription": "text_publisher_description",
+        "PurposesHeader": "text_purposes_header"
         "SaveButton": "save_and_exit",
         "VendorButton": "button_vendor",
+        "VendorsHeader": "text_vendor_header",
         "VendorLongButton": "button_vendor",
     }
     m.components = {}
@@ -167,8 +169,8 @@ sub renderNav(buttonIds)
     m.previouslyFocusedChild = m.nav
 end sub
 
-sub setPmvData(event as Object)
-    if event.getData() = "stop" then
+sub setPmvData(event = invalid as Object)
+    if event = invalid or m.privacyManagerViewTask.state = "stop" then
         m.top.privacyManagerViewData = m.privacyManagerViewTask.data
     end if
 end sub
