@@ -7,7 +7,7 @@ sub init()
     m.top.focusBitmapUri = " "          ' note space here, empty string is the default and does not override...
     m.top.focusFootprintBitmapUri = " "
     m.top.observeField("settings", "render")
-    m.top.observeField("buttonFocused", "updateBackground")
+    m.top.observeField("focusedChild", "updateBackground")
 
     ' TODO: add our defaults
     m.focusBackgroundColor = "0xFFFFFFFF"
@@ -48,7 +48,6 @@ sub render(event as Object)
     m.top.focusedTextColor = m.focusedTextColor
 
     bg = createObject("roSGNode", "Rectangle")
-    ' bg.id = "button_background"
     bg.height = scalePixelDimension(64)
     bg.width = 0
     bg.color = m.unFocusBackgroundColor
@@ -60,11 +59,9 @@ end sub
 sub updateBackground(event as Object)
     focused = event.getData()
 
-    if focused = true then
-        m.top.textColor = m.focusedTextColor
+    if m.top.hasFocus() = true then
         m.top.backgroundRect.color = m.focusBackgroundColor
     else
-        m.top.textColor = m.textColor
         m.top.backgroundRect.color = m.unFocusBackgroundColor
     end if
 end sub

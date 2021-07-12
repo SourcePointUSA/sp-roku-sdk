@@ -1,5 +1,7 @@
 sub init()
     m.top.observeField("viewDataExtra", "renderView")
+
+    m.navButtons = ["button_on", "button_off"]
 end sub
 
 sub observeNav(event as Object)
@@ -17,6 +19,14 @@ end sub
 sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
+    for i = 0 to m.navButtons.count() step 1 
+        if (m.vendorData.__enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.__enabled = false and m.navButtons[i] = "button_off") then
+            m.nav.focusButton = i
+            exit for
+        end if
+    end for
+
+    m.nav.setFocus(true)
 
     if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 and m.vendorData.purposes[0] <> invalid then
         m.categoryList = createObject("roSGNode", "LabelList")
@@ -44,11 +54,11 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["button_on", "button_off"])
+    renderNav(m.navButtons)
 
     ' TODO add loader to the right col until it is rendered
 
-    m.nav.setFocus(true)
+    ' m.nav.setFocus(true)
 
     m.vendorData = event.getData()
 
