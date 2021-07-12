@@ -1,10 +1,6 @@
 sub init()
-    m.navViewMap = {
-        "accept_all": "HomeView",
-        ' "save_and_exit": "HomeView",
-    }
-
     m.top.observeField("view", "renderView")
+    m.top.observeField("privacyManagerViewData", "renderRightCol")
 end sub
 
 sub observeVendorList(event as Object)
@@ -12,28 +8,33 @@ sub observeVendorList(event as Object)
 
     if index <> invalid then
         item = m.vendorList.buttonComponents[index]
-        changeView("VendorDetailsView", m.privacyManagerViewData.vendors[item.id])
+        changeView("VendorDetailsView", m.top.privacyManagerViewData.vendors[item.id])
     end if
 end sub
 
 sub renderRightCol()
+    if m.vendorList <> invalid then
+        ' this re-renders if consent changes, remove old component to re-render
+        m.colRight.removeChild(m.vendorList)
+        m.vendorList = invalid
+    end if 
+
     m.vendorList = createObject("roSGNode", "SpButtonList")
     m.vendorList.width = m.colRightWidth - scalePixelDimension(50)
 
     buttons = []
-    for each vendorId in m.privacyManagerViewData.vendors
+    for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
-            on: m.privacyManagerViewData.vendors[vendorId]["__enabled"]
+            on: m.top.privacyManagerViewData.vendors[vendorId]["__enabled"]
             settings: {} 
         } 
         buttonSettings.settings.append(m.components.button_vendor.settings)
         buttonSettings.id = vendorId
-        buttonSettings.settings.text = m.privacyManagerViewData.vendors[vendorId].name
+        buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
 
         buttons.push(buttonSettings)
     end for
 
-    ' m.vendorList.buttonComponentName = "SpToggleButton"
     m.vendorList.buttonComponents = buttons
 
     m.colRight.appendChild(m.vendorList)
@@ -42,7 +43,7 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
-    getPrivacyManagerViewData(renderRightCol, 2)
+    getPrivacyManagerViewData(2)
 
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")

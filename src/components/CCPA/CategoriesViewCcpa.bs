@@ -1,9 +1,6 @@
 sub init()
-    m.navViewMap = {
-        ' "save_and_exit": "HomeView",
-    }
-    
     m.top.observeField("view", "renderView")
+    m.top.observeField("privacyManagerViewData", "renderRightCol")
 end sub
 
 sub observeCategoryList(event as Object)
@@ -14,6 +11,12 @@ sub observeCategoryList(event as Object)
 end sub
 
 sub renderRightCol()
+    if m.categoryList <> invalid then
+        ' this re-renders if consent changes, remove old component to re-render
+        m.colRight.removeChild(m.categoryList)
+        m.categoryList = invalid
+    end if 
+
     m.categoryList = createObject("roSGNode", "LabelList")
     rootContentNode = createObject("roSGNode", "ContentNode")
 
@@ -32,7 +35,7 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
-    getPrivacyManagerViewData(renderRightCol, 2)
+    getPrivacyManagerViewData(2)
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
 

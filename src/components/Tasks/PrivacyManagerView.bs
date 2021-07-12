@@ -2,6 +2,11 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
     m.top.functionName = "privacyManagerView"
+    m.top.observeField("userConsentNode", "addUcnObserver")
+end sub
+
+sub addUcnObserver()
+    m.top.userConsentNode.observeField("consentChanged", "updateData")
 end sub
 
 sub privacyManagerView()
@@ -44,4 +49,8 @@ sub privacyManagerView()
 
         m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", data)
     end if
+end sub
+
+sub updateData()
+    m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", m.top.data)
 end sub

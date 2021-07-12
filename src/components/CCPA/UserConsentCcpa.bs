@@ -17,6 +17,8 @@ sub acceptCategory(event as Object)
             exit for
         end if
     end for
+
+    fireConsentChange()
 end sub
 
 sub acceptVendor(event as Object)
@@ -27,6 +29,8 @@ sub acceptVendor(event as Object)
             exit for
         end if
     end for
+
+    fireConsentChange()
 end sub
 
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
@@ -77,6 +81,8 @@ sub rejectCategory(event as Object)
     if found = false then
         m.rejectedCategories.push(rejectedCategory)
     end if
+
+    fireConsentChange()
 end sub
 
 sub rejectVendor(event as Object)
@@ -91,6 +97,12 @@ sub rejectVendor(event as Object)
     if found = false then
         m.rejectedVendors.push(rejectedVendor)
     end if
+
+    fireConsentChange()
+end sub
+
+sub fireConsentChange()
+    m.top.consentChanged = getSaveAndExitVariables()
 end sub
 
 function getSaveAndExitVariables() as Object

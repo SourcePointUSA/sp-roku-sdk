@@ -11,6 +11,7 @@
       <field id="viewDataExtra" type="assocarray" />
 
       <field id="privacyManagerViewTask" type="node" />
+      <field id="privacyManagerViewData" type="assocarray" />
       <field id="userConsentNode" type="node" />
   </interface>
 

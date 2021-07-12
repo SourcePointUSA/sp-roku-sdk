@@ -47,14 +47,13 @@ sub changeView(viewName as String, viewData = invalid as Object)
     spMessage.changeView = viewName
 end sub
 
-sub getPrivacyManagerViewData(callbackFn, messageCategoryId)
-    m.pmvCallback = callbackFn
-    if m.privacyManagerViewData = invalid then
+sub getPrivacyManagerViewData(messageCategoryId)
+    if m.top.privacyManagerViewData = invalid then
         m.privacyManagerViewTask = m.top.privacyManagerViewTask
         m.privacyManagerViewTask.messageCategory = messageCategoryId
         m.privacyManagerViewTask.propertyId = m.global.config.propertyId
         m.privacyManagerViewTask.control = "RUN"
-        m.privacyManagerViewTask.observeField("state", "setCategoryData")
+        m.privacyManagerViewTask.observeField("data", "setCategoryData")
     else
         m.pmvCallback()
     end if
@@ -159,15 +158,7 @@ sub renderNav(buttonIds)
 end sub
 
 sub setCategoryData(event as Object)
-    eventStatus = event.getData()
-
-    if eventStatus = "stop" or eventStatus = "done" then
-        m.privacyManagerViewData = m.privacyManagerViewTask.data
-
-        if m.pmvCallback <> invalid then
-            m.pmvCallback()
-        end if
-    end if
+    m.top.privacyManagerViewData = event.getData()
 end sub
 
 sub setConsent(event as Object)
