@@ -22,6 +22,7 @@ sub init()
         "BackButton": "button_nav_back",
         "CategoriesDescriptionText": "text_category_description",
         "CategoriesSubDescriptionText": "text_category_sub_description",
+        "CategoryButton": "button_category",
         "Header": "text_header",
         "LogoImage": "image_logo",
         "OnButton": "button_on",
@@ -32,6 +33,7 @@ sub init()
         "PublisherDescription": "text_publisher_description",
         "SaveButton": "save_and_exit",
         "VendorButton": "button_vendor",
+        "VendorLongButton": "button_vendor",
     }
     m.components = {}
     ' m.navViewMap : maps nav button IDs to views they should link to

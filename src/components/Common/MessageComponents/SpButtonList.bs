@@ -28,6 +28,9 @@ sub render(event as Object)
         buttonContentNode.height = buttonHeight
         buttonContentNode.width = width
 
+        if button.carat <> invalid then
+            buttonContentNode.carat = button.carat
+        end if
         if button.on <> invalid then
             buttonContentNode.on = button.on
         end if

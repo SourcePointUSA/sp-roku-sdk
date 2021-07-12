@@ -36,17 +36,23 @@ sub renderRightCol(event as Object)
         vendors = m.categoryData.legIntVendors
     end if
 
-    m.vendorList = createObject("roSGNode", "LabelList")
-    rootContentNode = createObject("roSGNode", "ContentNode")
+    m.vendorList = createObject("roSGNode", "SpButtonList")
+    m.vendorList.width = m.colRightWidth - scalePixelDimension(50)
 
+    buttons = []
     for each vendor in vendors
-        contentNode = createObject("roSGNode", "ContentNode")
-        contentNode.id = vendor._id
-        contentNode.title = vendor.name
-        rootContentNode.appendChild(contentNode)
-    endfor
+        buttonSettings = { 
+            carat: "",
+            settings: {} 
+        } 
+        buttonSettings.settings.append(m.components.button_vendor.settings)
+        buttonSettings.id = vendor._id
+        buttonSettings.settings.text = vendor.name
 
-    m.vendorList.content = rootContentNode
+        buttons.push(buttonSettings)
+    end for
+
+    m.vendorList.buttonComponents = buttons
 
     m.colRight.appendChild(m.vendorList)
     m.rightColFocus = m.vendorList
