@@ -27,7 +27,7 @@ sub render(event as Object)
     m.top.numRows = 8
 
     buttonSettings = invalid
-
+    first = true
     for each button in buttons
         buttonSettings = button.settings
 
@@ -37,6 +37,12 @@ sub render(event as Object)
         buttonContentNode.height = buttonHeight
         buttonContentNode.width = width
 
+        ' fake that the first element is focused when rendering
+        ' this will give us the correct focus footprint state
+        if first = true then
+            buttonContentNode.focused = true
+            first = false
+        end if
         if button.carat <> invalid then
             buttonContentNode.carat = button.carat
         end if
