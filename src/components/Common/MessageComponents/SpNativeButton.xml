@@ -5,8 +5,7 @@
     <interface>
         <field id="settings" type="assocarray" />
         <field id="backgroundRect" type="node" />
-
-        <field id="buttonFocused" type="boolean"/>
+        <field id="width" type="integer"/>
     </interface>
 
     <script uri="./SpNativeButton.bs" />

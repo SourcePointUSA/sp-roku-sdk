@@ -4,10 +4,11 @@ sub init()
     ' reset default look and feel
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
-    m.top.focusBitmapUri = " "          ' note space here, empty string is the default and does not override...
-    m.top.focusFootprintBitmapUri = " "
+    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"          ' note space here, empty string is the default and does not override...
+    m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+    m.top.showFocusFootprint = true
     m.top.observeField("settings", "render")
-    m.top.observeField("focusedChild", "updateBackground")
+    m.top.observeField("width", "setWidths")
 
     ' TODO: add our defaults
     m.focusBackgroundColor = "0xFFFFFFFF"
@@ -47,21 +48,41 @@ sub render(event as Object)
     m.top.textColor = m.textColor
     m.top.focusedTextColor = m.focusedTextColor
 
-    bg = createObject("roSGNode", "Rectangle")
-    bg.height = scalePixelDimension(64)
-    bg.width = 0
-    bg.color = m.unFocusBackgroundColor
+    ' blend focus button color
+    children = m.top.getChildren(-1, 0)
+    print "children:"
+    for each child in children
+        if child.subtype() = "Poster" then
+            if child.uri.Instr("focus_button.jpg") >= 0 then
+                ' this turns our button the right color in focus
+                child.blendColor = m.focusBackgroundColor
+            else if child.uri.Instr("focus_footprint_button.jpg") >= 0 then
+                ' this turns our footprint the right color 
+                child.blendColor = "0xA9A9A9FF" ' default disabled color
+            end if
+        end if
+    end for
 
-    m.top.backgroundRect = bg
-    m.top.insertChild(bg, 0)
+    createBg()
+
+    m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
+    m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
+    m.top.backgroundRect.height = scalePixelDimension(64)
+    m.top.backgroundRect.width = 0
 end sub
 
-sub updateBackground(event as Object)
-    focused = event.getData()
+sub createBg()
+    if m.top.backgroundRect = invalid then
+        ' create regular background image
+        bg = createObject("roSGNode", "Poster")
+        m.top.backgroundRect = bg
+        m.top.insertChild(bg, 0)
+    end if
+end sub
 
-    if m.top.hasFocus() = true then
-        m.top.backgroundRect.color = m.focusBackgroundColor
-    else
-        m.top.backgroundRect.color = m.unFocusBackgroundColor
+sub setWidths(event as Object)
+    width = event.getData()
+    if m.top.backgroundRect <> invalid then
+        m.top.backgroundRect.width = width
     end if
 end sub

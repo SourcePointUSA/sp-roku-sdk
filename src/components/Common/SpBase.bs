@@ -144,7 +144,7 @@ sub renderLogo()
             component.loadHeight = 540
         end if 
 
-        component.uri = m.components.image_logo.settings.url
+        component.uri = m.components.image_logo.settings.src
         ' TODO - set this to something for loading
         ' component.loadingBitmapUri = 
         m.colLeft.appendChild(component)

@@ -21,7 +21,10 @@ sub render(event as Object)
         end if
     end for
 
+    ' adjust button background widths
     for each button in m.buttonNodes
-        button.backgroundRect.width = maxWidth
+        button.width = maxWidth
     end for
+    ' make all buttons the same width
+    m.top.minWidth = maxWidth
 end sub
