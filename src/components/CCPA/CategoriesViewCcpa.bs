@@ -12,15 +12,6 @@ sub observeCategoryList(event as Object)
 end sub
 
 sub renderRightCol()
-    if m.categoryList <> invalid then
-        ' this re-renders if consent changes, remove old component to re-render
-        m.colRight.removeChild(m.categoryList)
-        m.categoryList = invalid
-    end if 
-
-    m.categoryList = createObject("roSGNode", "SpButtonList")
-    m.categoryList.width = m.colRightWidth
-
     buttons = []
     for each categoryId in m.top.privacyManagerViewData.categories
         buttonSettings = { 
@@ -34,11 +25,16 @@ sub renderRightCol()
         buttons.push(buttonSettings)
     end for
 
-    m.categoryList.buttonComponents = buttons
+    if m.categoryList = invalid then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
 
-    m.colRight.appendChild(m.categoryList)
-    m.rightColFocus = m.categoryList
-    m.categoryList.observeField("itemSelected", "observeCategoryList")
+        m.colRight.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+        m.categoryList.observeField("itemSelected", "observeCategoryList")
+    end if 
+
+    m.categoryList.buttonComponents = buttons
 end sub
 
 sub renderView(event as Object)

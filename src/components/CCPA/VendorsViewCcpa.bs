@@ -14,15 +14,6 @@ sub observeVendorList(event as Object)
 end sub
 
 sub renderRightCol()
-    if m.vendorList <> invalid then
-        ' this re-renders if consent changes, remove old component to re-render
-        m.colRight.removeChild(m.vendorList)
-        m.vendorList = invalid
-    end if 
-
-    m.vendorList = createObject("roSGNode", "SpButtonList")
-    m.vendorList.width = m.colRightWidth
-
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
@@ -36,11 +27,16 @@ sub renderRightCol()
         buttons.push(buttonSettings)
     end for
 
-    m.vendorList.buttonComponents = buttons
+    if m.vendorList = invalid then
+        m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.width = m.colRightWidth
+        
+        m.colRight.appendChild(m.vendorList)
+        m.rightColFocus = m.vendorList
+        m.vendorList.observeField("itemSelected", "observeVendorList")
+    end if 
 
-    m.colRight.appendChild(m.vendorList)
-    m.rightColFocus = m.vendorList
-    m.vendorList.observeField("itemSelected", "observeVendorList")
+    m.vendorList.buttonComponents = buttons
 end sub
 
 sub renderView(event as Object)

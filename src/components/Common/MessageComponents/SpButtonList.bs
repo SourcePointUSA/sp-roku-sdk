@@ -12,6 +12,9 @@ sub init()
     m.top.itemSpacing = [0, scalePixelDimension(10)]
 
     m.buttonNodes = createObject("roSGNode", "ContentNode")
+    m.buttonNodesKeyed = {}
+
+    m.rendered = false
 end sub
 
 sub render(event as Object)
@@ -31,18 +34,25 @@ sub render(event as Object)
     for each button in buttons
         buttonSettings = button.settings
 
-        buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
-        buttonContentNode.settings = button.settings
-        buttonContentNode.id = button.id
-        buttonContentNode.height = buttonHeight
-        buttonContentNode.width = width
-
-        ' fake that the first element is focused when rendering
-        ' this will give us the correct focus footprint state
-        if first = true then
-            buttonContentNode.focused = true
-            first = false
+        if button.id = invalid then
+            button.id = button.settings.text
         end if
+        buttonContentNode = m.buttonNodesKeyed[button.id]
+        if buttonContentNode = invalid then
+            buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
+            buttonContentNode.id = button.id
+            buttonContentNode.height = buttonHeight
+            buttonContentNode.width = width
+
+            ' fake that the first element is focused when rendering
+            ' this will give us the correct focus footprint state
+            if m.rendered = false and first = true then
+                buttonContentNode.focused = true
+                first = false
+            end if
+        end if
+        buttonContentNode.settings = button.settings
+
         if button.carat <> invalid then
             buttonContentNode.carat = button.carat
         end if
@@ -50,18 +60,25 @@ sub render(event as Object)
             buttonContentNode.on = button.on
         end if
 
-        m.buttonNodes.appendChild(buttonContentNode)
+        if m.buttonNodesKeyed[button.id] = invalid then
+            m.buttonNodesKeyed[button.id] = buttonContentNode
+            m.buttonNodes.appendChild(buttonContentNode)
+        end if
     end for
 
-    ' set up focus bitmap and focus footprint bitmap based on settings
-    if buttonSettings <> invalid and buttonSettings.style.onFocusBackgroundColor <> invalid then
-        m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
-        m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
-        m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
-        m.top.focusFootprintBlendColor = "0xA9A9A9FF"
-    end if 
+    if m.rendered = false then
+        ' set up focus bitmap and focus footprint bitmap based on settings
+        if buttonSettings <> invalid and buttonSettings.style.onFocusBackgroundColor <> invalid then
+            m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+            m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
+            m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+            m.top.focusFootprintBlendColor = "0xA9A9A9FF"
+        end if 
 
-    m.top.content = m.buttonNodes
+        m.top.content = m.buttonNodes
+    end if
+
+    m.rendered = true
 end sub
 
 sub focusButton(event as Object)

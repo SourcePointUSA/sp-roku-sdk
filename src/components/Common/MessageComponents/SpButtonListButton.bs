@@ -18,7 +18,7 @@ sub render(event as Object)
     settings = content.settings
 
     if m.rendered = true then
-        renderTextColor(content.focused)
+        renderUpdate(content)
         return
     else
         m.rendered = true
@@ -63,10 +63,12 @@ sub render(event as Object)
     m.button_label.textComponent.height = content.height
     m.button_label.textComponent.width = content.width * .6
 
-    renderTextColor(content.focused)
+    renderUpdate(content)
 end sub
 
-sub renderTextColor(focused as Boolean)
+sub renderUpdate(content as Object)
+    focused = content.focused
+
     if focused = true then
         textColor = m.focusedTextColor
     else
@@ -88,6 +90,14 @@ sub renderTextColor(focused as Boolean)
         m.background.visible = false
     else 
         m.background.visible = true
+    end if
+
+    if m.onOffNode <> invalid then
+        if content.on = true then
+            m.onOffNode.text = content.settings.onText
+        else
+            m.onOffNode.text = content.settings.offText
+        endif
     end if
 end sub
 
