@@ -4,7 +4,6 @@
 
     <interface>
         <field id="buttonComponents" type="array" />
-        <field id="buttonComponentName" type="string" value="SpNativeButton" />
         <field id="width" type="integer" />
     </interface>
 

@@ -19,7 +19,7 @@ sub renderRightCol()
     end if 
 
     m.categoryList = createObject("roSGNode", "SpButtonList")
-    m.categoryList.width = m.colRightWidth - scalePixelDimension(50)
+    m.categoryList.width = m.colRightWidth
 
     buttons = []
     for each categoryId in m.top.privacyManagerViewData.categories

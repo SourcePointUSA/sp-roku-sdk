@@ -48,7 +48,7 @@ sub renderRightCol(event as Object)
 
     ' render vendors
     m.vendorList = createObject("roSGNode", "SpButtonList")
-    m.vendorList.width = m.colRightWidth - scalePixelDimension(50)
+    m.vendorList.width = m.colRightWidth
     buttons = []
     for each vendor in vendors
         buttonSettings = { 

@@ -1,7 +1,8 @@
 import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
-    usableWidth = scalePixelDimension(1180)
+    leftRightPadding = 180
+    usableWidth = scalePixelDimension(1280 - leftRightPadding)
     m.colLeftWidth = usableWidth / 2
     m.colRightWidth = usableWidth / 2
     
@@ -42,7 +43,7 @@ sub init()
     ' m.componentIdMap : fills in m.components mapping JSON id to our IDs
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
 
-    m.top.translation=[scalePixelDimension(50),scalePixelDimension(50)]
+    m.top.translation=[scalePixelDimension(leftRightPadding/2), 50]
 
     m.top.observeField("focusedChild", "trackFocusedChild")
 end sub

@@ -25,22 +25,31 @@ sub renderRightCol()
             exit for
         end if
     end for
-
     m.nav.setFocus(true)
 
-    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 and m.vendorData.purposes[0] <> invalid then
-        m.categoryList = createObject("roSGNode", "LabelList")
-        rootContentNode = createObject("roSGNode", "ContentNode")
-
+    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
+        buttons = []
         for each purpose in m.vendorData.purposes
-            contentNode = createObject("roSGNode", "ContentNode")
-            contentNode.title = purpose
-            rootContentNode.appendChild(contentNode)
-        endfor
+            if purpose <> invalid then
+                buttonSettings = { 
+                    carat: "",
+                    settings: {} 
+                } 
+                buttonSettings.settings.append(m.components.button_vendor.settings)
+                buttonSettings.settings.text = purpose
 
-        m.categoryList.content = rootContentNode
+                buttons.push(buttonSettings)
+            end if
+        end for
+        m.categoryList.buttonComponents = buttons
 
-        m.colRight.appendChild(m.categoryList)
+
+        if buttons.count() > 0 then
+            m.colRight.appendChild(m.categoryList)
+            m.rightColFocus = m.categoryList
+        end if
     else
         'TODO - what to show if no purposes?
     end if
