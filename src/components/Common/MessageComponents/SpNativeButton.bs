@@ -50,7 +50,6 @@ sub render(event as Object)
 
     ' blend focus button color
     children = m.top.getChildren(-1, 0)
-    print "children:"
     for each child in children
         if child.subtype() = "Poster" then
             if child.uri.Instr("focus_button.jpg") >= 0 then

@@ -1,13 +1,15 @@
 import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
-    m.top.observeField("buttonFocused", "onFocus")
     m.top.observeField("itemContent", "render")
+
+    m.buttonPadding = scalePixelDimension(24)
+    m.buttonTextSpacing = scalePixelDimension(15)
 
     m.button_background = m.top.findNode("button_background")
     m.button_label = m.top.findNode("button_label")
+    m.button_label.translation = [m.buttonPadding, 0]
 
-    m.buttonTextSpacing = scalePixelDimension(15)
     m.rendered = false
 end sub
 
@@ -25,6 +27,7 @@ sub render(event as Object)
     ' defaults
     m.textColor = "0x000000FF"
     m.focusedTextColor = "0xFFFFFFFF"
+    m.unFocusBackgroundColor = "0xFFFFFFFF"
     
     if settings.style <> invalid and settings.style <> invalid then
         if settings.style.onUnfocusTextColor <> invalid then
@@ -33,16 +36,15 @@ sub render(event as Object)
         if settings.style.onFocusTextColor <> invalid then
             m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
         end if
-        ' if settings.style.onFocusBackgroundColor <> invalid then
-        '     m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
-        ' end if
-        ' if settings.style.onUnfocusBackgroundColor <> invalid then
-        '     m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
-        ' end if
+        if settings.style.onUnfocusBackgroundColor <> invalid then
+            m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
+        end if
     end if
 
     m.top.id = content.id
     m.button_label.settings = settings
+
+    addBackground(content)
 
     if content.carat <> "" and m.caratNode = invalid then
         addCarat(content)
@@ -81,6 +83,12 @@ sub renderTextColor(focused as Boolean)
     if m.onOffNode <> invalid then
         m.onOffNode.color = textColor
     end if
+
+    if focused = true then
+        m.background.visible = false
+    else 
+        m.background.visible = true
+    end if
 end sub
 
 sub addCarat(content as Object)
@@ -90,8 +98,18 @@ sub addCarat(content as Object)
     m.caratNode.text = content.carat
     m.caratNode.horizOrigin = "right"
     m.caratNode.vertOrigin = "center"
-    m.caratNode.translation = [content.width, content.height / 2]
+    m.caratNode.translation = [content.width  - m.buttonPadding, content.height / 2]
     m.top.appendChild(m.caratNode)
+end sub
+
+sub addBackground(content as Object)
+    m.background = createObject("roSGNode", "Poster")
+    m.background.height = content.height
+    m.background.width = content.width
+    m.background.uri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+    m.background.blendColor = m.unFocusBackgroundColor
+    m.background.visible = false
+    m.top.insertChild(m.background, 0)
 end sub
 
 sub addCustomText(content as Object, settings as Object)
@@ -119,7 +137,7 @@ sub addOnOff(content as Object, settings as Object)
     else
         m.onOffNode.text = settings.offText
     endif
-    rightOffset = 0
+    rightOffset = content.width - m.buttonPadding
     if m.caratNode <> invalid then
         rightOffset = m.caratNode.boundingRect().x - m.buttonTextSpacing
     end if 
@@ -127,14 +145,4 @@ sub addOnOff(content as Object, settings as Object)
     m.onOffNode.vertOrigin = "center"
     m.onOffNode.translation = [rightOffset, content.height / 2]
     m.top.appendChild(m.onOffNode)
-end sub
-
-sub onFocus(event as Object)
-    focus = event.getData()
-
-    if focus = true then
-        m.button_label.color = m.focusedTextColor
-    else
-        m.button_label.color = m.textColor
-    end if
 end sub

@@ -6,6 +6,11 @@ sub init()
     m.top.observeField("itemFocused", "focusButton")
     m.top.observeField("itemUnfocused", "unFocusButton")
 
+    ' default settings
+    m.top.focusBitmapUri = ""
+    m.top.focusFootprintBitmapUri = ""
+    m.top.itemSpacing = [0, scalePixelDimension(10)]
+
     m.buttonNodes = createObject("roSGNode", "ContentNode")
 end sub
 
@@ -21,7 +26,11 @@ sub render(event as Object)
     m.top.itemSize = [width, buttonHeight]
     m.top.numRows = 8
 
+    buttonSettings = invalid
+
     for each button in buttons
+        buttonSettings = button.settings
+
         buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
         buttonContentNode.settings = button.settings
         buttonContentNode.id = button.id
@@ -37,6 +46,14 @@ sub render(event as Object)
 
         m.buttonNodes.appendChild(buttonContentNode)
     end for
+
+    ' set up focus bitmap and focus footprint bitmap based on settings
+    if buttonSettings <> invalid and buttonSettings.style.onFocusBackgroundColor <> invalid then
+        m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+        m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
+        m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+        m.top.focusFootprintBlendColor = "0xA9A9A9FF"
+    end if 
 
     m.top.content = m.buttonNodes
 end sub

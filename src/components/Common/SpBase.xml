@@ -24,7 +24,7 @@
     
     <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
         <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
-            <Rectangle id="col-left-width-holder" width="700" height="0" />
+            <Rectangle id="col-left-width-holder" height="0" />
         </LayoutGroup>
         <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
             <Rectangle id="col-right-width-holder" height="0" />
