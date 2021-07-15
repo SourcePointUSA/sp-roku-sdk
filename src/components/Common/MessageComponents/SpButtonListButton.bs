@@ -42,6 +42,7 @@ sub render(event as Object)
     end if
 
     m.top.id = content.id
+    ' set this before continuing, other labels will pull font settings from here
     m.button_label.settings = settings
 
     addBackground(content)
@@ -50,7 +51,7 @@ sub render(event as Object)
         addCarat(content)
     end if
 
-    if content.on <> invalid and settings.onText <> invalid and settings.offText <> invalid and m.onOffNode = invalid then
+    if m.onOffNode = invalid and (content.on = true or content.off = true) and settings.onText <> invalid and settings.offText <> invalid then
         addOnOff(content, settings)
     end if
 
@@ -95,7 +96,7 @@ sub renderUpdate(content as Object)
     if m.onOffNode <> invalid then
         if content.on = true then
             m.onOffNode.text = content.settings.onText
-        else
+        else if content.off = true then
             m.onOffNode.text = content.settings.offText
         endif
     end if
@@ -116,7 +117,7 @@ sub addBackground(content as Object)
     m.background = createObject("roSGNode", "Poster")
     m.background.height = content.height
     m.background.width = content.width
-    m.background.uri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+    m.background.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
     m.background.blendColor = m.unFocusBackgroundColor
     m.background.visible = false
     m.top.insertChild(m.background, 0)
@@ -144,7 +145,7 @@ sub addOnOff(content as Object, settings as Object)
     m.onOffNode.fontSize = m.button_label.textComponent.font.size
     if content.on = true then
         m.onOffNode.text = settings.onText
-    else
+    else if content.off = true then
         m.onOffNode.text = settings.offText
     endif
     rightOffset = content.width - m.buttonPadding

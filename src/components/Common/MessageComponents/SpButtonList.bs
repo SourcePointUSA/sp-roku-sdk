@@ -61,6 +61,7 @@ sub render(event as Object)
         end if
 
         if m.buttonNodesKeyed[button.id] = invalid then
+            ' node is new, add it
             m.buttonNodesKeyed[button.id] = buttonContentNode
             m.buttonNodes.appendChild(buttonContentNode)
         end if

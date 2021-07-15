@@ -8,10 +8,11 @@
         <field id="height" type="float" value="64" />
         <field id="width" type="float" value="100" />
         <field id="carat" type="string" value=">" />
-        <field id="on" type="boolean" />
+        <field id="on" type="boolean" alwaysNotify="true"/>
+        <field id="off" type="boolean" value="false" />
     </interface>
 
-    <!-- <script uri="./SpButton.bs" /> -->
+    <script uri="./SpButtonListContentNode.bs" />
 
     <children></children>
 
