@@ -14,7 +14,10 @@ sub render(event as Object)
     if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
         textComponent.color = colorConvert(settings.style.font.color)
     end if
-    textComponent.text = settings.text
+    
+    if settings.text <> invalid then
+        textComponent.text = settings.text
+    end if 
 
     if settings.style.font <> invalid then
         if componentName = "Label" or componentName = "ScrollingLabel" or componentName = "ScrollableText" then

@@ -66,7 +66,7 @@ sub render(event as Object)
 
     m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
     m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
-    m.top.backgroundRect.height = scalePixelDimension(64)
+    m.top.backgroundRect.height = m.top.height
     m.top.backgroundRect.width = 0
 end sub
 
