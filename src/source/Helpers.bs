@@ -23,7 +23,6 @@ function createFont(fontSettings as Object) as Object
     if fontSettings.fontSize <> invalid then
         font.size = fontSettings.fontSize
     else
-        ' TODO: set a default here
         font.size = 14
     end if
 

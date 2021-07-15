@@ -1,11 +1,9 @@
 sub init()
     m.top.observeField("view", "renderView")
-    ' TODO - just re-render statuses on data change
     m.top.observeField("privacyManagerViewData", "renderRightCol")
 end sub
 
 sub observeCategoryList(event as Object)
-    'CategoryDetailsView
     item = m.categoryList.content.getChild(event.getData())
 
     changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])

@@ -1,6 +1,5 @@
 sub init()
     m.top.observeField("view", "renderView")
-    ' TODO - just re-render statuses on data change
     m.top.observeField("privacyManagerViewData", "renderRightCol")
 end sub
 

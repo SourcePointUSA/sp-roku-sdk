@@ -15,8 +15,6 @@ sub changeView(event as object)
 end sub
 
 sub goBack()
-    ' TODO grab view from viewHistory and show it
-    ' TODO "cache" views ? keep them in memory once rendered ?
     if m.viewHistory.count() > 0 then
         previousView = m.viewHistory.pop()
 

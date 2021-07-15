@@ -10,7 +10,6 @@ sub init()
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
 
-    ' TODO: add our defaults
     m.focusBackgroundColor = "0xFFFFFFFF"
     m.unFocusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
