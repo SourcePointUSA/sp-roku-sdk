@@ -1,0 +1,25 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "UserConsentGdpr" extends = "Node" >
+
+    <interface>
+        <function name="addConsentToPmvData" />
+        <function name="getSaveAndExitVariables" />
+
+        <field id="privacyManagerViewTask" type="node" />
+        <field id="userConsent" type="assocarray" />
+        <field id="messageId" type="integer" />
+
+        <field id="acceptCategory" type="string" alwaysNotify="true"/>
+        <field id="acceptVendor" type="string" alwaysNotify="true"/>
+        <field id="rejectCategory" type="string" alwaysNotify="true"/>
+        <field id="rejectVendor" type="string" alwaysNotify="true"/>
+
+        <field id="consentChanged" type="assocarray" />
+    </interface>
+
+    <script uri="./UserConsentGdpr.bs" />
+
+    <children></children>
+
+</component>

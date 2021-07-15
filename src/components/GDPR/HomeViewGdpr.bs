@@ -1,0 +1,32 @@
+sub init()
+    m.navViewMap = {
+        "button_nav_categories": "CategoriesView",
+        "button_nav_privacy_policy": "PrivacyPolicyView",
+        "button_nav_vendors": "VendorsView"
+    }
+
+    m.top.observeField("view", "renderView")
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
+    renderRightCol()
+
+    m.nav.setFocus(true)
+end sub
+
+sub renderRightCol()
+    description = createObject("roSGNode", "SpNativeText")
+    description.settings = m.components.text_publisher_description.settings
+    description.textComponent.wrap = true
+    description.textComponent.width = m.colRightWidth
+    
+    m.colRight.appendChild(description)
+end sub
