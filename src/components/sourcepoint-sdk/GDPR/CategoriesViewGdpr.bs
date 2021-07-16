@@ -18,19 +18,52 @@ sub renderCategoryDescription()
 end sub
 
 sub renderRightCol()
-    buttons = []
-    for each categoryId in m.top.privacyManagerViewData.categories
-        buttonSettings = { 
-            on: m.top.privacyManagerViewData.categories[categoryId]["__enabled"]
-            settings: {} 
-        } 
-        buttonSettings.settings.append(m.components.button_category.settings)
-        buttonSettings.id = categoryId
-        buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
+    print "render right col"
+    categoryTypes = {
+        "categories": {
+            headerComponent: m.components.text_purposes_header,
+            defComponent: m.components.text_purposes_def
+        }, 
+        "specialPurposes": {
+            headerComponent: m.components.text_special_purposes_header,
+            defComponent: m.components.text_special_purposes_def
+        }, 
+        "specialFeatures": {
+            headerComponent: m.components.text_features_header,
+            defComponent: m.components.text_features_def
+        }
+    }
 
-        buttons.push(buttonSettings)
+    sections = []
+
+    for each cType in categoryTypes
+        buttons = []
+        for each id in m.top.privacyManagerViewData[cType]
+            buttonSettings = { 
+                on: m.top.privacyManagerViewData[cType][id]["__enabled"]
+                settings: {} 
+            } 
+            buttonSettings.settings.append(m.components.button_category.settings)
+            buttonSettings.id = id
+            buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
+
+            print "bloop:"
+            print cType
+            print m.top.privacyManagerViewData[cType][id].name
+    
+            buttons.push(buttonSettings)
+        end for
+    
+        if buttons.count() > 0 then
+            section = {
+                children: buttons,
+                settings: categoryTypes[cType].headerComponent.settings
+            }
+
+            sections.push(section)
+        end if
     end for
-
+    
     if m.categoryList = invalid then
         m.categoryList = createObject("roSGNode", "SpButtonList")
         m.categoryList.width = m.colRightWidth
@@ -43,12 +76,7 @@ sub renderRightCol()
         end if
     end if 
 
-    section = {
-        children: buttons,
-        settings: m.components.text_purposes_header.settings
-    }
-
-    m.categoryList.buttonComponents = [section]
+    m.categoryList.buttonComponents = sections
 end sub
 
 sub renderView(event as Object)
