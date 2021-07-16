@@ -40,13 +40,36 @@ sub privacyManagerView()
             vendors: {}
         }
 
-        for each category in response.categories
-            data.categories[category._id] = category
-        end for
+        if response.categories <> invalid then
+            for each category in response.categories
+                data.categories[category._id] = category
+            end for
+        end if
 
-        for each vendor in response.vendors
-            data.vendors[vendor._id] = vendor
-        end for
+        if response.vendors <> invalid then
+            for each vendor in response.vendors
+                key = "_id"
+                if m.top.messageCategory = 1 then
+                    key = "vendorId"
+                end if
+                data.vendors[vendor[key]] = vendor
+            end for
+        end if 
+
+        if response.specialPurposes <> invalid then
+            data.specialPurposes = {}
+            for each sp in response.specialPurposes
+                data.specialPurposes[sp._id] = sp
+            end for
+        end if
+
+        ' TODO - get a VL that has data for these to verify
+        if response.specialFeatures <> invalid then
+            data.specialFeatures = {}
+            for each sf in response.specialFeatures
+                data.specialFeatures[sf._id] = sf
+            end for
+        end if
 
         m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", data)
     end if

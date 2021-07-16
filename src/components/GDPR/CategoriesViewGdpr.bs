@@ -1,0 +1,68 @@
+sub init()
+    m.top.observeField("view", "renderView")
+    m.top.observeField("privacyManagerViewData", "renderRightCol")
+end sub
+
+sub observeCategoryList(event as Object)
+    item = m.categoryList.content.getChild(event.getData())
+
+    changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
+end sub
+
+sub renderCategoryDescription()
+    if m.categoryDescription = invalid then
+        m.categoryDescription = createObject("roSGNode", "SpNativeText")
+        m.categoryDescription.settings = m.components.text_category_description.settings
+        m.categoryDescription.textComponent.wrap = true
+    end if
+end sub
+
+sub renderRightCol()
+    buttons = []
+    for each categoryId in m.top.privacyManagerViewData.categories
+        buttonSettings = { 
+            on: m.top.privacyManagerViewData.categories[categoryId]["__enabled"]
+            settings: {} 
+        } 
+        buttonSettings.settings.append(m.components.button_category.settings)
+        buttonSettings.id = categoryId
+        buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
+
+        buttons.push(buttonSettings)
+    end for
+
+    if m.categoryList = invalid then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
+
+        m.colRight.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+        m.categoryList.observeField("itemSelected", "observeCategoryList")
+        m.categoryList.sectionDividerFont = createFont(m.components.text_purposes_header.settings)
+        m.categoryList.sectionDividerTextColor = "0xFF0000FF"
+    end if 
+
+    section = {
+        children: buttons,
+        settings: m.components.text_purposes_header.settings
+    }
+
+    m.categoryList.buttonComponents = [section]
+end sub
+
+sub renderView(event as Object)
+    getPrivacyManagerViewData(1)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderCategoryDescription()
+    renderNav(["save_and_exit"])
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.nav.setFocus(true)
+end sub

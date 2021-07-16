@@ -13,6 +13,7 @@ sub init()
 
     m.buttonNodes = createObject("roSGNode", "ContentNode")
     m.buttonNodesKeyed = {}
+    m.buttonNodesArray = []
 
     m.rendered = false
 end sub
@@ -31,39 +32,59 @@ sub render(event as Object)
 
     buttonSettings = invalid
     first = true
-    for each button in buttons
-        buttonSettings = button.settings
-
-        if button.id = invalid then
-            button.id = button.settings.text
+    for each section in buttons
+        if section.children <> invalid then
+            ' create section
+            sectionNode = createObject("roSGNode", "ContentNode")
+            sectionNode.CONTENTTYPE = "SECTION"
+            sectionNode.title = section.settings.text
+            sectionButtons = section.children
+        else
+            sectionNode = m.buttonNodes
+            sectionButtons = [section]
         end if
-        buttonContentNode = m.buttonNodesKeyed[button.id]
-        if buttonContentNode = invalid then
-            buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
-            buttonContentNode.id = button.id
-            buttonContentNode.height = buttonHeight
-            buttonContentNode.width = width
 
-            ' fake that the first element is focused when rendering
-            ' this will give us the correct focus footprint state
-            if m.rendered = false and first = true then
-                buttonContentNode.focused = true
-                first = false
+        for each button in sectionButtons 
+            if buttonSettings = invalid then
+                buttonSettings = button.settings
             end if
-        end if
-        buttonContentNode.settings = button.settings
 
-        if button.carat <> invalid then
-            buttonContentNode.carat = button.carat
-        end if
-        if button.on <> invalid then
-            buttonContentNode.on = button.on
-        end if
+            if button.id = invalid then
+                button.id = button.settings.text
+            end if
+            buttonContentNode = m.buttonNodesKeyed[button.id]
+            if buttonContentNode = invalid then
+                buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
+                buttonContentNode.id = button.id
+                buttonContentNode.height = buttonHeight
+                buttonContentNode.width = width
 
-        if m.buttonNodesKeyed[button.id] = invalid then
-            ' node is new, add it
-            m.buttonNodesKeyed[button.id] = buttonContentNode
-            m.buttonNodes.appendChild(buttonContentNode)
+                ' fake that the first element is focused when rendering
+                ' this will give us the correct focus footprint state
+                if m.rendered = false and first = true then
+                    buttonContentNode.focused = true
+                    first = false
+                end if
+            end if
+            buttonContentNode.settings = button.settings
+
+            if button.carat <> invalid then
+                buttonContentNode.carat = button.carat
+            end if
+            if button.on <> invalid then
+                buttonContentNode.on = button.on
+            end if
+
+            if m.buttonNodesKeyed[button.id] = invalid then
+                ' node is new, add it
+                m.buttonNodesKeyed[button.id] = buttonContentNode
+                m.buttonNodesArray.push(buttonContentNode)
+                sectionNode.appendChild(buttonContentNode)
+            end if
+        end for
+
+        if section.children <> invalid then
+            m.buttonNodes.appendChild(sectionNode)
         end if
     end for
 
