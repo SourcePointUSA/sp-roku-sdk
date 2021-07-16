@@ -4,7 +4,7 @@
 
   <interface>
     <!-- updated for request -->
-    <field id="legislationsEnabled" type="array" />
+    <field id="legislationsEnabled" type="assocarray" />
     <field id="propertyId" type="integer" />
 
     <!-- updated by response -->

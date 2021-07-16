@@ -22,7 +22,7 @@ sub getMessage()
     }
 
     for each l in m.top.legislationsEnabled
-        requestBody.campaigns[l] = {}
+        requestBody.campaigns[l] = m.top.legislationsEnabled[l]
     end for
 
     response = makeRequest(m.top.url, "POST", requestBody)
