@@ -19,8 +19,7 @@ class SourcepointSdk
         pathPOST: "/"
     }
 
-    ' TODO - leglisations enabled should allow for extra configs
-    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = [] as Object, optional = {} as Object)
+    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = {} as Object, optional = {} as Object)
         ' create screen to 
         m.screen = CreateObject("roSGScreen")
         m.port = CreateObject("roMessagePort")
