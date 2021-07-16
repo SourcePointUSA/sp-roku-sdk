@@ -5,6 +5,7 @@ sub init()
     m.top.observeField("buttonComponents", "render")
     m.top.observeField("itemFocused", "focusButton")
     m.top.observeField("itemUnfocused", "unFocusButton")
+    m.top.observeField("sectionSettings", "setSectionSettings")
 
     ' default settings
     m.top.focusBitmapUri = ""
@@ -31,6 +32,7 @@ sub render(event as Object)
     m.top.numRows = 8
 
     buttonSettings = invalid
+    hasSections = false
     first = true
     for each section in buttons
         if section.children <> invalid then
@@ -39,6 +41,7 @@ sub render(event as Object)
             sectionNode.CONTENTTYPE = "SECTION"
             sectionNode.title = section.settings.text
             sectionButtons = section.children
+            hasSections = true
         else
             sectionNode = m.buttonNodes
             sectionButtons = [section]
@@ -98,9 +101,17 @@ sub render(event as Object)
         end if 
 
         m.top.content = m.buttonNodes
-    end if
 
-    m.rendered = true
+        if hasSections then
+            ' this seems like it shouldn't be necessary but is to show the section header on initial render
+            m.top.sectionDividerHeight = buttonHeight
+            icr = m.top.boundingRect()
+            icr.y = -1 * (m.top.sectionDividerHeight + m.top.itemSpacing[1])
+            m.top.itemClippingRect = icr
+        end if
+
+        m.rendered = true
+    end if
 end sub
 
 sub focusButton(event as Object)
@@ -111,10 +122,20 @@ end sub
 
 sub setFocus(index as Integer, focused as Boolean)
     if index <> invalid then
-        buttonCn = m.buttonNodes.getChild(index)
+        buttonCn = m.buttonNodesArray[index]
         if buttonCn <> invalid then
             buttonCn.focused = focused
         end if 
+    end if
+end sub
+
+sub setSectionSettings(event as Object)
+    settings = event.getData()
+    if settings <> invalid then
+        m.top.sectionDividerFont = createFont(settings)
+        if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
+            m.top.sectionDividerTextColor = settings.style.font.color
+        end if
     end if
 end sub
 

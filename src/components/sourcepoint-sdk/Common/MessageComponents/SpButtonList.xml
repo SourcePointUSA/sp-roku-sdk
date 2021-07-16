@@ -5,6 +5,7 @@
     <interface>
         <field id="buttonComponents" type="array" />
         <field id="width" type="integer" />
+        <field id="sectionSettings" type="assocarray" />
     </interface>
 
     <script uri="./SpButtonList.bs" />

@@ -38,8 +38,9 @@ sub renderRightCol()
         m.colRight.appendChild(m.categoryList)
         m.rightColFocus = m.categoryList
         m.categoryList.observeField("itemSelected", "observeCategoryList")
-        m.categoryList.sectionDividerFont = createFont(m.components.text_purposes_header.settings)
-        m.categoryList.sectionDividerTextColor = "0xFF0000FF"
+        if m.components.text_purposes_header <> invalid then
+            m.categoryList.sectionSettings = m.components.text_purposes_header.settings
+        end if
     end if 
 
     section = {
