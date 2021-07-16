@@ -12,7 +12,7 @@ sub showChannelSGScreen()
   scene = screen.CreateScene("Home")
   screen.show()
 
-  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}})
+  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}, "gdpr": {}})
   consent = m.spSdk.getUserConsent()
 
   print "consent object: "
