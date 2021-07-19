@@ -1,0 +1,73 @@
+sub init()
+    m.top.observeField("viewDataExtra", "renderView")
+
+    m.navButtons = ["button_on", "button_off"]
+end sub
+
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
+
+    if selectedButton.id = "button_on" then
+        m.top.userConsentNode.acceptVendor = m.vendorData._id
+    else if selectedButton.id = "button_off" then
+        m.top.userConsentNode.rejectVendor = m.vendorData._id
+    end if 
+
+    changeView("_go_back_")
+end sub
+
+sub renderRightCol()
+    m.top.findNode("screen-title").text = m.vendorData.name
+
+    for i = 0 to m.navButtons.count() step 1 
+        if (m.vendorData.__enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.__enabled = false and m.navButtons[i] = "button_off") then
+            m.nav.focusButton = i
+            exit for
+        end if
+    end for
+    m.nav.setFocus(true)
+
+    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
+        buttons = []
+        for each purpose in m.vendorData.purposes
+            if purpose <> invalid then
+                buttonSettings = { 
+                    carat: "",
+                    settings: {} 
+                } 
+                buttonSettings.settings.append(m.components.button_vendor.settings)
+                buttonSettings.settings.text = purpose
+
+                buttons.push(buttonSettings)
+            end if
+        end for
+        m.categoryList.buttonComponents = buttons
+
+
+        if buttons.count() > 0 then
+            m.colRight.appendChild(m.categoryList)
+            m.rightColFocus = m.categoryList
+        end if
+    else
+        'TODO - what to show if no purposes?
+    end if
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+    
+    view = m.top.view
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(m.navButtons)
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.vendorData = event.getData()
+
+    renderRightCol()
+end sub

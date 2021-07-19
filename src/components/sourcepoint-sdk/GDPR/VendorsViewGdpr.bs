@@ -1,0 +1,56 @@
+sub init()
+    m.top.observeField("view", "renderView")
+    m.top.observeField("privacyManagerViewData", "renderRightCol")
+end sub
+
+sub observeVendorList(event as Object)
+    index = event.getData()
+
+    if index <> invalid then
+        item = m.vendorList.buttonComponents[index]
+        changeView("VendorDetailsView", m.top.privacyManagerViewData.vendors[item.id])
+    end if
+end sub
+
+sub renderRightCol()
+    buttons = []
+    for each vendorId in m.top.privacyManagerViewData.vendors
+        buttonSettings = { 
+            on: m.top.privacyManagerViewData.vendors[vendorId]["__enabled"]
+            settings: {} 
+        } 
+        buttonSettings.settings.append(m.components.button_vendor.settings)
+        buttonSettings.id = vendorId
+        buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
+
+        buttons.push(buttonSettings)
+    end for
+
+    if m.vendorList = invalid then
+        m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.width = m.colRightWidth
+        
+        m.colRight.appendChild(m.vendorList)
+        m.rightColFocus = m.vendorList
+        m.vendorList.observeField("itemSelected", "observeVendorList")
+    end if 
+
+    m.vendorList.buttonComponents = buttons
+end sub
+
+sub renderView(event as Object)
+    getPrivacyManagerViewData(1)
+
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(["accept_all", "save_and_exit"])
+
+    ' TODO add loader to the right col until it is rendered
+
+    m.nav.setFocus(true)
+end sub
