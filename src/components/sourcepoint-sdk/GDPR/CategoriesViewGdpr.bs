@@ -4,7 +4,7 @@ sub init()
 end sub
 
 sub observeCategoryList(event as Object)
-    item = m.categoryList.content.getChild(event.getData())
+    item = m.categoryList.focusedContentNode
 
     changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
 end sub

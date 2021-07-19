@@ -3,9 +3,12 @@
 <component name = "SpHeaderButtonList" extends = "Group" >
 
     <interface>
+        <field id="content" alias="button-list.content" />
         <field id="buttonComponents" alias="button-list.buttonComponents" />
-        <field id="width" alias="button-list.width" />
+        <field id="focusedContentNode" alias="button-list.focusedContentNode" />
+        <field id="itemSelected" alias="button-list.itemSelected" />
         <field id="sectionSettings" alias="button-list.sectionSettings" />
+        <field id="width" alias="button-list.width" />
     </interface>
 
     <script uri="./SpHeaderButtonList.bs" />

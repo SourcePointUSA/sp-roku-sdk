@@ -1,0 +1,81 @@
+sub init()
+    m.top.observeField("view", "renderView")
+    m.top.observeField("viewDataExtra", "renderRightCol")
+    m.navButtons = ["button_on", "button_off"]
+end sub
+
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
+
+    if selectedButton.id = "button_on" then
+        m.top.userConsentNode.acceptCategory = m.categoryData._id
+    else if selectedButton.id = "button_off" then
+        m.top.userConsentNode.rejectCategory = m.categoryData._id
+    end if 
+
+    changeView("_go_back_")
+end sub
+
+sub renderRightCol(event as Object)
+    m.categoryData = event.getData()
+
+    for i = 0 to m.navButtons.count() step 1 
+        if (m.categoryData.__enabled = true and m.navButtons[i] = "button_on") or (m.categoryData.__enabled = false and m.navButtons[i] = "button_off") then
+            m.nav.focusButton = i
+            exit for
+        end if
+    end for
+
+    m.nav.setFocus(true)
+    m.top.findNode("screen-title").text = m.categoryData.name
+
+    ' figure out which type of vendor this is
+    if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
+        vendors = m.categoryData.requiringConsentVendors
+    else 
+        vendors = m.categoryData.legIntVendors
+    end if
+
+    ' render vendor header with count
+    if m.components.text_vendor_header <> invalid then
+        vendorsHeader = createObject("roSGNode", "SpNativeText")
+        settings = {}
+        settings.append(m.components.text_vendor_header.settings)
+        settings.text = settings.text + " (" + vendors.count().toStr() + ")"
+        vendorsHeader.settings = settings
+        m.colRight.appendChild(vendorsHeader)
+    end if
+
+    ' render vendors
+    m.vendorList = createObject("roSGNode", "SpButtonList")
+    m.vendorList.width = m.colRightWidth
+    buttons = []
+    for each vendor in vendors
+        buttonSettings = { 
+            carat: "",
+            settings: {} 
+        } 
+        buttonSettings.settings.append(m.components.button_vendor.settings)
+        buttonSettings.id = vendor._id
+        buttonSettings.settings.text = vendor.name
+
+        buttons.push(buttonSettings)
+    end for
+    m.vendorList.buttonComponents = buttons
+
+    m.colRight.appendChild(m.vendorList)
+    m.rightColFocus = m.vendorList
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(m.navButtons)
+
+    ' TODO add loader to the right col until it is rendered
+end sub
