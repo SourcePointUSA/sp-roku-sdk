@@ -34,9 +34,11 @@ sub renderRightCol()
         }
     }
 
+    categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+
     sections = []
 
-    for each cType in categoryTypes
+    for each cType in categoryTypeOrder
         buttons = []
         for each id in m.top.privacyManagerViewData[cType]
             buttonSettings = { 
