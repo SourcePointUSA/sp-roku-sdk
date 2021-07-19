@@ -1,0 +1,31 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.navViewMap = {
+        "button_nav_back": "HomeView",
+    }
+    
+    m.top.observeField("view", "renderView")
+end sub
+
+sub renderView(event as Object)
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
+
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav(["button_nav_back"])
+
+    description = createObject("roSGNode", "SpNativeText")
+    description.componentName = "ScrollableText"
+    description.settings = m.components.privacy_policy_body.settings
+    description.textComponent.width = m.colRightWidth
+    description.textComponent.height = scalePixelDimension(530)
+
+    m.colRight.appendChild(description)
+
+    description.textComponent.setFocus(true)
+    m.rightColFocus = description.textComponent
+end sub
