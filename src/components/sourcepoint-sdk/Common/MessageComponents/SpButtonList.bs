@@ -40,6 +40,7 @@ sub render(event as Object)
             sectionNode = createObject("roSGNode", "ContentNode")
             sectionNode.CONTENTTYPE = "SECTION"
             sectionNode.title = section.settings.text
+            sectionNode.description = "lorem ipsum description" ' TODO - replace this with correct description
             sectionButtons = section.children
             hasSections = true
         else
@@ -100,15 +101,13 @@ sub render(event as Object)
             m.top.focusFootprintBlendColor = "0xA9A9A9FF"
         end if 
 
-        m.top.content = m.buttonNodes
-
-        if hasSections then
-            ' this seems like it shouldn't be necessary but is to show the section header on initial render
-            m.top.sectionDividerHeight = buttonHeight
-            icr = m.top.boundingRect()
-            icr.y = -1 * (m.top.sectionDividerHeight + m.top.itemSpacing[1])
-            m.top.itemClippingRect = icr
+        ' update focused nodes so we render our SpHeaderButtonList components correctly
+        if m.buttonNodesArray[0] <> invalid then
+            m.top.focusedContentNode = m.buttonNodesArray[0]
+            m.top.focusedSectionNode = m.top.focusedContentNode.getParent()
         end if
+
+        m.top.content = m.buttonNodes
 
         m.rendered = true
     end if
@@ -125,6 +124,8 @@ sub setFocus(index as Integer, focused as Boolean)
         buttonCn = m.buttonNodesArray[index]
         if buttonCn <> invalid then
             buttonCn.focused = focused
+            m.top.focusedContentNode = buttonCn
+            m.top.focusedSectionNode = buttonCn.getParent()
         end if 
     end if
 end sub

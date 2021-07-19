@@ -18,7 +18,6 @@ sub renderCategoryDescription()
 end sub
 
 sub renderRightCol()
-    print "render right col"
     categoryTypes = {
         "categories": {
             headerComponent: m.components.text_purposes_header,
@@ -48,10 +47,6 @@ sub renderRightCol()
             buttonSettings.settings.append(m.components.button_category.settings)
             buttonSettings.id = id
             buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
-
-            print "bloop:"
-            print cType
-            print m.top.privacyManagerViewData[cType][id].name
     
             buttons.push(buttonSettings)
         end for
@@ -67,7 +62,7 @@ sub renderRightCol()
     end for
     
     if m.categoryList = invalid then
-        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
         m.categoryList.width = m.colRightWidth
 
         m.colRight.appendChild(m.categoryList)

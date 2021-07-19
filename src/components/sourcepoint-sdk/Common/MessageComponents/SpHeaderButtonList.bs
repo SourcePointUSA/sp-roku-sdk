@@ -1,0 +1,31 @@
+sub init()
+    m.top.observeField("focusedChild", "setFocus")
+    m.top.observeField("sectionSettings", "render")
+
+    m.headerTitleLabel =  m.top.findNode("header-title")
+    m.headerDescriptionLabel =  m.top.findNode("header-description")
+    m.buttonList = m.top.findNode("button-list")
+    m.buttonList.observeField("focusedSectionNode", "updateHeader")
+end sub
+
+sub render()
+    m.headerTitleLabel.settings = m.top.sectionSettings
+    m.headerDescriptionLabel.settings = m.top.sectionSettings
+end sub
+
+sub setFocus(event as Object)
+    focusedChild = event.getData()
+
+    if focusedChild <> invalid and focusedChild.isSameNode(m.top) then
+        m.buttonList.setFocus(true)
+    end if
+end sub
+
+sub updateHeader(event as Object)
+    headerContentNode = event.getData()
+
+    if headerContentNode <> invalid then
+        m.headerTitleLabel.text = headerContentNode.title
+        m.headerDescriptionLabel.text = headerContentNode.description
+    end if
+end sub

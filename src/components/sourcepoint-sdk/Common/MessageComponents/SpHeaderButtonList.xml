@@ -1,0 +1,21 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "SpHeaderButtonList" extends = "Group" >
+
+    <interface>
+        <field id="buttonComponents" alias="button-list.buttonComponents" />
+        <field id="width" alias="button-list.width" />
+        <field id="sectionSettings" alias="button-list.sectionSettings" />
+    </interface>
+
+    <script uri="./SpHeaderButtonList.bs" />
+
+    <children>
+        <LayoutGroup horizAlignment="left" layoutDirection="vert" itemSpacings="[10]">
+            <SpNativeText id="header-title" componentName="SimpleLabel" />
+            <SpNativeText id="header-description" />
+            <SpButtonList id="button-list" />
+        </LayoutGroup>
+    </children>
+
+</component>
