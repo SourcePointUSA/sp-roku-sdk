@@ -9,11 +9,11 @@ sub init()
     translationMap = {
         "col-left-width-holder": [0,0,m.colLeftWidth,0],
         "col-right-width-holder": [0,0,m.colRightWidth,0],
-        "screen-title": [usableWidth/2, 0],
+        "title-holder-width-holder": [0, 0, usableWidth, 0],
+        ' "title-holder": [usableWidth/2, 0],
         ' "screen-title": function(node, sWidth, sHeight) as Object
         '     return [1180/2, 0] 
         ' end function,
-        "col-layout": [0, 50]
     }
     scalePixelDimensions(m.top, translationMap)
 
@@ -22,6 +22,7 @@ sub init()
         "Body": "privacy_policy_body",
         "BackButton": "button_nav_back",
         "CategoriesDescriptionText": "text_category_description",
+        "CategoriesSlider": "slider_categories",
         "CategoriesSubDescriptionText": "text_category_sub_description",
         "CategoryButton": "button_category",
         "FeaturesHeader": "text_features_header",
