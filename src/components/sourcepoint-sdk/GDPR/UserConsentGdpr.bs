@@ -5,15 +5,65 @@ sub init()
     m.top.observeField("rejectCategory", "rejectCategory")
     m.top.observeField("rejectVendor", "rejectVendor")
 
-    m.rejectedCategories = []
-    m.rejectedVendors = []
+    m.acceptedCategories = []
+    m.acceptedVendors = []
+    m.legIntCategories = []
 end sub
 
+' TODO - do we need to update vendors that need this category?
 sub acceptCategory(event as Object)
+    found = false
     acceptedCategory = event.getData()
-    for i = 0 to (m.rejectedCategories.count() - 1) step 1
-        if m.rejectedCategories[i] = acceptedCategory then
-            m.rejectedCategories.delete(i)
+    for each cat in m.acceptedCategories
+        if acceptedCategory = cat then
+            found = true
+        end if
+    end for
+
+    if found = false then
+        m.acceptedCategories.push(acceptedCategory)
+    end if
+
+    fireConsentChange()
+end sub
+
+sub acceptLiCategory(event as Object)
+    found = false
+    acceptedLiCategory = event.getData()
+    for each cat in m.legIntCategories
+        if acceptedLiCategory = cat then
+            found = true
+        end if
+    end for
+
+    if found = false then
+        m.legIntCategories.push(acceptedLiCategory)
+    end if
+
+    fireConsentChange()
+end sub
+
+sub acceptVendor(event as Object)
+    found = false
+    acceptedVendor = event.getData()
+    for each vendor in m.acceptedVendors
+        if acceptedVendor = vendor then
+            found = true
+        end if
+    end for
+
+    if found = false then
+        m.acceptedVendors.push(acceptedVendor)
+    end if
+
+    fireConsentChange()
+end sub
+
+sub rejectCategory(event as Object)
+    rejectedCategory = event.getData()
+    for i = 0 to (m.acceptedCategories.count() - 1) step 1
+        if m.acceptedCategories[i] = rejectedCategory then
+            m.acceptedCategories.delete(i)
             exit for
         end if
     end for
@@ -21,11 +71,23 @@ sub acceptCategory(event as Object)
     fireConsentChange()
 end sub
 
-sub acceptVendor(event as Object)
-    acceptedVendor = event.getData()
-    for i = 0 to (m.rejectedVendors.count() - 1) step 1
-        if m.rejectedVendors[i] = acceptedVendor then
-            m.rejectedVendors.delete(i)
+sub rejectLiCategory(event as Object)
+    rejectedLiCategory = event.getData()
+    for i = 0 to (m.legIntCategories.count() - 1) step 1
+        if m.legIntCategories[i] = rejectedLiCategory then
+            m.legIntCategories.delete(i)
+            exit for
+        end if
+    end for
+
+    fireConsentChange()
+end sub
+
+sub rejectVendor(event as Object)
+    rejectedVendor = event.getData()
+    for i = 0 to (m.acceptedVendors.count() - 1) step 1
+        if m.acceptedVendors[i] = rejectedVendor then
+            m.acceptedVendors.delete(i)
             exit for
         end if
     end for
@@ -35,22 +97,28 @@ end sub
 
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
     for each categoryId in privacyManagerViewData.categories
-        privacyManagerViewData.categories[categoryId]["__enabled"] = true
+        privacyManagerViewData.categories[categoryId]["__enabled"] = false
     end for
     
     for each vendorId in privacyManagerViewData.vendors
-        privacyManagerViewData.vendors[vendorId]["__enabled"] = true
+        privacyManagerViewData.vendors[vendorId]["__enabled"] = false
     end for
 
-    for each categoryId in m.rejectedCategories
+    for each categoryId in m.acceptedCategories
         if privacyManagerViewData.categories[categoryId] <> invalid then 
-            privacyManagerViewData.categories[categoryId]["__enabled"] = false
+            privacyManagerViewData.categories[categoryId]["__enabled"] = true
         end if
     end for
 
-    for each vendorId in m.rejectedVendors
+    for each categoryId in m.legIntCategories
+        if privacyManagerViewData.categories[categoryId] <> invalid then 
+            privacyManagerViewData.categories[categoryId]["__enabled_li"] = true
+        end if
+    end for
+
+    for each vendorId in m.acceptedVendors
         if privacyManagerViewData.vendors[vendorId] <> invalid then 
-            privacyManagerViewData.vendors[vendorId]["__enabled"] = false
+            privacyManagerViewData.vendors[vendorId]["__enabled"] = true
         end if
     end for
 
@@ -60,56 +128,38 @@ end function
 sub ingestConsent(event as Object)
     userConsent = event.getData()
 
-    if userConsent.rejectedCategories <> invalid then
-        m.rejectedCategories = userConsent.rejectedCategories
+    print "GDPR userConsent"
+    print userConsent
+
+    if userConsent.acceptedCategories <> invalid then
+        m.acceptedCategories = userConsent.acceptedCategories
     end if
-    if userConsent.rejectedVendors <> invalid then
-        m.rejectedVendors = userConsent.rejectedVendors
+    if userConsent.acceptedVendors <> invalid then
+        m.acceptedVendors = userConsent.acceptedVendors
     end if
-end sub
-
-' TODO - do we need to update vendors that need this category?
-sub rejectCategory(event as Object)
-    found = false
-    rejectedCategory = event.getData()
-    for each cat in m.rejectedCategories
-        if rejectedCategory = cat then
-            found = true
-        end if
-    end for
-
-    if found = false then
-        m.rejectedCategories.push(rejectedCategory)
+    if userConsent.legIntCategories <> invalid then
+        m.legIntCategories = userConsent.legIntCategories
     end if
-
-    fireConsentChange()
-end sub
-
-sub rejectVendor(event as Object)
-    found = false
-    rejectedVendor = event.getData()
-    for each vendor in m.rejectedVendors
-        if rejectedVendor = vendor then
-            found = true
-        end if
-    end for
-
-    if found = false then
-        m.rejectedVendors.push(rejectedVendor)
-    end if
-
-    fireConsentChange()
 end sub
 
 sub fireConsentChange()
     m.top.consentChanged = getSaveAndExitVariables()
 end sub
 
+function getConsentedCategories() as Object
+    return []
+end function
+
+function getConsentedVendors() as Object
+    return []
+end function
+
 function getSaveAndExitVariables() as Object
     return {
         "lan": m.global.config.consentLanguage,
         "privacyManagerId": m.top.messageId.toStr(),
-        "rejectedCategories": m.rejectedCategories,
-        "rejectedVendors": m.rejectedVendors
+        "categories": getConsentedCategories(),
+        "specialFeatures": [],  ' TODO - what is this?
+        "vendors": getConsentedVendors()
     }
 end function
