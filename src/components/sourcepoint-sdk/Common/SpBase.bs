@@ -110,6 +110,10 @@ sub observeNav(event as Object)
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
+    return _onKeyEvent(key, press)
+end function
+
+function _onKeyEvent(key as String, press as Boolean) as boolean
     if key = "left" and press = true and m.nav <> invalid then
         m.nav.setFocus(true)
         m.previouslyFocusedChild = m.nav
@@ -136,7 +140,6 @@ sub renderLogo()
 
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
-        m.top.findNode("screen-title").textComponent.horizOrigin = "center"
     end if
 
     if m.components.image_logo <> invalid then
