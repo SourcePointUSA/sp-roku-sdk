@@ -3,11 +3,28 @@ sub init()
     m.top.observeField("privacyManagerViewData", "renderRightCol")
 end sub
 
+sub changeCategories(event as Object)
+    print "change categories:"
+    print event.getData()
+end sub
+
 sub observeCategoryList(event as Object)
     item = m.categoryList.focusedContentNode
 
     changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
 end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "up" and m.nav.isInFocusChain() = true then 
+        m.categorySlider.setFocus(true)
+        return true
+    else if key = "down" and m.categorySlider.isInFocusChain() = true then
+        m.nav.setFocus(true)
+        return true
+    end if 
+
+    return _onKeyEvent(key, press)
+end function
 
 sub renderCategoryDescription()
     if m.categoryDescription = invalid then
@@ -76,6 +93,17 @@ sub renderRightCol()
     m.categoryList.buttonComponents = sections
 end sub
 
+sub renderSlider()
+    if m.categorySlider = invalid then
+        categorySlider = createObject("roSGNode", "SpSlider")
+        categorySlider.settings = m.components.slider_categories.settings
+        titleHolder = m.top.findNode("title-holder")
+        titleHolder.appendChild(categorySlider)
+        m.categorySlider = categorySlider
+        m.categorySlider.observeField("buttonSelected", "changeCategories")
+    end if
+end sub
+
 sub renderView(event as Object)
     getPrivacyManagerViewData(1)
     m.colLeft = m.top.findNode("col-left")
@@ -87,6 +115,7 @@ sub renderView(event as Object)
     renderLogo()
     renderCategoryDescription()
     renderNav(["save_and_exit"])
+    renderSlider()
 
     ' TODO add loader to the right col until it is rendered
 

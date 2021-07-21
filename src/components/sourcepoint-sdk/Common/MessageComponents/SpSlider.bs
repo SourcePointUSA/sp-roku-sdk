@@ -1,0 +1,44 @@
+sub init()
+    m.top.focusable = true
+    m.top.observeField("focusedChild", "setFocus")
+
+    m.buttonGroup = m.top.findNode("button-group")
+    m.top.buttonLeft = m.top.findNode("button-left")
+    m.top.buttonRight = m.top.findNode("button-right")
+
+    m.focusedChild = invalid
+    m.top.buttonSelected = "left"
+end sub
+
+sub setFocus(event as Object)
+    focusedChild = event.getData()
+
+    if m.top.isSameNode(focusedChild) then
+        if m.focusedChild <> invalid then
+            m.focusedChild.setFocus(true)
+        else
+            m.buttonGroup.getChild(0).setFocus(true)
+        end if
+    else
+        m.focusedChild = focusedChild
+    end if
+end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "right" then 
+        m.top.buttonRight.setFocus(true)
+        return true
+    else if key = "left" then
+        m.top.buttonLeft.setFocus(true)
+        return true
+    else if key = "OK" then
+        if m.top.buttonLeft.isInFocusChain() then
+            m.top.buttonSelected = "left"
+        else
+            m.top.buttonSelected = "right"
+        end if 
+        return true
+    end if 
+
+    return false
+end function

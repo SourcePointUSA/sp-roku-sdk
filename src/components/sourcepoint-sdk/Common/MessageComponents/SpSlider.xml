@@ -1,0 +1,22 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "SpSlider" extends = "Group" >
+
+    <interface>
+        <field id="settings" type="assocarray" />
+        <field id="buttonSelected" type="string" />
+        <field id="buttonLeft" type="node" />
+        <field id="buttonRight" type="node" />
+    </interface>
+
+    <script uri="./SpSlider.bs" />
+
+    <children>
+        <Poster uri="pkg:/images/sourcepoint-sdk/unfocus_button.jpg" />
+        <LayoutGroup id="button-group" layoutDirection="horiz">
+            <SpNativeButton id="button-left" text="left button"/>
+            <SpNativeButton id="button-right" text="right button"/>
+        </LayoutGroup>
+    </children>
+
+</component>
