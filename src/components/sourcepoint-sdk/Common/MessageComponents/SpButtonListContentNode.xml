@@ -10,7 +10,7 @@
         <field id="carat" type="string" value=">" />
         <field id="on" type="boolean" alwaysNotify="true"/>
         <field id="off" type="boolean" value="false" />
-        <field id="type" type="string" value="categories" />
+        <field id="categoryType" type="string" />
     </interface>
 
     <script uri="./SpButtonListContentNode.bs" />

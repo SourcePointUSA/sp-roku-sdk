@@ -43,10 +43,6 @@ sub render(event as Object)
             sectionNode.description = "lorem ipsum description" ' TODO - replace this with correct description
             sectionButtons = section.children
             hasSections = true
-
-            if section.type <> invalid then
-                sectionNode.album = section.type
-            end if
         else
             sectionNode = m.buttonNodes
             sectionButtons = [section]
@@ -81,6 +77,9 @@ sub render(event as Object)
             end if
             if button.on <> invalid then
                 buttonContentNode.on = button.on
+            end if
+            if button.categoryType <> invalid then
+                buttonContentNode.categoryType = button.categoryType
             end if
 
             if m.buttonNodesKeyed[button.id] = invalid then

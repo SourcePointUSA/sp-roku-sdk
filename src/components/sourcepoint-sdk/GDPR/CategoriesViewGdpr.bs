@@ -6,17 +6,28 @@ sub init()
 end sub
 
 sub changeCategories(event as Object)
-    print "change categories:"
-    print event.getData()
+    buttonSide = event.getData()
+
+    if buttonSide = "left" then
+        m.categoryLists["right"].visible = false
+        m.categoryLists["left"].visible = true
+
+        m.rightColFocus = m.categoryLists["left"]
+    else
+        m.categoryLists["left"].visible = false
+        m.categoryLists["right"].visible = true
+
+        m.rightColFocus = m.categoryLists["right"]
+    end if
 end sub
 
 sub observeCategoryList(event as Object)
     item = m.categoryList.focusedContentNode
 
     cType = "categories"
-    section = item.getParent()
-    if section <> invalid and section.album <> invalid then
-        cType = section.album
+    ' TODO - we are not getting the correct categories here
+    if item.categoryType <> invalid then
+        cType = item.categoryType
     end if
 
     viewData = {"categoryType": cType}
@@ -64,16 +75,16 @@ sub renderRightCol()
     categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
 
     sections = []
-    sectionsLi = []
-
+    buttonsLi = []
     for each cType in categoryTypeOrder
         buttons = []
-        buttonsLi = []
+
         for each id in m.top.privacyManagerViewData[cType]
             listItem = m.top.privacyManagerViewData[cType][id]
 
             if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
-                buttonSettings = { 
+                buttonSettings = {
+                    categoryType: cType, 
                     on: m.top.privacyManagerViewData[cType][id]["__enabled"]
                     settings: {} 
                 } 
@@ -83,24 +94,39 @@ sub renderRightCol()
         
                 buttons.push(buttonSettings)
             end if
+            if listItem.legIntVendors <> invalid and listItem.legIntVendors.count() > 0 then
+                buttonSettings = { 
+                    categoryType: "legInt",
+                    on: m.top.privacyManagerViewData[cType][id]["__enabled_li"]
+                    settings: {} 
+                } 
+                buttonSettings.settings.append(m.components.button_category.settings)
+                buttonSettings.id = id
+                buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
+        
+                buttonsLi.push(buttonSettings)
+            end if
         end for
     
         if buttons.count() > 0 then
             section = {
                 children: buttons,
-                settings: categoryTypes[cType].headerComponent.settings,
-                "type": cType
+                settings: categoryTypes[cType].headerComponent.settings
             }
 
             sections.push(section)
         end if
     end for
+
+    m.categoryListTarget = createObject("roSGNode", "Group")
+    m.colRight.appendChild(m.categoryListTarget)
     
+    ' Create category list
     if m.categoryList = invalid then
         m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
         m.categoryList.width = m.colRightWidth
 
-        m.colRight.appendChild(m.categoryList)
+        m.categoryListTarget.appendChild(m.categoryList)
         m.rightColFocus = m.categoryList
         m.categoryList.observeField("itemSelected", "observeCategoryList")
         if m.components.text_purposes_header <> invalid then
@@ -109,6 +135,18 @@ sub renderRightCol()
 
         m.categoryLists["left"] = m.categoryList
     end if 
+    ' Create LI category list if needed
+    if buttonsLi.count() > 0 and m.categoryListLi = invalid then
+        m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
+        m.categoryListLi.width = m.colRightWidth
+        m.categoryListLi.visible = false
+
+        m.categoryListTarget.appendChild(m.categoryListLi)
+        m.categoryListLi.observeField("itemSelected", "observeCategoryList")
+
+        m.categoryListLi.buttonComponents = buttonsLi
+        m.categoryLists["right"] = m.categoryListLi
+    end if
 
     m.categoryList.buttonComponents = sections
 end sub

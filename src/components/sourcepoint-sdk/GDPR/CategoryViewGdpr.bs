@@ -64,6 +64,8 @@ sub renderRightCol(event as Object)
     end if
 
     ' figure out which type of vendor this is
+    print "category type"
+    print m.categoryData.categoryType 
     if m.categoryData.categoryType = "categories" then
         vendors = m.categoryData.requiringConsentVendors
     else if m.categoryData.categoryType = "legInt" then
