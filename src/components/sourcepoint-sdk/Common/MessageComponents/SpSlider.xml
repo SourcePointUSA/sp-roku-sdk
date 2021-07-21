@@ -4,7 +4,7 @@
 
     <interface>
         <field id="settings" type="assocarray" />
-        <field id="buttonSelected" type="string" />
+        <field id="buttonSelected" type="string" value = "left" />
         <field id="buttonLeft" type="node" />
         <field id="buttonRight" type="node" />
     </interface>
@@ -12,7 +12,7 @@
     <script uri="./SpSlider.bs" />
 
     <children>
-        <Poster uri="pkg:/images/sourcepoint-sdk/unfocus_button.jpg" />
+        <Poster uri="pkg:/images/sourcepoint-sdk/unfocus_button.jpg" id="slider-background" />
         <LayoutGroup id="button-group" layoutDirection="horiz" itemSpacings="[10]">
             <SpNativeButton id="button-left"/>
             <SpNativeButton id="button-right"/>
