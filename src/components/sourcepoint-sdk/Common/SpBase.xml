@@ -19,7 +19,7 @@
 
   <children>
     <LayoutGroup layoutDirection="vert" itemSpacings="[20]">
-      <LayoutGroup id="title-holder" horizAlignment="center" layoutDirection="vert">
+      <LayoutGroup id="title-holder" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
           <Rectangle id="title-holder-width-holder" height="0"/>
           <SpNativeText id="screen-title" componentName="Label"/>
       </Layout>

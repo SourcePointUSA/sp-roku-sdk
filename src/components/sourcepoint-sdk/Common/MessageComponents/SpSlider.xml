@@ -13,9 +13,9 @@
 
     <children>
         <Poster uri="pkg:/images/sourcepoint-sdk/unfocus_button.jpg" />
-        <LayoutGroup id="button-group" layoutDirection="horiz">
-            <SpNativeButton id="button-left" text="left button"/>
-            <SpNativeButton id="button-right" text="right button"/>
+        <LayoutGroup id="button-group" layoutDirection="horiz" itemSpacings="[10]">
+            <SpNativeButton id="button-left"/>
+            <SpNativeButton id="button-right"/>
         </LayoutGroup>
     </children>
 

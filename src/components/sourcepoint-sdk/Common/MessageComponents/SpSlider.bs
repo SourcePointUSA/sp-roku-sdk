@@ -1,6 +1,7 @@
 sub init()
     m.top.focusable = true
     m.top.observeField("focusedChild", "setFocus")
+    m.top.observeField("settings", "render")
 
     m.buttonGroup = m.top.findNode("button-group")
     m.top.buttonLeft = m.top.findNode("button-left")
@@ -9,6 +10,22 @@ sub init()
     m.focusedChild = invalid
     m.top.buttonSelected = "left"
 end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "right" then 
+        m.top.buttonRight.setFocus(true)
+        m.top.buttonSelected = "right"
+        return true
+    else if key = "left" then
+        m.top.buttonLeft.setFocus(true)
+        m.top.buttonSelected = "left"
+        return true
+    else if key = "OK" then
+        return true
+    end if 
+
+    return false
+end function
 
 sub setFocus(event as Object)
     focusedChild = event.getData()
@@ -24,21 +41,19 @@ sub setFocus(event as Object)
     end if
 end sub
 
-function onKeyEvent(key as String, press as Boolean) as Boolean
-    if key = "right" then 
-        m.top.buttonRight.setFocus(true)
-        return true
-    else if key = "left" then
-        m.top.buttonLeft.setFocus(true)
-        return true
-    else if key = "OK" then
-        if m.top.buttonLeft.isInFocusChain() then
-            m.top.buttonSelected = "left"
-        else
-            m.top.buttonSelected = "right"
-        end if 
-        return true
-    end if 
+sub render(event as Object)
+    settings = event.getData()
 
-    return false
-end function
+    m.top.buttonLeft.settings = settings
+    m.top.buttonRight.settings = settings
+
+    m.top.buttonLeft.showFocusFootprint = false
+    m.top.buttonRight.showFocusFootprint = false
+
+    if settings.leftText <> invalid then
+        m.top.buttonLeft.text = settings.leftText
+    end if
+    if settings.rightText <> invalid then
+        m.top.buttonRight.text = settings.rightText
+    end if
+end sub

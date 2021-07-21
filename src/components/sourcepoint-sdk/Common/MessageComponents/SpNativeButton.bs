@@ -6,12 +6,12 @@ sub init()
     m.top.focusedIconUri = ""
     m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"          ' note space here, empty string is the default and does not override...
     m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+    m.top.minWidth = 0
     m.top.showFocusFootprint = true
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
 
     m.focusBackgroundColor = "0xFFFFFFFF"
-    m.unFocusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
     m.textColor = "0x000000FF"
 end sub
@@ -63,10 +63,12 @@ sub render(event as Object)
 
     createBg()
 
-    m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
-    m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
-    m.top.backgroundRect.height = m.top.height
-    m.top.backgroundRect.width = 0
+    if m.unFocusBackgroundColor <> invalid then
+        m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
+        m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
+        m.top.backgroundRect.height = m.top.height
+        m.top.backgroundRect.width = 0
+    endif
 end sub
 
 sub createBg()
