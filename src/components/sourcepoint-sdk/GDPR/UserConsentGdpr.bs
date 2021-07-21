@@ -1,8 +1,10 @@
 sub init()
     m.top.observeField("userConsent", "ingestConsent")
     m.top.observeField("acceptCategory", "acceptCategory")
+    m.top.observeField("acceptLiCategory", "acceptLiCategory")
     m.top.observeField("acceptVendor", "acceptVendor")
     m.top.observeField("rejectCategory", "rejectCategory")
+    m.top.observeField("rejectLiCategory", "rejectLiCategory")
     m.top.observeField("rejectVendor", "rejectVendor")
 
     m.acceptedCategories = []

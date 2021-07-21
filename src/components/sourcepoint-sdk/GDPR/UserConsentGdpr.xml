@@ -11,8 +11,10 @@
         <field id="messageId" type="integer" />
 
         <field id="acceptCategory" type="string" alwaysNotify="true"/>
+        <field id="acceptLiCategory" type="string" alwaysNotify="true"/>
         <field id="acceptVendor" type="string" alwaysNotify="true"/>
         <field id="rejectCategory" type="string" alwaysNotify="true"/>
+        <field id="rejectLiCategory" type="string" alwaysNotify="true"/>
         <field id="rejectVendor" type="string" alwaysNotify="true"/>
 
         <field id="consentChanged" type="assocarray" />
