@@ -43,6 +43,10 @@ sub render(event as Object)
             sectionNode.description = "lorem ipsum description" ' TODO - replace this with correct description
             sectionButtons = section.children
             hasSections = true
+
+            if section.type <> invalid then
+                sectionNode.album = section.type
+            end if
         else
             sectionNode = m.buttonNodes
             sectionButtons = [section]

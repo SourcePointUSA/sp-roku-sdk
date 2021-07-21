@@ -64,10 +64,12 @@ sub renderRightCol(event as Object)
     end if
 
     ' figure out which type of vendor this is
-    if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
+    if m.categoryData.categoryType = "categories" then
         vendors = m.categoryData.requiringConsentVendors
-    else 
+    else if m.categoryData.categoryType = "legInt" then
         vendors = m.categoryData.legIntVendors
+    else
+        vendors = m.categoryData.vendors
     end if
 
     ' render vendor header with count

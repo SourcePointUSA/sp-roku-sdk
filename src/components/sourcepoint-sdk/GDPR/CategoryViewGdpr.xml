@@ -3,8 +3,6 @@
 <component name = "CategoryViewGdpr" extends = "SpBase" >
 
     <interface>
-        <field id="vendorType" type="string" />
-
         <field id="categoryId" type="string" />
     </interface>
 

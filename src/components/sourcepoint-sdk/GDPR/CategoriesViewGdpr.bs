@@ -1,6 +1,8 @@
 sub init()
     m.top.observeField("view", "renderView")
     m.top.observeField("privacyManagerViewData", "renderRightCol")
+
+    m.categoryLists = {}
 end sub
 
 sub changeCategories(event as Object)
@@ -11,7 +13,16 @@ end sub
 sub observeCategoryList(event as Object)
     item = m.categoryList.focusedContentNode
 
-    changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
+    cType = "categories"
+    section = item.getParent()
+    if section <> invalid and section.album <> invalid then
+        cType = section.album
+    end if
+
+    viewData = {"categoryType": cType}
+    viewData.append(m.top.privacyManagerViewData.[cType][item.id])
+
+    changeView("CategoryDetailsView", viewData)
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
@@ -53,25 +64,32 @@ sub renderRightCol()
     categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
 
     sections = []
+    sectionsLi = []
 
     for each cType in categoryTypeOrder
         buttons = []
+        buttonsLi = []
         for each id in m.top.privacyManagerViewData[cType]
-            buttonSettings = { 
-                on: m.top.privacyManagerViewData[cType][id]["__enabled"]
-                settings: {} 
-            } 
-            buttonSettings.settings.append(m.components.button_category.settings)
-            buttonSettings.id = id
-            buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
-    
-            buttons.push(buttonSettings)
+            listItem = m.top.privacyManagerViewData[cType][id]
+
+            if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
+                buttonSettings = { 
+                    on: m.top.privacyManagerViewData[cType][id]["__enabled"]
+                    settings: {} 
+                } 
+                buttonSettings.settings.append(m.components.button_category.settings)
+                buttonSettings.id = id
+                buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
+        
+                buttons.push(buttonSettings)
+            end if
         end for
     
         if buttons.count() > 0 then
             section = {
                 children: buttons,
-                settings: categoryTypes[cType].headerComponent.settings
+                settings: categoryTypes[cType].headerComponent.settings,
+                "type": cType
             }
 
             sections.push(section)
@@ -88,6 +106,8 @@ sub renderRightCol()
         if m.components.text_purposes_header <> invalid then
             m.categoryList.sectionSettings = m.components.text_purposes_header.settings
         end if
+
+        m.categoryLists["left"] = m.categoryList
     end if 
 
     m.categoryList.buttonComponents = sections
