@@ -22,7 +22,6 @@ sub observeNav(event as Object)
 
     categoryType = m.categoryData.categoryType
 
-    ' TODO need to choose the correct accept / reject
     if selectedButton.id = "button_on" then
         m.top.userConsentNode[categoryActionMap[categoryType]["accept"]] = m.categoryData._id
     else if selectedButton.id = "button_off" then
@@ -34,6 +33,13 @@ end sub
 
 sub renderRightCol(event as Object)
     m.categoryData = event.getData()
+
+    ' Show back button if it's not a toggle-able category
+    if m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt" then
+        renderNav(["button_nav_back"])
+    else
+        renderNav(m.navButtons)
+    end if
 
     if m.categoryData.categoryType = "legInt" then
         enabled = m.categoryData.__enabled_li
@@ -133,9 +139,6 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    ' TODO - nav buttons may differ based on category type 
-    ' I believe some will not have on / off
-    renderNav(m.navButtons)
 
     ' TODO add loader to the right col until it is rendered
 end sub
