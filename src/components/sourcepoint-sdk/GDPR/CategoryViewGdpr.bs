@@ -9,10 +9,24 @@ end sub
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
+    categoryActionMap = {
+        "categories": {
+            accept: "acceptCategory",
+            reject: "rejectCategory"
+        },
+        "legInt": {
+            accept: "acceptLiCategory",
+            reject: "rejectLiCategory"
+        }
+    }
+
+    categoryType = m.categoryData.categoryType
+
+    ' TODO need to choose the correct accept / reject
     if selectedButton.id = "button_on" then
-        m.top.userConsentNode.acceptCategory = m.categoryData._id
+        m.top.userConsentNode[categoryActionMap[categoryType]["accept"]] = m.categoryData._id
     else if selectedButton.id = "button_off" then
-        m.top.userConsentNode.rejectCategory = m.categoryData._id
+        m.top.userConsentNode[categoryActionMap[categoryType]["reject"]] = m.categoryData._id
     end if 
 
     changeView("_go_back_")
@@ -21,8 +35,14 @@ end sub
 sub renderRightCol(event as Object)
     m.categoryData = event.getData()
 
+    if m.categoryData.categoryType = "legInt" then
+        enabled = m.categoryData.__enabled_li
+    else
+        enabled = m.categoryData.__enabled
+    end if
+
     for i = 0 to m.navButtons.count() step 1 
-        if (m.categoryData.__enabled = true and m.navButtons[i] = "button_on") or (m.categoryData.__enabled = false and m.navButtons[i] = "button_off") then
+        if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
             m.nav.focusButton = i
             exit for
         end if
@@ -64,8 +84,6 @@ sub renderRightCol(event as Object)
     end if
 
     ' figure out which type of vendor this is
-    print "category type"
-    print m.categoryData.categoryType 
     if m.categoryData.categoryType = "categories" then
         vendors = m.categoryData.requiringConsentVendors
     else if m.categoryData.categoryType = "legInt" then
@@ -115,6 +133,8 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
+    ' TODO - nav buttons may differ based on category type 
+    ' I believe some will not have on / off
     renderNav(m.navButtons)
 
     ' TODO add loader to the right col until it is rendered

@@ -130,33 +130,37 @@ sub renderRightCol()
     m.colRight.appendChild(m.categoryListTarget)
     
     ' Create category list
-    if m.categoryList = invalid then
-        m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
-        m.categoryList.width = m.colRightWidth
+    if sections.count() > 0 then
+        if m.categoryList = invalid then
+            m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
+            m.categoryList.width = m.colRightWidth
+    
+            m.categoryListTarget.appendChild(m.categoryList)
+            m.rightColFocus = m.categoryList
+            m.categoryList.observeField("itemSelected", "observeCategoryList")
+            if m.components.text_purposes_header <> invalid then
+                m.categoryList.sectionSettings = m.components.text_purposes_header.settings
+            end if
+    
+            m.categoryLists["left"] = m.categoryList
+        end if 
+        
+        m.categoryList.buttonComponents = sections
+    end if
+    ' Create LI category list if needed
+    if buttonsLi.count() > 0 then
+        if m.categoryListLi = invalid then
+            m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
+            m.categoryListLi.width = m.colRightWidth
+            m.categoryListLi.visible = false
 
-        m.categoryListTarget.appendChild(m.categoryList)
-        m.rightColFocus = m.categoryList
-        m.categoryList.observeField("itemSelected", "observeCategoryList")
-        if m.components.text_purposes_header <> invalid then
-            m.categoryList.sectionSettings = m.components.text_purposes_header.settings
+            m.categoryListTarget.appendChild(m.categoryListLi)
+            m.categoryListLi.observeField("itemSelected", "observeCategoryListLi")
+            m.categoryLists["right"] = m.categoryListLi
         end if
 
-        m.categoryLists["left"] = m.categoryList
-    end if 
-    ' Create LI category list if needed
-    if buttonsLi.count() > 0 and m.categoryListLi = invalid then
-        m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
-        m.categoryListLi.width = m.colRightWidth
-        m.categoryListLi.visible = false
-
-        m.categoryListTarget.appendChild(m.categoryListLi)
-        m.categoryListLi.observeField("itemSelected", "observeCategoryListLi")
-
         m.categoryListLi.buttonComponents = buttonsLi
-        m.categoryLists["right"] = m.categoryListLi
     end if
-
-    m.categoryList.buttonComponents = sections
 end sub
 
 sub renderSlider()

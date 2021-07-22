@@ -9,6 +9,7 @@ sub init()
 
     m.acceptedCategories = []
     m.acceptedVendors = []
+    m.hasConsentData = false
     m.legIntCategories = []
 end sub
 
@@ -100,6 +101,7 @@ end sub
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
     for each categoryId in privacyManagerViewData.categories
         privacyManagerViewData.categories[categoryId]["__enabled"] = false
+        ' TODO - LI needs to be enabled by default I believe
         privacyManagerViewData.categories[categoryId]["__enabled_li"] = false
     end for
     
@@ -133,6 +135,8 @@ sub ingestConsent(event as Object)
 
     print "GDPR userConsent"
     print userConsent
+
+    m.hasConsentData = userConsent.hasConsentData
 
     if userConsent.acceptedCategories <> invalid then
         m.acceptedCategories = userConsent.acceptedCategories
