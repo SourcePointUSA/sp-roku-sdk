@@ -22,16 +22,24 @@ sub changeCategories(event as Object)
 end sub
 
 sub observeCategoryList(event as Object)
-    item = m.categoryList.focusedContentNode
+    showCategory(m.categoryList.focusedContentNode)
+end sub
 
+sub observeCategoryListLi(event as Object)
+    showCategory(m.categoryListLi.focusedContentNode)
+end sub
+
+sub showCategory(listItem as Object)
     cType = "categories"
-    ' TODO - we are not getting the correct categories here
-    if item.categoryType <> invalid then
-        cType = item.categoryType
+
+    viewData = {}
+    if listItem.categoryType <> invalid then
+        viewData["categoryType"] = listItem.categoryType
+        ' legInt categories are pulled from same "categories" list
+        cType = listItem.categoryType = "legInt" ? "categories" : listItem.categoryType
     end if
 
-    viewData = {"categoryType": cType}
-    viewData.append(m.top.privacyManagerViewData.[cType][item.id])
+    viewData.append(m.top.privacyManagerViewData[cType][listItem.id])
 
     changeView("CategoryDetailsView", viewData)
 end sub
@@ -142,7 +150,7 @@ sub renderRightCol()
         m.categoryListLi.visible = false
 
         m.categoryListTarget.appendChild(m.categoryListLi)
-        m.categoryListLi.observeField("itemSelected", "observeCategoryList")
+        m.categoryListLi.observeField("itemSelected", "observeCategoryListLi")
 
         m.categoryListLi.buttonComponents = buttonsLi
         m.categoryLists["right"] = m.categoryListLi
