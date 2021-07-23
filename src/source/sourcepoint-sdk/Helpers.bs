@@ -50,6 +50,10 @@ end function
 sub setLocalState(localState)
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
 
+    if localState = invalid then
+        localState = ""
+    end if
+
     registry.write("localState", localState)
     registry.flush()
 end sub
