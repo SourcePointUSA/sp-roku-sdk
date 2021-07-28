@@ -17,7 +17,7 @@ sub privacyManagerView()
     end if 
 
     if m.top.messageCategory = 1 then
-        url = m.global.config.baseEndpoint + "/consent/tcfv2/privacy-manager/privacy-manager-view"
+        url = m.global.config.baseEndpoint + "/wrapper/v2/privacy-manager/privacy-manager-view/gdpr"
     else if m.top.messageCategory = 2 then
         url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
     else
@@ -28,7 +28,9 @@ sub privacyManagerView()
         url,
         {
             "consentLanguage": m.top.consentLanguage,
-            "siteId": m.top.propertyId
+            "siteId": m.top.propertyId,
+            "propertyId": m.top.propertyId
+            "env": m.global.config.env
         }
     )
 
@@ -43,6 +45,13 @@ sub privacyManagerView()
         if response.categories <> invalid then
             for each category in response.categories
                 data.categories[category._id] = category
+            end for
+        end if
+
+        if response.legIntCategories <> invalid then
+            data.legIntCategories = {}
+            for each category in response.legIntCategories
+                data.legIntCategories[category._id] = category
             end for
         end if
 

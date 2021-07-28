@@ -80,10 +80,28 @@ sub renderRightCol()
         }
     }
 
-    categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
-
-    sections = []
     buttonsLi = []
+    if m.top.privacyManagerViewData.legIntCategories <> invalid then
+        for each id in m.top.privacyManagerViewData.legIntCategories
+            buttonSettings = { 
+                categoryType: "legInt",
+                on: m.top.privacyManagerViewData.legIntCategories[id].enabled
+                settings: {} 
+            } 
+            print "on:"
+            print id
+            print m.top.privacyManagerViewData.legIntCategories[id].enabled
+
+            buttonSettings.settings.append(m.components.button_category.settings)
+            buttonSettings.id = id
+            buttonSettings.settings.text = m.top.privacyManagerViewData.legIntCategories[id].name
+    
+            buttonsLi.push(buttonSettings)
+        end for
+    end if
+    
+    categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+    sections = []
     for each cType in categoryTypeOrder
         buttons = []
 
@@ -93,7 +111,7 @@ sub renderRightCol()
             if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
                 buttonSettings = {
                     categoryType: cType, 
-                    on: m.top.privacyManagerViewData[cType][id]["__enabled"]
+                    on: m.top.privacyManagerViewData[cType][id].enabled
                     settings: {} 
                 } 
                 buttonSettings.settings.append(m.components.button_category.settings)
@@ -101,18 +119,6 @@ sub renderRightCol()
                 buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
         
                 buttons.push(buttonSettings)
-            end if
-            if listItem.legIntVendors <> invalid and listItem.legIntVendors.count() > 0 then
-                buttonSettings = { 
-                    categoryType: "legInt",
-                    on: m.top.privacyManagerViewData[cType][id]["__enabled_li"]
-                    settings: {} 
-                } 
-                buttonSettings.settings.append(m.components.button_category.settings)
-                buttonSettings.id = id
-                buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
-        
-                buttonsLi.push(buttonSettings)
             end if
         end for
     
@@ -157,6 +163,8 @@ sub renderRightCol()
             m.categoryListTarget.appendChild(m.categoryListLi)
             m.categoryListLi.observeField("itemSelected", "observeCategoryListLi")
             m.categoryLists["right"] = m.categoryListLi
+
+            renderSlider()
         end if
 
         m.categoryListLi.buttonComponents = buttonsLi
@@ -185,7 +193,6 @@ sub renderView(event as Object)
     renderLogo()
     renderCategoryDescription()
     renderNav(["save_and_exit"])
-    renderSlider()
 
     ' TODO add loader to the right col until it is rendered
 
