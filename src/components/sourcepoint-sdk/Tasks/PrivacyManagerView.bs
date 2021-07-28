@@ -18,20 +18,25 @@ sub privacyManagerView()
 
     if m.top.messageCategory = 1 then
         url = m.global.config.baseEndpoint + "/wrapper/v2/privacy-manager/privacy-manager-view/gdpr"
+        queryParams = {
+            "consentLanguage": m.top.consentLanguage,
+            "propertyId": m.top.propertyId
+            "env": m.global.config.env,
+            "uuid": getUuid("gdpr")
+        }
     else if m.top.messageCategory = 2 then
         url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
+        queryParams = {
+            "consentLanguage": m.top.consentLanguage,
+            "siteId": m.top.propertyId
+        }
     else
         return
     end if 
 
     url = addQueryParams(
         url,
-        {
-            "consentLanguage": m.top.consentLanguage,
-            "siteId": m.top.propertyId,
-            "propertyId": m.top.propertyId
-            "env": m.global.config.env
-        }
+        queryParams
     )
 
     response = makeRequest(url, "GET")
