@@ -1,10 +1,27 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
 sub init()
   ' Please change to following background to whatever we get in the demo.
   m.top.backgroundURI = "pkg:/images/blue-background-dark-texture.jpeg"
-  ' setUpDialogVars()
-  ' appendListPanel()
-  ' m.top.setFocus(true)
-  ' m.top.overhang.visible = true
-  sec = CreateObject("roRegistrySection", "Authentication")
-  sec.write("sid", "sids")
+  m.nav = createObject("roSGNode", "NavList")
+
+  m.top.appendChild(m.nav)
+
+  m.nav.observeField("buttonSelected", "observeHomeNav")
+end sub
+
+sub observeHomeNav(event as Object)
+  print event.getData()
+
+  index = event.getData()
+  if index = 0 then
+    ' run logic
+    print "setting run campaign logic"
+    m.top.run_campaign_logic = true
+  else if index = 1 then
+    ' clear user data
+    setLocalState("")
+  else if index = 2 then
+    ' open pm
+  end if
 end sub
