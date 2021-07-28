@@ -2,7 +2,11 @@
 
 <!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
 
-<component name = "Home" extends = "OverhangPanelSetScene">
+<component name = "Home" extends = "Scene">
+
+  <interface>
+    <field id="run_campaign_logic" type="boolean" alwaysNotify="true"/>
+  </interface>
 
   <script uri="./Home.bs" />
 </component>
