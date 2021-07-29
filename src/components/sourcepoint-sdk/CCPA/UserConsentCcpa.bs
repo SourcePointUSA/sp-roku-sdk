@@ -7,6 +7,7 @@ sub init()
 
     m.rejectedCategories = []
     m.rejectedVendors = []
+    m.rejectedAll = invalid
 end sub
 
 sub acceptCategory(event as Object)
@@ -66,6 +67,8 @@ sub ingestConsent(event as Object)
     if userConsent.rejectedVendors <> invalid then
         m.rejectedVendors = userConsent.rejectedVendors
     end if
+
+    m.rejectedAll = userConsent.rejectedAll
 end sub
 
 ' TODO - do we need to update vendors that need this category?
