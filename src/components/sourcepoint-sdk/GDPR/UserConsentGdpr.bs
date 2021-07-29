@@ -1,5 +1,4 @@
 sub init()
-    m.top.observeField("userConsent", "ingestConsent")
     m.top.observeField("acceptCategory", "acceptCategory")
     m.top.observeField("acceptLiCategory", "acceptLiCategory")
     m.top.observeField("acceptVendor", "acceptVendor")
@@ -9,27 +8,23 @@ sub init()
 
     m.acceptedCategories = []
     m.acceptedVendors = []
-    m.hasConsentData = false
     m.legIntCategories = []
 end sub
 
 ' TODO - do we need to update vendors that need this category?
 sub acceptCategory(event as Object)
-    found = false
     acceptedCategory = event.getData()
-    for each cat in m.acceptedCategories
-        if acceptedCategory = cat then
-            found = true
-        end if
-    end for
 
-    if found = false then
-        m.acceptedCategories.push(acceptedCategory)
+    pmvConsent = m.top.privacyManagerViewConsent
+    if pmvConsent.categories <> invalid and pmvConsent.categories[acceptedCategory] <> invalid then
+        pmvConsent.categories[acceptedCategory].enabled = true
+        m.top.privacyManagerViewConsent = pmvConsent
     end if
 
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 sub acceptLiCategory(event as Object)
     found = false
     acceptedLiCategory = event.getData()
@@ -46,6 +41,7 @@ sub acceptLiCategory(event as Object)
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 sub acceptVendor(event as Object)
     found = false
     acceptedVendor = event.getData()
@@ -62,6 +58,7 @@ sub acceptVendor(event as Object)
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 sub rejectCategory(event as Object)
     rejectedCategory = event.getData()
     for i = 0 to (m.acceptedCategories.count() - 1) step 1
@@ -74,6 +71,7 @@ sub rejectCategory(event as Object)
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 sub rejectLiCategory(event as Object)
     rejectedLiCategory = event.getData()
     for i = 0 to (m.legIntCategories.count() - 1) step 1
@@ -86,6 +84,7 @@ sub rejectLiCategory(event as Object)
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 sub rejectVendor(event as Object)
     rejectedVendor = event.getData()
     for i = 0 to (m.acceptedVendors.count() - 1) step 1
@@ -98,59 +97,24 @@ sub rejectVendor(event as Object)
     fireConsentChange()
 end sub
 
+' TODO - update this to do the same as acceptCategory
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
-    for each categoryId in privacyManagerViewData.categories
-        privacyManagerViewData.categories[categoryId]["__enabled"] = false
-        ' TODO - LI needs to be enabled by default I believe
-        privacyManagerViewData.categories[categoryId]["__enabled_li"] = false
-    end for
-    
-    for each vendorId in privacyManagerViewData.vendors
-        privacyManagerViewData.vendors[vendorId]["__enabled"] = false
-    end for
-
-    for each categoryId in m.acceptedCategories
-        if privacyManagerViewData.categories[categoryId] <> invalid then 
-            privacyManagerViewData.categories[categoryId]["__enabled"] = true
-        end if
-    end for
-
-    for each categoryId in m.legIntCategories
-        if privacyManagerViewData.categories[categoryId] <> invalid then 
-            privacyManagerViewData.categories[categoryId]["__enabled_li"] = true
-        end if
-    end for
-
-    for each vendorId in m.acceptedVendors
-        if privacyManagerViewData.vendors[vendorId] <> invalid then 
-            privacyManagerViewData.vendors[vendorId]["__enabled"] = true
-        end if
-    end for
-
-    return privacyManagerViewData
+    ' this is a no-op for GDPR, "enabled" comes with the data
+    ' we do want to ingest this data so we can update it
+    if m.top.privacyManagerViewConsent = invalid then
+        ingestConsent(privacyManagerViewData)
+        return privacyManagerViewData
+    else
+        return m.top.privacyManagerViewConsent
+    end if
 end function
 
-sub ingestConsent(event as Object)
-    userConsent = event.getData()
-
-    print "GDPR userConsent"
-    print userConsent
-
-    m.hasConsentData = userConsent.hasConsentData
-
-    if userConsent.acceptedCategories <> invalid then
-        m.acceptedCategories = userConsent.acceptedCategories
-    end if
-    if userConsent.acceptedVendors <> invalid then
-        m.acceptedVendors = userConsent.acceptedVendors
-    end if
-    if userConsent.legIntCategories <> invalid then
-        m.legIntCategories = userConsent.legIntCategories
-    end if
+sub ingestConsent(privacyManagerViewData as Object)
+    m.top.privacyManagerViewConsent = privacyManagerViewData
 end sub
 
 sub fireConsentChange()
-    m.top.consentChanged = getSaveAndExitVariables()
+    m.top.consentChanged = m.top.privacyManagerViewConsent
 end sub
 
 function getConsentedCategories() as Object

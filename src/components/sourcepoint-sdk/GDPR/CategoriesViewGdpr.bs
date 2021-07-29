@@ -88,9 +88,6 @@ sub renderRightCol()
                 on: m.top.privacyManagerViewData.legIntCategories[id].enabled
                 settings: {} 
             } 
-            print "on:"
-            print id
-            print m.top.privacyManagerViewData.legIntCategories[id].enabled
 
             buttonSettings.settings.append(m.components.button_category.settings)
             buttonSettings.id = id
