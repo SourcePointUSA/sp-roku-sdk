@@ -24,6 +24,7 @@ sub init()
         "CategoriesDescriptionText": "text_category_description",
         "CategoriesSubDescriptionText": "text_category_sub_description",
         "CategoryButton": "button_category",
+        "DoNotSellButton": "button_do_not_sell",
         "Header": "text_header",
         "LogoImage": "image_logo",
         "OnButton": "button_on",

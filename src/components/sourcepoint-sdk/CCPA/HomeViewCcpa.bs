@@ -29,4 +29,28 @@ sub renderRightCol()
     description.textComponent.width = m.colRightWidth
     
     m.colRight.appendChild(description)
+
+    dnsButton = {
+        carat: "",
+        on: false,
+        settings: {}
+    }
+
+    dnsButton.settings.append(m.components.button_do_not_sell.settings)
+    dnsButton.settings.text = dnsButton.settings.dnsText
+
+    if m.dnsButtonHolder = invalid then
+        m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
+        m.dnsButtonHolder.width = m.colRightWidth
+
+        m.colRight.appendChild(m.dnsButtonHolder)
+        m.rightColFocus = m.dnsButtonHolder
+        m.dnsButtonHolder.observeField("itemSelected", "observeDns")
+    end if 
+
+    m.dnsButtonHolder.buttonComponents = [dnsButton]
+end sub
+
+sub observeDns(event as Object)
+    print event.getData()
 end sub
