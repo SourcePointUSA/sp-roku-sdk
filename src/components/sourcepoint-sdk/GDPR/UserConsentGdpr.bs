@@ -76,8 +76,8 @@ function getConsentedCategories() as Object
             if categories[categoryId].enabled = true then
                 consentedCat = {
                     consent: true,
-                    legInt: false,
-                    iabId: categories[categoryId].iabId,
+                    "legInt": false,
+                    "iabId": categories[categoryId].iabId,
                     "type": categories[categoryId]["type"],
                     "_id": categories[categoryId]["_id"]
                 }
@@ -98,8 +98,8 @@ function getConsentedCategories() as Object
             if categories[categoryId].enabled = false and legIntCategories[categoryId].enabled = true then
                 consentedCat = {
                     consent: false,
-                    legInt: true,
-                    iabId: legIntCategories[categoryId].iabId,
+                    "legInt": true,
+                    "iabId": legIntCategories[categoryId].iabId,
                     "type": legIntCategories[categoryId]["type"],
                     "_id": legIntCategories[categoryId]["_id"]
                 }
@@ -113,7 +113,33 @@ function getConsentedCategories() as Object
 end function
 
 function getConsentedVendors() as Object
-    return []
+    consentedVendors = []
+
+    if m.top.privacyManagerViewConsent <> invalid then 
+        vendors = m.top.privacyManagerViewConsent.vendors
+
+        ' iterate through categories to find enabled cats
+        for each vendorId in vendors
+            if vendors[vendorId].enabled = true then
+                consentedVendor = {
+                    consent: true,
+                    "legInt": false,
+                    "iabId": vendors[vendorId].iabId,
+                    "vendorType": vendors[vendorId].vendorType,
+                    "_id": vendors[vendorId].vendorId
+                }
+
+                ' TODO - figure out leg int logic
+                ' if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
+                '     consentedCat.legInt = true
+                ' end if
+
+                consentedVendors.push(consentedVendor)
+            end if
+        end for
+    end if
+
+    return consentedVendors
 end function
 
 function getSaveAndExitVariables() as Object
