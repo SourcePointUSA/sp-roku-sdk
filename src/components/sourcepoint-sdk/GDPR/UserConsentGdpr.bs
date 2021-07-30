@@ -6,54 +6,45 @@ sub init()
     m.top.observeField("rejectLiCategory", "rejectLiCategory")
     m.top.observeField("rejectVendor", "rejectVendor")
 
-    m.acceptedCategories = []
-    m.acceptedVendors = []
     m.legIntCategories = []
 end sub
 
-' TODO - do we need to update vendors that need this category?
 sub acceptCategory(event as Object)
     updatePmvConsent("categories", event.getData(), true)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 sub acceptLiCategory(event as Object)
     updatePmvConsent("legIntCategories", event.getData(), true)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 sub acceptVendor(event as Object)
     updatePmvConsent("vendors", event.getData(), true)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 sub rejectCategory(event as Object)
     updatePmvConsent("categories", event.getData(), false)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 sub rejectLiCategory(event as Object)
     updatePmvConsent("legIntCategories", event.getData(), false)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 sub rejectVendor(event as Object)
     updatePmvConsent("vendors", event.getData(), false)
 
     fireConsentChange()
 end sub
 
-' TODO - update this to do the same as acceptCategory
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
     ' this is a no-op for GDPR, "enabled" comes with the data
     ' we do want to ingest this data so we can update it
@@ -74,7 +65,51 @@ sub fireConsentChange()
 end sub
 
 function getConsentedCategories() as Object
-    return []
+    consentedCategories = []
+
+    if m.top.privacyManagerViewConsent <> invalid then 
+        categories = m.top.privacyManagerViewConsent.categories
+        legIntCategories = m.top.privacyManagerViewConsent.legIntCategories
+
+        ' iterate through categories to find enabled cats
+        for each categoryId in categories
+            if categories[categoryId].enabled = true then
+                consentedCat = {
+                    consent: true,
+                    legInt: false,
+                    iabId: categories[categoryId].iabId,
+                    "type": categories[categoryId]["type"],
+                    "_id": categories[categoryId]["_id"]
+                }
+
+                ' if this category is also leg int enabled, say so
+                if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
+                    consentedCat.legInt = true
+                end if
+
+                consentedCategories.push(consentedCat)
+            end if
+        end for
+
+        ' iterate through leg int categories to find enabled cats
+        for each categoryId in legIntCategories
+            ' we already got all enabled categories
+            ' we only missed disabled categories where leg int is enabled, so grab those
+            if categories[categoryId].enabled = false and legIntCategories[categoryId].enabled = true then
+                consentedCat = {
+                    consent: false,
+                    legInt: true,
+                    iabId: legIntCategories[categoryId].iabId,
+                    "type": legIntCategories[categoryId]["type"],
+                    "_id": legIntCategories[categoryId]["_id"]
+                }
+
+                consentedCategories.push(consentedCat)
+            end if
+        end for
+    end if 
+
+    return consentedCategories
 end function
 
 function getConsentedVendors() as Object
