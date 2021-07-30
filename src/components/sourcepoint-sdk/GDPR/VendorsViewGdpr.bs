@@ -48,7 +48,7 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["button_nav_back"])
+    renderNav(["accept_all", "save_and_exit"])
 
     ' TODO add loader to the right col until it is rendered
 
