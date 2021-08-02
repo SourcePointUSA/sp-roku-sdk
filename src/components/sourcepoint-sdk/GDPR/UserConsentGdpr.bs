@@ -156,6 +156,49 @@ sub updatePmvConsent(categoryType as String, categoryId as String, enabled as Bo
     pmvConsent = m.top.privacyManagerViewConsent
     if pmvConsent[categoryType] <> invalid and pmvConsent[categoryType][categoryId] <> invalid then
         pmvConsent[categoryType][categoryId].enabled = enabled
+
+        if categoryType = "categories" or categoryType = "legIntCategories" then
+            ' Toggle on or off vendors 
+            cat = pmvConsent[categoryType][categoryId]
+            ' get correct vendors
+            vendors = categoryType = "categories" ? cat.requiringConsentVendors : cat.legIntVendors
+
+            ' for each vendor update their category data in grants
+            ' update their vendorGrant based on that
+            ' update their enabled based on the vendorGrant
+            for each v in vendors
+                if v.vendorId <> invalid then
+                    if m.grants[v.vendorId] = invalid then
+                        ' create grant data if it doesn't exist
+                        m.grants[v.vendorId] = {
+                            vendorGrant: false,
+                            purposeGrants: {}
+                        }
+                    end if
+
+                    ' update purpose grant for this category
+                    m.grants[v.vendorId].purposeGrants[categoryId] = enabled
+
+                    ' update vendorGrant based on whether any categories are enabled
+                    ' we can skip this if "enabled" matches vendorGrant
+                    ' ie , enabling a category for an enabled vendor will not change vendorGrant,
+                    ' disabling a category for a disabled vendor will not change vendorGrant
+                    if enabled <> m.grants[v.vendorId].vendorGrant then 
+                        vendorGrant = false
+                        for each c in m.grants[v.vendorId].purposeGrants
+                            if m.grants[v.vendorId].purposeGrants[c] = true then
+                                vendorGrant = true
+                                exit for
+                            end if
+                        end for
+
+                        m.grants[v.vendorId].vendorGrant = vendorGrant
+                        pmvConsent.vendors[v.vendorId].enabled = vendorGrant
+                    end if
+                end if
+            end for
+        end if
+
         m.top.privacyManagerViewConsent = pmvConsent
     end if
 end sub
