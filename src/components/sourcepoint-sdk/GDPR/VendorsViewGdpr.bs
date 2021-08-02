@@ -96,6 +96,7 @@ sub renderRightCol()
         if m.vendorListLi = invalid then
             m.vendorListLi = createObject("roSGNode", "SpButtonList")
             m.vendorListLi.width = m.colRightWidth
+            m.vendorListLi.visible = false
             
             m.vendorListTarget.appendChild(m.vendorListLi)
             m.vendorLists["right"] = m.vendorListLi
