@@ -207,13 +207,15 @@ sub updatePmvConsent(categoryType as String, categoryId as String, enabled as Bo
                     vendorGrant = true
                     vendorEnabled = false
                     for each c in grants[v.vendorId].purposeGrants
+                        purposeGrant = grants[v.vendorId].purposeGrants[c]
                         ' if the purposeGrant is enabled for this vendor
-                        ' and that category is enabled in this category type
+                        ' AND that category is enabled in this category type (consent or LI)
                         ' then this vendor is enabled
-                        if grants[v.vendorId].purposeGrants[c] = true and pmvConsent[categoryType][c] <> invalid and pmvConsent[categoryType][c].enabled = true then
+                        if purposeGrant  = true and pmvConsent[categoryType] <> invalid and pmvConsent[categoryType][c] <> invalid and pmvConsent[categoryType][c].enabled = true then
                             vendorEnabled = true
                         end if
-                        if grants[v.vendorId].purposeGrants[c] = false then
+                        ' if any purposeGrant is false, then the vendorGrant is false
+                        if purposeGrant = false then
                             vendorGrant = false
                         end if
                     end for
