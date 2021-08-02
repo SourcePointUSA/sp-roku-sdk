@@ -20,7 +20,7 @@ sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
     for i = 0 to m.navButtons.count() step 1 
-        if (m.vendorData.__enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.__enabled = false and m.navButtons[i] = "button_off") then
+        if (m.vendorData.enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.enabled = false and m.navButtons[i] = "button_off") then
             m.nav.focusButton = i
             exit for
         end if

@@ -41,11 +41,7 @@ sub renderRightCol(event as Object)
         renderNav(m.navButtons)
     end if
 
-    if m.categoryData.categoryType = "legInt" then
-        enabled = m.categoryData.__enabled_li
-    else
-        enabled = m.categoryData.__enabled
-    end if
+    enabled = m.categoryData.enabled
 
     for i = 0 to m.navButtons.count() step 1 
         if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
