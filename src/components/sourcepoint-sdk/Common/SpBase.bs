@@ -25,6 +25,7 @@ sub init()
         "CategoriesSlider": "slider_categories",
         "CategoriesSubDescriptionText": "text_category_sub_description",
         "CategoryButton": "button_category",
+        "CategoryButtons": "button_categories"
         "FeaturesHeader": "text_features_header",
         "FeaturesDefinition": "text_features_def",
         "Header": "text_header",

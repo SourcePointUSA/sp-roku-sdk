@@ -113,7 +113,6 @@ function createViewComponent(componentName, viewId, viewData, viewDataExtra) as 
     viewComponent.userConsentNode = m.userConsentNode
     viewComponent.message = m.message.message
     viewComponent.messageMetadata = m.message.messageMetadata
-    ' TODO add categories here as well
     viewComponent.view = viewData
     viewComponent.viewDataExtra = viewDataExtra
 

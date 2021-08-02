@@ -22,6 +22,30 @@ sub renderView(event as Object)
     m.nav.setFocus(true)
 end sub
 
+sub renderCategories(categories)
+    categoryButtons = []
+    for each c in categories
+        buttonSettings = {
+            carat: "",
+            settings: {
+                text: c.name
+            }
+        }
+        buttonSettings.settings.append(m.components.button_categories.settings)
+        categoryButtons.push(buttonSettings)
+    end for
+
+    if m.categoryList = invalid then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
+        
+        m.colRight.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+    end if
+
+    m.categoryList.buttonComponents = categoryButtons
+end sub
+
 sub renderRightCol()
     description = createObject("roSGNode", "SpNativeText")
     description.settings = m.components.text_publisher_description.settings
@@ -29,4 +53,9 @@ sub renderRightCol()
     description.textComponent.width = m.colRightWidth
     
     m.colRight.appendChild(description)
+
+    if m.top.message <> invalid and m.top.message.categories <> invalid then
+        renderCategories(m.top.message.categories)
+    end if
 end sub
+
