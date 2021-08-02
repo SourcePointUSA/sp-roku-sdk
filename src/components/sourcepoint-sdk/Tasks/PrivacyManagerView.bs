@@ -44,7 +44,9 @@ sub privacyManagerView()
     if response <> invalid then
         data = {
             categories: {},
-            vendors: {}
+            legIntCategories: {},
+            vendors: {},
+            legIntVendors: {}
         }
 
         if response.categories <> invalid then
@@ -54,7 +56,6 @@ sub privacyManagerView()
         end if
 
         if response.legIntCategories <> invalid then
-            data.legIntCategories = {}
             for each category in response.legIntCategories
                 data.legIntCategories[category._id] = category
             end for
@@ -67,6 +68,16 @@ sub privacyManagerView()
                     key = "vendorId"
                 end if
                 data.vendors[vendor[key]] = vendor
+            end for
+        end if 
+
+        if response.legIntVendors <> invalid then
+            for each vendor in response.legIntVendors
+                key = "_id"
+                if m.top.messageCategory = 1 then
+                    key = "vendorId"
+                end if
+                data.legIntVendors[vendor[key]] = vendor
             end for
         end if 
 

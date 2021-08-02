@@ -43,6 +43,7 @@ sub init()
         "VendorButton": "button_vendor",
         "VendorsHeader": "text_vendor_header",
         "VendorLongButton": "button_vendor",
+        "VendorsSlider": "slider_vendors"
     }
     m.components = {}
     ' m.navViewMap : maps nav button IDs to views they should link to
