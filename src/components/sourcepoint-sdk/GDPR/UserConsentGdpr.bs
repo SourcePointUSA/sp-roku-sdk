@@ -2,9 +2,12 @@ sub init()
     m.top.observeField("acceptCategory", "acceptCategory")
     m.top.observeField("acceptLiCategory", "acceptLiCategory")
     m.top.observeField("acceptVendor", "acceptVendor")
+    m.top.observeField("acceptLiVendor", "acceptLiVendor")
     m.top.observeField("rejectCategory", "rejectCategory")
     m.top.observeField("rejectLiCategory", "rejectLiCategory")
     m.top.observeField("rejectVendor", "rejectVendor")
+    m.top.observeField("rejectLiVendor", "rejectLiVendor")
+
     m.top.observeField("userConsent", "ingestConsent")
 
     m.legIntCategories = []
@@ -28,6 +31,12 @@ sub acceptVendor(event as Object)
     fireConsentChange()
 end sub
 
+sub acceptLiVendor(event as Object)
+    updatePmvConsent("legIntVendors", event.getData(), true)
+
+    fireConsentChange()
+end sub
+
 sub rejectCategory(event as Object)
     updatePmvConsent("categories", event.getData(), false)
 
@@ -42,6 +51,12 @@ end sub
 
 sub rejectVendor(event as Object)
     updatePmvConsent("vendors", event.getData(), false)
+
+    fireConsentChange()
+end sub
+
+sub rejectLiVendor(event as Object)
+    updatePmvConsent("legIntVendors", event.getData(), false)
 
     fireConsentChange()
 end sub
