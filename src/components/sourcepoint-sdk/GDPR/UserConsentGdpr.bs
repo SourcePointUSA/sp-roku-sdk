@@ -117,7 +117,7 @@ function getConsentedCategories() as Object
         for each categoryId in legIntCategories
             ' we already got all enabled categories
             ' we only missed disabled categories where leg int is enabled, so grab those
-            if categories[categoryId].enabled = false and legIntCategories[categoryId].enabled = true then
+            if categories[categoryId] <> invalid and categories[categoryId].enabled = false and legIntCategories[categoryId].enabled = true then
                 consentedCat = {
                     consent: false,
                     "legInt": true,
@@ -139,6 +139,7 @@ function getConsentedVendors() as Object
 
     if m.top.privacyManagerViewConsent <> invalid then 
         vendors = m.top.privacyManagerViewConsent.vendors
+        legIntVendors = m.top.privacyManagerViewConsent.legIntVendors
 
         ' iterate through categories to find enabled cats
         for each vendorId in vendors
@@ -151,10 +152,26 @@ function getConsentedVendors() as Object
                     "_id": vendors[vendorId].vendorId
                 }
 
-                ' TODO - figure out leg int logic
-                ' if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
-                '     consentedCat.legInt = true
-                ' end if
+                if legIntVendors[vendorId] <> invalid and legIntVendors[vendorId].enabled = true then
+                    consentedVendor.legInt = true
+                end if
+
+                consentedVendors.push(consentedVendor)
+            end if
+        end for
+
+        ' iterate through leg int categories to find enabled cats
+        for each vendorId in legIntVendors
+            ' we already got all enabled categories
+            ' we only missed disabled categories where leg int is enabled, so grab those
+            if vendors[vendorId] <> invalid and vendors[vendorId].enabled = false and legIntVendors[vendorId].enabled = true then
+                consentedVendor = {
+                    consent: false,
+                    "legInt": true,
+                    "iabId": legIntVendors[vendorId].iabId,
+                    "vendorType": legIntVendors[vendorId].vendorType,
+                    "_id": legIntVendors[vendorId].vendorId
+                }
 
                 consentedVendors.push(consentedVendor)
             end if
