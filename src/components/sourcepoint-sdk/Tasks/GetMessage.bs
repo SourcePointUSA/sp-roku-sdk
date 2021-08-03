@@ -16,6 +16,6 @@ sub getMessage()
 
     if response <> invalid then
         ' TODO set message data
-        print response
+        m.top.message = response
     end if 
 end sub
