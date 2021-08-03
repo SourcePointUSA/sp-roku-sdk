@@ -19,13 +19,7 @@ class SourcepointSdk
         pathPOST: "/"
     }
 
-    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = {} as Object, optional = {} as Object)
-        ' create screen to 
-        m.screen = CreateObject("roSGScreen")
-        m.port = CreateObject("roMessagePort")
-        m.screen.setMessagePort(m.port)
-        m.scene = m.screen.CreateScene("SpScene")
-
+    sub new(accountId as Integer, propertyHref as String, legislationsEnabled = {} as Object, optional = {} as Object, showMessages = true as boolean)
         m.accountId = accountId
         m.propertyHref = propertyHref
         m.legislationsEnabled = legislationsEnabled
@@ -47,9 +41,7 @@ class SourcepointSdk
 
         m.requestUUID = m.makeRequestUUID()
 
-        m.global = m.screen.getGlobalNode()
-        m.global.addField("config", "assocarray", true)
-        m.global.config = {
+        m.globalConfig = {
             "accountId": m.accountId,
             "authId": m.authId,
             "baseEndpoint" : m.constants.baseEndpoint,
@@ -59,29 +51,36 @@ class SourcepointSdk
         }
 
         ' fetch messages and user consent, and messages
-        m.getUserConsent()
+        if showMessages = true then
+            m.getUserConsent()
+        end if
+    end sub
 
-        while(true)
-            msg = wait(0, m.port)
-            msgType = type(msg)
+    private sub createScreen()
+         ' create screen
+         m.screen = CreateObject("roSGScreen")
+         m.port = CreateObject("roMessagePort")
+         m.screen.setMessagePort(m.port)
+         m.scene = m.screen.CreateScene("SpScene")
 
-            if msgType = "roSGNodeEvent" and msg.getField() = "userConsent" then
-                m.userConsent = msg.getData()
-                m.screen.close()
-            end if
+         m.global = m.screen.getGlobalNode()
+         m.global.addField("config", "assocarray", true)
+         m.global.config = m.globalConfig
+    end sub
 
-            if msgType = "roSGScreenEvent"
-            if msg.isScreenClosed() then return
-            end if
-        end while
+    private sub closeScreen()
+        m.screen.close()
     end sub
 
     public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
             return m.userConsent
-        endif 
+        endif
 
-        getMessageTask = createObject("roSGNode", "GetMessage")
+        ' create screen before we make our task
+        m.createScreen()
+
+        getMessageTask = createObject("roSGNode", "GetMessages")
         getMessageTask.url = addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
         getMessageTask.clientMMSOrigin = m.constants.baseEndpoint
 
@@ -115,14 +114,39 @@ class SourcepointSdk
         return m.userConsent
     end function
 
+    public sub openPrivacyManager(legislation as string, messageId as integer)
+        ' create screen before we make our task
+        m.createScreen()
+
+        port = CreateObject("roMessagePort")
+
+        getMessageTask = createObject("roSGNode", "GetMessage")
+        getMessageTask.legislation = legislation
+        getMessageTask.messageId = messageId
+        getMessageTask.observeFieldScoped("state", port)
+
+        getMessageTask.control = "RUN"
+
+        while true
+            msg = wait(1000, port)
+            if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
+                m.showMessages([getMessageTask.message])
+                exit while
+            end if
+        end while
+
+        getMessageTask.unobserveFieldScoped("state")
+    end sub
+
     private function makeRequestUUID() as string
+        ' TODO implement this
         return "test"
     end function
 
     private sub showMessages(campaigns as Object)
         ' close screen and return if we have no messages
         if campaigns = invalid or campaigns.Count() = 0 then
-            m.screen.close()
+            m.closeScreen()
             return
         end if
 
@@ -130,12 +154,29 @@ class SourcepointSdk
 
         m.screen.show()
         m.scene.observeFieldScoped("userConsent", m.port)
+
+        while(true)
+            msg = wait(0, m.port)
+            msgType = type(msg)
+
+            if msgType = "roSGNodeEvent" and msg.getField() = "userConsent" then
+                m.userConsent = msg.getData()
+                m.screen.close()
+            end if
+
+            if msgType = "roSGScreenEvent"
+            if msg.isScreenClosed() then return
+            end if
+        end while
     end sub
 
     private sub setPropertyId(propertyId as Integer)
         m.propertyId = propertyId
-        globalConfig = m.global.config
-        globalConfig.propertyId = propertyId
-        m.global.config = globalConfig
+        m.globalConfig.propertyId = propertyId
+        
+        ' update global config if it has been created
+        if m.global.config <> invalid then
+            m.global.config = m.globalConfig
+        end if
     end sub
 end class
