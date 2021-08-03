@@ -18,10 +18,11 @@ sub observeHomeNav(event as Object)
     ' run logic
     print "setting run campaign logic"
     m.top.run_campaign_logic = true
-  else if index = 1 then
+  else if index = 2 then
     ' clear user data
     setLocalState("")
-  else if index = 2 then
+  else if index = 1 then
     ' open pm
+    m.top.open_pm = true
   end if
 end sub

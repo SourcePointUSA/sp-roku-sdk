@@ -6,6 +6,7 @@
 
   <interface>
     <field id="run_campaign_logic" type="boolean" alwaysNotify="true"/>
+    <field id="open_pm" type="boolean" alwaysNotify="true"/>
   </interface>
 
   <script uri="./Home.bs" />
