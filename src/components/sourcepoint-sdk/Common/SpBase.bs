@@ -86,6 +86,8 @@ sub observeNav(event as Object)
 
     if m.navViewMap <> invalid and m.navViewMap[selectedButton.id] <> invalid then
         changeView(m.navViewMap[selectedButton.id])
+    else if selectedButton.id = "button_nav_back" then
+        changeView("_go_back_")
     else
         consentTask = createObject("roSGNode", "ConsentTask")
         consentTask.messageCategory = m.top.messageMetadata.categoryId
