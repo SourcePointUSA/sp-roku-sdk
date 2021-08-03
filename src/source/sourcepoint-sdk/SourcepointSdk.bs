@@ -81,7 +81,7 @@ class SourcepointSdk
             return m.userConsent
         endif 
 
-        getMessageTask = createObject("roSGNode", "GetMessage")
+        getMessageTask = createObject("roSGNode", "GetMessages")
         getMessageTask.url = addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
         getMessageTask.clientMMSOrigin = m.constants.baseEndpoint
 
