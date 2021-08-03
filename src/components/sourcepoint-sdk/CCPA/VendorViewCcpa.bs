@@ -1,7 +1,7 @@
 sub init()
     m.top.observeField("viewDataExtra", "renderView")
 
-    m.navButtons = ["button_on", "button_off"]
+    m.navButtons = ["button_nav_back"]
 end sub
 
 sub observeNav(event as Object)
@@ -19,12 +19,13 @@ end sub
 sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
-    for i = 0 to m.navButtons.count() step 1 
-        if (m.vendorData.__enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.__enabled = false and m.navButtons[i] = "button_off") then
-            m.nav.focusButton = i
-            exit for
-        end if
-    end for
+    ' Supports button_on and button_off
+    ' for i = 0 to m.navButtons.count() step 1 
+    '     if (m.vendorData.enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.enabled = false and m.navButtons[i] = "button_off") then
+    '         m.nav.focusButton = i
+    '         exit for
+    '     end if
+    ' end for
     m.nav.setFocus(true)
 
     if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then

@@ -16,7 +16,7 @@ sub renderRightCol()
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
-            on: m.top.privacyManagerViewData.vendors[vendorId]["__enabled"]
+            ' on: m.top.privacyManagerViewData.vendors[vendorId].enabled
             settings: {} 
         } 
         buttonSettings.settings.append(m.components.button_vendor.settings)
