@@ -6,6 +6,7 @@ sub init()
     }
 
     m.top.observeField("view", "renderView")
+    m.top.observeField("userConsentNode", "observedConsentChanged")
 end sub
 
 sub renderView(event as Object)
@@ -23,16 +24,18 @@ sub renderView(event as Object)
 end sub
 
 sub renderRightCol()
-    description = createObject("roSGNode", "SpNativeText")
-    description.settings = m.components.text_publisher_description.settings
-    description.textComponent.wrap = true
-    description.textComponent.width = m.colRightWidth
-    
-    m.colRight.appendChild(description)
+    if m.description = invalid then
+        m.description = createObject("roSGNode", "SpNativeText")
+        m.description.settings = m.components.text_publisher_description.settings
+        m.description.textComponent.wrap = true
+        m.description.textComponent.width = m.colRightWidth
+        
+        m.colRight.appendChild(m.description)
+    end if
 
     dnsButton = {
         carat: "",
-        on: false,
+        on: m.top.userConsentNode.doNotSell,
         settings: {}
     }
 
@@ -51,6 +54,14 @@ sub renderRightCol()
     m.dnsButtonHolder.buttonComponents = [dnsButton]
 end sub
 
+sub observedConsentChanged()
+    m.top.userConsentNode.observeField("consentChanged", "renderRightCol")
+end sub
+
 sub observeDns(event as Object)
-    print event.getData()
+    if m.top.userConsentNode.doNotSell = true then
+        m.top.userConsentNode.doNotSell = false
+    else
+        m.top.userConsentNode.doNotSell = true
+    end if
 end sub

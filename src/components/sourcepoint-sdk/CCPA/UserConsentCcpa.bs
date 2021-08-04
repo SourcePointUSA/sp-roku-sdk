@@ -4,6 +4,7 @@ sub init()
     m.top.observeField("acceptVendor", "acceptVendor")
     m.top.observeField("rejectCategory", "rejectCategory")
     m.top.observeField("rejectVendor", "rejectVendor")
+    m.top.observeField("doNotSell", "fireConsentChange")
 
     m.rejectedCategories = []
     m.rejectedVendors = []
@@ -35,6 +36,9 @@ sub acceptVendor(event as Object)
 end sub
 
 function addConsentToPmvData(privacyManagerViewData as Object) as Object
+    if privacyManagerViewData = invalid then
+        return {}
+    end if
     for each categoryId in privacyManagerViewData.categories
         privacyManagerViewData.categories[categoryId].enabled = true
     end for
@@ -61,6 +65,9 @@ end function
 sub ingestConsent(event as Object)
     userConsent = event.getData()
 
+    if userConsent.status <> "consentedAll" and userConsent.status <> "rejectedNone" then
+        m.top.doNotSell = true
+    end if 
     if userConsent.rejectedCategories <> invalid then
         m.rejectedCategories = userConsent.rejectedCategories
     end if
