@@ -111,6 +111,7 @@ class SourcepointSdk
         ' always call show messages, it will show or close our screen
         m.showMessages(getMessageTask.campaigns)
 
+        ' TODO - format userConsent here
         return m.userConsent
     end function
 
@@ -130,7 +131,12 @@ class SourcepointSdk
         while true
             msg = wait(1000, port)
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
-                m.showMessages([getMessageTask.message])
+                message = getMessageTask.message
+                ' set user consent if we have it (which we should)
+                if m.userConsent <> invalid and m.userConsent[legislation] <> invalid then
+                    message.userConsent = m.userConsent[legislation]
+                end if
+                m.showMessages([message])
                 exit while
             end if
         end while

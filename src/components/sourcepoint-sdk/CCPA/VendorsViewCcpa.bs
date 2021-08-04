@@ -16,7 +16,7 @@ sub renderRightCol()
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
-            on: m.top.privacyManagerViewData.vendors[vendorId]["__enabled"]
+            ' on: m.top.privacyManagerViewData.vendors[vendorId].enabled
             settings: {} 
         } 
         buttonSettings.settings.append(m.components.button_vendor.settings)
@@ -48,7 +48,7 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["accept_all", "save_and_exit"])
+    renderNav(["button_nav_back"])
 
     ' TODO add loader to the right col until it is rendered
 

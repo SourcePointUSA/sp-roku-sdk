@@ -97,11 +97,15 @@ sub render(event as Object)
 
     if m.rendered = false then
         ' set up focus bitmap and focus footprint bitmap based on settings
-        if buttonSettings <> invalid and buttonSettings.style.onFocusBackgroundColor <> invalid then
-            m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
-            m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
-            m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
-            m.top.focusFootprintBlendColor = "0xA9A9A9FF"
+        if buttonSettings <> invalid and buttonSettings.style <> invalid then 
+            if buttonSettings.style.onFocusBackgroundColor <> invalid then
+                m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+                m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onFocusBackgroundColor)
+            end if
+            if buttonSettings.style.onUnfocusBackgroundColor <> invalid then
+                m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+                m.top.focusFootprintBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
+            end if
         end if 
 
         ' update focused nodes so we render our SpHeaderButtonList components correctly

@@ -26,7 +26,7 @@ sub render(event as Object)
 
     ' defaults
     m.textColor = "0x000000FF"
-    m.focusedTextColor = "0xFFFFFFFF"
+    m.focusedTextColor = "0x000000FF"
     m.unFocusBackgroundColor = "0xFFFFFFFF"
     
     if settings.style <> invalid and settings.style <> invalid then
