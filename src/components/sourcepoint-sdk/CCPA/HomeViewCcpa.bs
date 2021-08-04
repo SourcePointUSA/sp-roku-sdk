@@ -20,7 +20,7 @@ sub renderView(event as Object)
     renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
     renderRightCol()
 
-    m.nav.setFocus(true)
+    setFocus(m.nav)
 end sub
 
 sub renderRightCol()

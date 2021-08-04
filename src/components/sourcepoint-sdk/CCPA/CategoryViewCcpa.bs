@@ -27,7 +27,7 @@ sub renderRightCol(event as Object)
     '     end if
     ' end for
 
-    m.nav.setFocus(true)
+    setFocus(m.nav)
     m.top.findNode("screen-title").text = m.categoryData.name
 
     ' figure out which type of vendor this is

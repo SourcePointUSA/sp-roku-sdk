@@ -48,5 +48,5 @@ sub renderView(event as Object)
 
     ' TODO add loader to the right col until it is rendered
 
-    m.nav.setFocus(true)
+    setFocus(m.nav)
 end sub

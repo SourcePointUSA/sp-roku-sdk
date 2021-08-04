@@ -26,7 +26,7 @@ sub renderRightCol()
     '         exit for
     '     end if
     ' end for
-    m.nav.setFocus(true)
+    setFocus(m.nav)
 
     if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")

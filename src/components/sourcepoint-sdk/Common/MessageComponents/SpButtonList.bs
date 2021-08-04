@@ -19,7 +19,8 @@ end sub
 
 sub render(event as Object)
     buttons = event.getData()
-
+    startFocus = false
+    
     buttonHeight = scalePixelDimension(64)
     width = 100
     if m.top.width <> invalid then
@@ -34,6 +35,9 @@ sub render(event as Object)
     for each button in buttons
         buttonSettings = button.settings
 
+        if buttonSettings.startFocus = true then
+            startFocus = true
+        end if
         if button.id = invalid then
             button.id = button.settings.text
         end if
@@ -81,6 +85,10 @@ sub render(event as Object)
         end if 
 
         m.top.content = m.buttonNodes
+
+        if startFocus = true then
+            m.top.setFocus(true)
+        end if
     end if
 
     m.rendered = true
