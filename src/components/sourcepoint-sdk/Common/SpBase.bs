@@ -131,17 +131,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
     return false
 end function
 
-sub renderBase()
-    if m.components.view.settings.style.backgroundColor <> invalid then
-        spScene = m.top.getScene()
-        spScene.backgroundUri = ""
-        spScene.backgroundColor = colorConvert(m.components.view.settings.style.backgroundColor)
-    end if 
-end sub
-
 sub renderLogo()
-    renderBase()
-
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
         m.top.findNode("screen-title").textComponent.horizOrigin = "center"
