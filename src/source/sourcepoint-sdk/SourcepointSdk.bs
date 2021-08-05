@@ -116,6 +116,10 @@ class SourcepointSdk
     end function
 
     public sub openPrivacyManager(legislation as string, messageId as integer)
+        if m.userConsent = invalid then
+            throw "Run the user campaign by calling getUserConsent() before calling openPrivacyManager()"
+        end if
+
         ' create screen before we make our task
         m.createScreen()
 

@@ -1,3 +1,5 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
 sub init()
     m.top.observeField("changeView", "changeView")
     m.top.observeField("message", "showMessage")
@@ -29,6 +31,8 @@ sub goBack()
     else
         m.top.changeView = "HomeView"
     end if
+
+    setSceneBgColor()
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
@@ -101,6 +105,8 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         m.top.done = true
         m.top.error = "Invalid message JSON"
     end if
+
+    setSceneBgColor()
 end sub
 
 function createViewComponent(componentName, viewId, viewData, viewDataExtra) as Object
@@ -128,3 +134,11 @@ function getViewData(view as String) as Object
 
     return invalid
 end function
+
+sub setSceneBgColor()
+    if m.currentView.view.settings.style.backgroundColor <> invalid then
+        spScene = m.top.getScene()
+        spScene.backgroundUri = ""
+        spScene.backgroundColor = colorConvert(m.currentView.view.settings.style.backgroundColor)
+    end if 
+end sub

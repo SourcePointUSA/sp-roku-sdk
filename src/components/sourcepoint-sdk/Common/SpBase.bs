@@ -48,6 +48,7 @@ sub init()
         "VendorsSlider": "slider_vendors"
     }
     m.components = {}
+    m.currentlyFocusedChild = invalid
     ' m.navViewMap : maps nav button IDs to views they should link to
     ' m.componentIdMap : fills in m.components mapping JSON id to our IDs
     ' m.rightColFocus : what should focus in the right column when the right arrow is pressed
@@ -143,17 +144,7 @@ function _onKeyEvent(key as String, press as Boolean) as boolean
     return false
 end function
 
-sub renderBase()
-    if m.components.view.settings.style.backgroundColor <> invalid then
-        spScene = m.top.getScene()
-        spScene.backgroundUri = ""
-        spScene.backgroundColor = colorConvert(m.components.view.settings.style.backgroundColor)
-    end if 
-end sub
-
 sub renderLogo()
-    renderBase()
-
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
     end if
@@ -194,6 +185,14 @@ sub renderNav(buttonIds)
     m.previouslyFocusedChild = m.nav
 end sub
 
+' Sets focus if none has been set yet
+' allows startFocus to be respected
+sub setFocus(node as Object)
+    if m.currentlyFocusedChild = invalid then
+        node.setFocus(true)
+    end if    
+end sub
+
 sub setPmvData(event = invalid as Object)
     if event = invalid or m.privacyManagerViewTask.state = "stop" then
         m.top.privacyManagerViewData = m.privacyManagerViewTask.data
@@ -206,13 +205,17 @@ sub setConsent(event as Object)
     spMessage.done = true
 end sub
 
-' Focus previously focused element if this view was just focused
 sub trackFocusedChild(event as Object)
     focusedChild = event.getData()
 
+    ' Focus previously focused element if this view was just focused
     if focusedChild <> invalid and m.previouslyFocusedChild <> invalid then
         if m.top.hasFocus() = true then
             m.previouslyFocusedChild.setFocus(true)
         end if
+    end if
+    ' Track currently focused element
+    if focusedChild <> invalid and m.top.hasFocus() = false then
+        m.currentlyFocusedChild = focusedChild
     end if
 end sub
