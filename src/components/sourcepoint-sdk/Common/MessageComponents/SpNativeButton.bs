@@ -9,6 +9,7 @@ sub init()
     m.top.showFocusFootprint = true
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
+    m.top.height = 50
 
     m.focusBackgroundColor = "0xFFFFFFFF"
     m.unFocusBackgroundColor = "0xFFFFFFFF"
@@ -58,6 +59,8 @@ sub render(event as Object)
                 ' this turns our footprint the right color 
                 child.blendColor = m.unFocusBackgroundColor
             end if
+        else if child.subtype() = "Label" then
+            m.top.buttonLabel = child
         end if
     end for
 

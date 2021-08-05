@@ -1,7 +1,7 @@
 sub init()
     m.top.observeField("view", "renderView")
     m.top.observeField("viewDataExtra", "renderRightCol")
-    m.navButtons = ["button_nav_back"]
+    m.navButtons = []
 end sub
 
 sub observeNav(event as Object)
@@ -27,7 +27,7 @@ sub renderRightCol(event as Object)
     '     end if
     ' end for
 
-    setFocus(m.nav)
+    setFocus(m.back_button)
     m.top.findNode("screen-title").text = m.categoryData.name
 
     ' figure out which type of vendor this is

@@ -33,7 +33,9 @@ sub init()
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
         "PublisherDescription": "text_publisher_description",
-        "PurposesHeader": "text_purposes_header"
+        "PurposesHeader": "text_purposes_header",
+        "RejectAllButton": "reject_all",
+        "SaveAndExitButton": "save_and_exit",
         "SaveButton": "save_and_exit",
         "VendorButton": "button_vendor",
         "VendorsHeader": "text_vendor_header",
@@ -82,6 +84,10 @@ sub mapComponents(view as object)
     end if
 end sub
 
+sub observeBackButton()
+    changeView("_go_back_")
+end sub
+
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
@@ -119,18 +125,51 @@ sub observeNav(event as Object)
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
-    if key = "left" and press = true and m.nav <> invalid then
-        m.nav.setFocus(true)
-        m.previouslyFocusedChild = m.nav
-        return true
-    else if key = "right" and press = true and m.rightColFocus <> invalid then
-        m.rightColFocus.setFocus(true)
-        m.previouslyFocusedChild = m.rightColFocus
-        return true
+    newFocus = invalid
+
+    if key = "left" and press = true then
+        if m.nav = invalid or m.nav.isInFocusChain() = true then
+            ' if we're focused on the nav go to the back button
+            newFocus = m.back_button
+        else 
+            ' else we're focused on the right col go to the nav
+            newFocus = m.nav
+        end if
+    else if key = "right" and press = true then
+        if m.back_button <> invalid and m.back_button.isInFocusChain() then
+            ' if we're focused on the back button, go to nav
+            newFocus = m.nav
+        end if
+        if newFocus = invalid then
+            ' if the back button doesn't exist, we're focused on the nav - go to right col
+            ' if the nav doesn't exist, go to right col
+            newFocus = m.rightColFocus
+        end if
     end if 
+
+    if newFocus <> invalid then
+        newFocus.setFocus(true)
+        m.previouslyFocusedChild = newFocus
+        return true
+    end if
 
     return false
 end function
+
+sub renderBackButton()
+    if m.back_button = invalid and m.components.button_nav_back <> invalid then
+        m.back_button = createObject("roSGNode", "SpNativeButton")
+        m.back_button.settings = m.components.button_nav_back.settings
+        m.back_button.id = m.components.button_nav_back.id
+
+        m.back_button.observeField("buttonSelected", "observeBackButton")
+        m.back_button.minWidth = 50
+
+        print m.back_button
+
+        m.top.appendChild(m.back_button)
+    end if
+end sub
 
 sub renderLogo()
     if m.components.text_header <> invalid then
@@ -141,11 +180,13 @@ sub renderLogo()
     if m.components.image_logo <> invalid then
         component = createObject("roSGNode", "Poster")
         component.id = "image_logo"
+        component.loadDisplayMode = "limitSize"
+        component.loadHeight = 540
 
-        if m.components.image_logo.settings.style.width <> invalid then
-            component.loadDisplayMode = "limitSize"
-            component.loadWidth = m.components.image_logo.settings.style.width
-            component.loadHeight = 540
+        if m.components.image_logo.settings.style.width <> invalid and m.components.image_logo.settings.style.width.value then
+            component.loadWidth = m.components.image_logo.settings.style.width.value
+        else
+            component.loadWidth = 200
         end if 
 
         component.uri = m.components.image_logo.settings.src
@@ -156,29 +197,37 @@ sub renderLogo()
 end sub
 
 sub renderNav(buttonIds)
-    buttons = []
-    for each buttonId in buttonIds
-        if m.components[buttonId] <> invalid then
-            button = m.components[buttonId]
-            button.id = buttonId
-            buttons.push(button)
-        end if
-    end for
+    renderBackButton()
 
-    buttonGroup = createObject("roSGNode", "SpButtonGroup")
-    buttonGroup.buttonComponents = buttons
+    if buttonIds.count() > 0 then
+        buttons = []
+        for each buttonId in buttonIds
+            if m.components[buttonId] <> invalid then
+                button = m.components[buttonId]
+                button.id = buttonId
+                buttons.push(button)
+            end if
+        end for
 
-    m.colLeft.appendChild(buttonGroup)
-    m.nav = buttonGroup
-    m.nav.observeField("buttonSelected", "observeNav")
-    m.previouslyFocusedChild = m.nav
+        buttonGroup = createObject("roSGNode", "SpButtonGroup")
+        buttonGroup.buttonComponents = buttons
+
+        m.colLeft.appendChild(buttonGroup)
+        m.nav = buttonGroup
+        m.nav.observeField("buttonSelected", "observeNav")
+        m.previouslyFocusedChild = m.nav
+    else
+        m.previouslyFocusedChild = m.back_button
+    end if
 end sub
 
 ' Sets focus if none has been set yet
 ' allows startFocus to be respected
 sub setFocus(node as Object)
     if m.currentlyFocusedChild = invalid then
-        node.setFocus(true)
+        if node <> invalid then
+            node.setFocus(true)
+        end if
     end if    
 end sub
 
