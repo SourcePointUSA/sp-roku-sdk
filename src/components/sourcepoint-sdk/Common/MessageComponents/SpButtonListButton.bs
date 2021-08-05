@@ -29,7 +29,7 @@ sub render(event as Object)
     m.focusedTextColor = "0x000000FF"
     m.unFocusBackgroundColor = "0xFFFFFFFF"
     
-    if settings.style <> invalid and settings.style <> invalid then
+    if settings.style <> invalid then
         if settings.style.onUnfocusTextColor <> invalid then
             m.textColor = colorConvert(settings.style.onUnfocusTextColor)
         end if
@@ -64,6 +64,7 @@ sub render(event as Object)
     m.button_label.textComponent.height = content.height
     m.button_label.textComponent.width = content.width * .6
 
+    content.focused = false
     renderUpdate(content)
 end sub
 

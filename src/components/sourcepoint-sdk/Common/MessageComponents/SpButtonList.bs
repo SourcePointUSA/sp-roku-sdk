@@ -5,6 +5,7 @@ sub init()
     m.top.observeField("buttonComponents", "render")
     m.top.observeField("itemFocused", "focusButton")
     m.top.observeField("itemUnfocused", "unFocusButton")
+    m.top.observeField("focusedChild", "unFocusButtonList")
 
     ' default settings
     m.top.focusBitmapUri = ""
@@ -97,6 +98,8 @@ end sub
 sub focusButton(event as Object)
     index = event.getData()
 
+    m.lastFocusedButton = index
+
     setFocus(index, true)
 end sub
 
@@ -113,4 +116,15 @@ sub unFocusButton(event as Object)
     index = event.getData()
 
     setFocus(index, false)
+end sub
+
+sub unFocusButtonList(event as Object)
+    focusedNode = event.getData()
+
+    if focusedNode = invalid then
+        index = m.lastFocusedButton <> invalid ? m.lastFocusedButton : 0
+        if m.lastFocusedButton <> invalid then
+            setFocus(index, false)
+        end if
+    end if
 end sub

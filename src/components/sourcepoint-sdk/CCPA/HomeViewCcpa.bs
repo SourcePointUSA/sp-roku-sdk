@@ -36,9 +36,10 @@ sub renderRightCol()
     dnsButton = {
         carat: "",
         on: m.top.userConsentNode.doNotSell,
+        settings: {}
     }
 
-    dnsButton.append(m.components.button_do_not_sell)
+    dnsButton.settings.append(m.components.button_do_not_sell.settings)
     dnsButton.settings.text = dnsButton.settings.dnsText
 
     if m.dnsButtonHolder = invalid then
