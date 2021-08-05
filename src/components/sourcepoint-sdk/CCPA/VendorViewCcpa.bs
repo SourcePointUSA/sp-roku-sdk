@@ -56,19 +56,47 @@ sub renderRightCol()
     end if
 end sub
 
+sub renderPrivacyPolicyUrl()
+    if m.vendorData.policyUrl = invalid then
+        return
+    end if
+    
+    screenTitle = m.top.findNode("screen-title")
+
+    textColor = "0x000000FF"
+    if screenTitle <> invalid then
+        textColor = screenTitle.textComponent.color
+    end if
+
+    ppHeader = createObject("roSGNode", "SimpleLabel")
+    ppHeader.text = "Privacy Policy Url:"
+    ppHeader.color = textColor
+
+    ppUrl = createObject("roSGNode", "Label")
+    ppUrl.text = m.vendorData.policyUrl
+    ppUrl.wrap = true
+    ppUrl.color = textColor
+    ppUrl.width = m.colLeftWidth * .8
+
+    m.colLeft.appendChild(ppHeader)
+    m.colLeft.appendChild(ppUrl)
+end sub
+
 sub renderView(event as Object)
+    m.vendorData = event.getData()
+
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
     
     view = m.top.view
     mapComponents(view)
 
-    renderLogo()
+    renderHeader()
+    renderPrivacyPolicyUrl()
     renderNav(m.navButtons)
 
     ' TODO add loader to the right col until it is rendered
 
-    m.vendorData = event.getData()
 
     renderRightCol()
 end sub

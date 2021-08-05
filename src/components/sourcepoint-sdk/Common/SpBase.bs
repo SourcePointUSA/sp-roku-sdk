@@ -165,17 +165,19 @@ sub renderBackButton()
         m.back_button.observeField("buttonSelected", "observeBackButton")
         m.back_button.minWidth = 50
 
-        print m.back_button
-
         m.top.appendChild(m.back_button)
     end if
 end sub
 
-sub renderLogo()
+sub renderHeader()
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
         m.top.findNode("screen-title").textComponent.horizOrigin = "center"
     end if
+end sub
+
+sub renderLogo()
+    renderHeader()
 
     if m.components.image_logo <> invalid then
         component = createObject("roSGNode", "Poster")
