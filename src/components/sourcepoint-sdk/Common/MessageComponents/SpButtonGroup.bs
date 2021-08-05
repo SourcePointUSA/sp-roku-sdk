@@ -4,9 +4,6 @@ sub init()
     m.top.itemSpacings = [scalePixelDimension(10)]
     m.top.observeField("buttonComponents", "render")
     m.buttonNodes = []
-
-    ' setting this allows us to center the text by overriding SpNativeButton > Label.horizAlign
-    m.top.rightJustify = true
 end sub
 
 sub render(event as Object)

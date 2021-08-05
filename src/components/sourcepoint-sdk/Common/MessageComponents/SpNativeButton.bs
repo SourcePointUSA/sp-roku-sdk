@@ -85,12 +85,4 @@ sub setWidths(event as Object)
     if m.top.backgroundRect <> invalid then
         m.top.backgroundRect.width = width
     end if
-
-    ' center the button text
-    children = m.top.getChildren(-1, 0)
-    for each c in children
-        if c.subType() = "Label" then
-            c.horizAlign = "center"
-        end if
-    end for
 end sub
