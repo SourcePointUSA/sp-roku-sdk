@@ -56,9 +56,11 @@ sub render(event as Object)
     settings = event.getData()
 
     ' normalize settings for buttons
+    focusFootprintColor = invalid
     if settings.style <> invalid then
         if settings.style.activeBackgroundColor <> invalid then
             settings.style.onFocusBackgroundColor = settings.style.activeBackgroundColor
+            focusFootprintColor = settings.style.activeBackgroundColor
         end if
         if settings.style.font <> invalid then
             settings.style.onUnfocusTextColor = settings.style.font.color
@@ -70,6 +72,12 @@ sub render(event as Object)
 
     m.top.buttonLeft.settings = settings
     m.top.buttonRight.settings = settings
+
+    ' set focus footprint colour to what it should be
+    if focusFootprintColor <> invalid then
+        m.top.buttonLeft.focusFootprintColor = colorConvert(focusFootprintColor)
+        m.top.buttonRight.focusFootprintColor = colorConvert(focusFootprintColor)
+    end if
 
     ' set correct default
     if m.top.buttonSelected = "left" then

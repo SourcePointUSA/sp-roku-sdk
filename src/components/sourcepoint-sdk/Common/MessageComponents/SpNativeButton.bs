@@ -8,12 +8,16 @@ sub init()
     m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
     m.top.minWidth = 0
     m.top.showFocusFootprint = true
+    m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
 
     m.focusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
     m.textColor = "0x000000FF"
+
+    m.focusPoster = invalid
+    m.footprintPoster = invalid
 end sub
 
 sub render(event as Object)
@@ -53,9 +57,11 @@ sub render(event as Object)
         if child.subtype() = "Poster" then
             if child.uri.Instr("focus_button.jpg") >= 0 then
                 ' this turns our button the right color in focus
+                m.focusPoster = child
                 child.blendColor = m.focusBackgroundColor
             else if child.uri.Instr("focus_footprint_button.jpg") >= 0 then
                 ' this turns our footprint the right color 
+                m.footprintPoster = child
                 child.blendColor = m.unFocusBackgroundColor
             end if
         end if
@@ -77,6 +83,14 @@ sub createBg()
         bg = createObject("roSGNode", "Poster")
         m.top.backgroundRect = bg
         m.top.insertChild(bg, 0)
+    end if
+end sub
+
+sub setFocusFootprintColor(event as Object)
+    color = event.getData()
+
+    if color <> invalid then
+        m.footprintPoster.blendColor = color
     end if
 end sub
 
