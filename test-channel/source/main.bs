@@ -26,7 +26,8 @@ sub showChannelSGScreen()
     else if msgType = "roSGNodeEvent" then
       field = msg.getField()
       if field = "open_pm" then
-        m.spSdk.openPrivacyManager("ccpa", 15995)
+        ' m.spSdk.openPrivacyManager("ccpa", 15995)
+        m.spSdk.openPrivacyManager("gdpr", 16020)
       else if field = "run_campaign_logic" then
         runCampaign()
       end if
