@@ -26,9 +26,6 @@ function createFont(fontSettings as Object) as Object
         font.size = 14
     end if
 
-    ' Scale the font a bit
-    font.size = font.size * 1.25
-
     return font
 end function
 
