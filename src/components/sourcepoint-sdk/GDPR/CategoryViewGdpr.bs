@@ -50,7 +50,7 @@ sub renderRightCol(event as Object)
         end if
     end for
 
-    m.nav.setFocus(true)
+    setFocus(m.nav)
     m.top.findNode("screen-title").text = m.categoryData.name
 
     if m.categoryData.description <> invalid then
