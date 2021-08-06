@@ -84,9 +84,6 @@ sub renderUpdate(content as Object)
     if m.customText <> invalid then
         m.customText.color = textColor
     end if
-    if m.onOffNode <> invalid then
-        m.onOffNode.color = textColor
-    end if
 
     if focused = true then
         m.background.visible = false
@@ -141,9 +138,14 @@ sub addCustomText(content as Object, settings as Object)
 end sub
 
 sub addOnOff(content as Object, settings as Object)
-    m.onOffNode = createObject("roSGNode", "SimpleLabel")
-    m.onOffNode.fontUri = "font:SystemFontFile"
-    m.onOffNode.fontSize = m.button_label.textComponent.font.size
+    m.onOffNode = createObject("roSGNode", "SpNativeText")
+    m.onOffNode.componentName = "SimpleLabel"
+    settings = {
+        style: {}
+    } 
+    settings.append(m.button_label.settings)
+    settings.style.font = settings.style.onOffFont
+    m.onOffNode.settings = settings
     if content.on = true then
         m.onOffNode.text = settings.onText
     else if content.off = true then
@@ -153,8 +155,8 @@ sub addOnOff(content as Object, settings as Object)
     if m.caratNode <> invalid then
         rightOffset = m.caratNode.boundingRect().x - m.buttonTextSpacing
     end if 
-    m.onOffNode.horizOrigin = "right"
-    m.onOffNode.vertOrigin = "center"
-    m.onOffNode.translation = [rightOffset, content.height / 2]
+    m.onOffNode.textComponent.horizOrigin = "right"
+    m.onOffNode.textComponent.vertOrigin = "center"
+    m.onOffNode.textComponent.translation = [rightOffset, content.height / 2]
     m.top.appendChild(m.onOffNode)
 end sub
