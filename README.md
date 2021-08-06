@@ -1,7 +1,16 @@
 # Using the SDk
 
-1. For each folder in `dist/` copy the `sourcepoint-sdk` folder into your corresponding project folder
-2. After creating your application's screen, create the SourcepointSDK:
+### Installing the SDK
+
+For each folder in `dist/` copy the `sourcepoint-sdk` folder into your corresponding project folder
+
+### Loading the SDK
+
+The SDK must be created in your main thread, as it will create its own Screen object if it needs to show messages.
+
+See the test-channel for an example of how to trigger SDK functions from your screen if needed.
+
+After creating your application's screen, create the SourcepointSDK:
 ```
 m.spSdk = new SourcepointSdk(accountId, propertyHref, legislationConfigs, optionalConfigs, showMessage)
 ```
@@ -13,22 +22,22 @@ ex:
 ```
 {"ccpa": { "targetingParams": {"roku": true} }, "gdpr": {}}
 ```
-- optionalConfigs (Object, optional) : additional configs
-Accepted keys:
-`authId` (String) : universal authId, see Sourcepoint documentation for additional info
-`campaignEnv` ("public" | "stage") : which campaign type to query, defaults to public
-`consentLanguage` (String) : two letter consent language 
+- `optionalConfigs` (Object, optional) : additional configs, accepted keys:
+  - `authId` (String) : universal authId, see Sourcepoint documentation for additional info
+  - `campaignEnv` ("public" | "stage") : which campaign type to query, defaults to public
+  - `consentLanguage` (String) : two letter consent language 
 - `showMessage` (Boolean, optional) : whether to get and show messages, and retrieve consent right away, defaults to `true`
 
-3. Retrieve user consent
+### Retrieving user consent
 ```
 consent = m.spSdk.getUserConsent()
 ```
 The first time this is called your configured scenarios will run and determine whether to show a message or message(s). 
 If your scenarios dictate a message or message(s) should be shown, this will create a new screen and show those messages. Once messages have been dismissed, consent will be returned. Each subsequent call to this function will return the same consent object.
+
 If showMessage is `true` when SourcepointSdk is created this will be called automatically.
 
-4. Opening a Privacy Manager
+### Opening a Privacy Manager
 ```
 m.spSdk.openPrivacyManager(privacyManagerId)
 ```
