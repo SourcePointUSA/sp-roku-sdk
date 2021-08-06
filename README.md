@@ -3,22 +3,41 @@
 1. For each folder in `dist/` copy the `sourcepoint-sdk` folder into your corresponding project folder
 2. After creating your application's screen, create the SourcepointSDK:
 ```
-m.spSdk = new SourcepointSdk([[ accountId ]], [[ propertyHref ]], [[ legislation configs ]])
+m.spSdk = new SourcepointSdk(accountId, propertyHref, legislationConfigs, optionalConfigs, showMessage)
 ```
 Arguments:
-- [[ accountId ]] (Integer) : your account id, ex `22`
-- [[ propertyHref ]] (String) : your property href, ex `"http://www.sourcepoint.com"`
-- [[ legislation configs ]] (Object) : the legislations to enable along with their configs (optional)
+- `accountId` (Integer, required) : your account id, ex `22`
+- `propertyHref` (String, required) : your property href, ex `"http://www.sourcepoint.com"`
+- `legislationConfigs` (Object, required) : the legislations to enable, optionalally with configs
 ex:
 ```
 {"ccpa": { "targetingParams": {"roku": true} }, "gdpr": {}}
 ```
+- optionalConfigs (Object, optional) : additional configs
+Accepted keys:
+`authId` (String) : universal authId, see Sourcepoint documentation for additional info
+`campaignEnv` ("public" | "stage") : which campaign type to query, defaults to public
+`consentLanguage` (String) : two letter consent language 
+- `showMessage` (Boolean, optional) : whether to get and show messages, and retrieve consent right away, defaults to `true`
+
 3. Retrieve user consent
 ```
 consent = m.spSdk.getUserConsent()
 ```
 The first time this is called your configured scenarios will run and determine whether to show a message or message(s). 
 If your scenarios dictate a message or message(s) should be shown, this will create a new screen and show those messages. Once messages have been dismissed, consent will be returned. Each subsequent call to this function will return the same consent object.
+If showMessage is `true` when SourcepointSdk is created this will be called automatically.
+
+4. Opening a Privacy Manager
+```
+m.spSdk.openPrivacyManager(privacyManagerId)
+```
+Arguments:
+- `privacyManagerId` (Integer) : the ID of the privacy manager to open
+
+As an alternative to hardcoding a `privacyManagerId`, you can setup a targeted scenario and call `m.spSdk.runCampaignLogic(legislationsEnabled)` to show your PM
+
+For example: `m.spSdk.runCampaignLogic({ "gdpr": { "targetingParams": { "showPm": true } } })` to re-run campaign logic for only GDPR, sending specific targetingParams that will trigger a show PM always scenario. (Note: these are example targeting params corresponding to an example scenario)
 
 # Developing the SDK
 
