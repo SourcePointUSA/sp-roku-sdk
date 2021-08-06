@@ -30,6 +30,7 @@ sub init()
         "OnButton": "button_on",
         "OffButton": "button_off",
         "NavCategoriesButton": "button_nav_categories",
+        "NavCustomButton": "button_nav_custom",
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
         "PublisherDescription": "text_publisher_description",
