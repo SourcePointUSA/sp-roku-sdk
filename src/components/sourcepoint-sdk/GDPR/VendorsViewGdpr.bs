@@ -53,6 +53,8 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
 end function
 
 sub renderRightCol()
+    hideRightColLoader()
+    
     if m.vendorListTarget = invalid then
         m.vendorListTarget = createObject("roSGNode", "Group")
         m.colRight.appendChild(m.vendorListTarget)
@@ -125,7 +127,11 @@ sub renderSlider()
 end sub
 
 sub renderView(event as Object)
-    getPrivacyManagerViewData(1)
+    hasPmvData = getPrivacyManagerViewData(1)
+
+    if hasPmvData = false then
+        renderRightColLoader()
+    end if
 
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
