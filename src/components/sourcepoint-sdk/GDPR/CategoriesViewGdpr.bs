@@ -204,7 +204,5 @@ sub renderView(event as Object)
     renderCategoryDescription()
     renderNav(["accept_all", "save_and_exit"])
 
-    ' TODO add loader to the right col until it is rendered
-
     setFocus(m.nav)
 end sub

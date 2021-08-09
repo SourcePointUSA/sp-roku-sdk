@@ -65,8 +65,6 @@ sub renderView(event as Object)
     renderLogo()
     renderNav(m.navButtons)
 
-    ' TODO add loader to the right col until it is rendered
-
     m.vendorData = event.getData()
 
     renderRightCol()

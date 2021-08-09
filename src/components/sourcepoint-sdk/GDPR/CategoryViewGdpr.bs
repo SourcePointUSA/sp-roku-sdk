@@ -56,16 +56,8 @@ sub renderRightCol(event as Object)
     if m.categoryData.description <> invalid then
         description = createObject("roSGNode", "SpNativeText")
         description.componentName = "ScrollableText"
-        ' TODO remove
-        settings = {
-            style : {
-                font: {
-                    color: "#000000"
-                }
-            }
-        }
-        ' TODO add back when the component is coming through
-        ' settings.append(m.components.text_category_description.settings)
+        settings = {}
+        settings.append(m.components.text_category_description.settings)
         settings.text = m.categoryData.description
         description.settings = settings
         description.textComponent.height = 250

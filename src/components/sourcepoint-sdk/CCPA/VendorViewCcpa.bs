@@ -95,8 +95,5 @@ sub renderView(event as Object)
     renderPrivacyPolicyUrl()
     renderNav(m.navButtons)
 
-    ' TODO add loader to the right col until it is rendered
-
-
     renderRightCol()
 end sub

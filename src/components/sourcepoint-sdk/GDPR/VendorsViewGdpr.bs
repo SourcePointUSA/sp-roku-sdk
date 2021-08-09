@@ -54,7 +54,7 @@ end function
 
 sub renderRightCol()
     hideRightColLoader()
-    
+
     if m.vendorListTarget = invalid then
         m.vendorListTarget = createObject("roSGNode", "Group")
         m.colRight.appendChild(m.vendorListTarget)
@@ -141,8 +141,6 @@ sub renderView(event as Object)
 
     renderLogo()
     renderNav(["accept_all", "save_and_exit"])
-
-    ' TODO add loader to the right col until it is rendered
 
     setFocus(m.nav)
 end sub
