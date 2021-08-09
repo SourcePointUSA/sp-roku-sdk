@@ -18,6 +18,8 @@ sub render(event as Object)
     if settings.style <> invalid and settings.style.font <> invalid then
         if settings.style.font.color <> invalid then
             textComponent.color = colorConvert(settings.style.font.color)
+        else
+            textComponent.color = "0x000000FF"
         end if
         if componentName = "Label" or componentName = "ScrollingLabel" or componentName = "ScrollableText" then
             font = createFont(settings.style.font)
