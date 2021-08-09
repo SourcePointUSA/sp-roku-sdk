@@ -23,6 +23,8 @@ sub renderSectionDesc()
     settings.text = invalid
 
     m.headerDescriptionLabel.settings = settings
+    m.headerDescriptionLabel.textComponent.width = m.top.width
+    m.headerDescriptionLabel.textComponent.wrap = true
 end sub
 
 sub setFocus(event as Object)
