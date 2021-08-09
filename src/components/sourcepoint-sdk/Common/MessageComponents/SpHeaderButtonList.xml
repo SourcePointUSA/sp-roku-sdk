@@ -9,6 +9,7 @@
         <field id="itemSelected" alias="button-list.itemSelected" />
         <field id="sectionSettings" alias="button-list.sectionSettings" />
         <field id="width" alias="button-list.width" />
+        <field id="sectionDescSettings" type="assocarray" />
     </interface>
 
     <script uri="./SpHeaderButtonList.bs" />

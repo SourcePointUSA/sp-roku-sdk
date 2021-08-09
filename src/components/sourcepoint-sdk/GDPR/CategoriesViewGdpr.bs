@@ -128,7 +128,8 @@ sub renderRightCol()
         if buttons.count() > 0 then
             section = {
                 children: buttons,
-                settings: categoryTypes[cType].headerComponent.settings
+                settings: categoryTypes[cType].headerComponent.settings,
+                settingsDesc: categoryTypes[cType].defComponent.settings
             }
 
             sections.push(section)
@@ -148,7 +149,8 @@ sub renderRightCol()
             m.rightColFocus = m.categoryList
             m.categoryList.observeField("itemSelected", "observeCategoryList")
             if m.components.text_purposes_header <> invalid then
-                m.categoryList.sectionSettings = m.components.text_purposes_header.settings
+                m.categoryList.sectionSettings = sections[0].settings
+                m.categoryList.sectionDescSettings = sections[0].settingsDesc
             end if
     
             m.categoryLists["left"] = m.categoryList

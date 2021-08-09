@@ -42,7 +42,9 @@ sub render(event as Object)
             sectionNode = createObject("roSGNode", "ContentNode")
             sectionNode.CONTENTTYPE = "SECTION"
             sectionNode.title = section.settings.text
-            sectionNode.description = "lorem ipsum description" ' TODO - replace this with correct description
+            if section.settingsDesc <> invalid and section.settingsDesc.text <> invalid then
+                sectionNode.description = section.settingsDesc.text
+            end if
             sectionButtons = section.children
             hasSections = true
         else

@@ -1,6 +1,7 @@
 sub init()
     m.top.observeField("focusedChild", "setFocus")
-    m.top.observeField("sectionSettings", "render")
+    m.top.observeField("sectionSettings", "renderSectionHeader")
+    m.top.observeField("sectionDescSettings", "renderSectionDesc")
 
     m.headerTitleLabel =  m.top.findNode("header-title")
     m.headerDescriptionLabel =  m.top.findNode("header-description")
@@ -8,9 +9,20 @@ sub init()
     m.buttonList.observeField("focusedSectionNode", "updateHeader")
 end sub
 
-sub render()
-    m.headerTitleLabel.settings = m.top.sectionSettings
-    m.headerDescriptionLabel.settings = m.top.sectionSettings
+sub renderSectionHeader()
+    settings = {}
+    settings.append(m.top.sectionSettings)
+    settings.text = invalid
+
+    m.headerTitleLabel.settings = settings
+end sub
+
+sub renderSectionDesc()
+    settings = {}
+    settings.append(m.top.sectionDescSettings)
+    settings.text = invalid
+
+    m.headerDescriptionLabel.settings = settings
 end sub
 
 sub setFocus(event as Object)
@@ -26,6 +38,8 @@ sub updateHeader(event as Object)
 
     if headerContentNode <> invalid then
         m.headerTitleLabel.text = headerContentNode.title
-        m.headerDescriptionLabel.text = headerContentNode.description
+        if headerContentNode.description <> invalid and headerContentNode.description <> "" then
+            m.headerDescriptionLabel.text = headerContentNode.description
+        end if
     end if
 end sub
