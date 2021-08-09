@@ -224,6 +224,22 @@ sub renderNav(buttonIds)
     end if
 end sub
 
+sub renderRightColLoader()
+    m.loader = createObject("roSGNode", "BusySpinner")
+    m.loader.poster.uri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
+    m.loader.translation = [scalePixelDimension(960 - 64), scalePixelDimension(360 - 64)]
+    m.loader.inheritParentTransform = false
+    m.loader.control = "start"
+    m.top.appendChild(m.loader)
+end sub
+
+sub hideRightColLoader()
+    if m.loader <> invalid then
+        m.loader.control = "stop"
+        m.loader.visible = false
+    end if
+end sub
+
 ' Sets focus if none has been set yet
 ' allows startFocus to be respected
 sub setFocus(node as Object)

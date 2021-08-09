@@ -13,6 +13,8 @@ sub observeVendorList(event as Object)
 end sub
 
 sub renderRightCol()
+    hideRightColLoader()
+
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
@@ -39,6 +41,7 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
+    renderRightColLoader()
     getPrivacyManagerViewData(2)
 
     m.colLeft = m.top.findNode("col-left")
