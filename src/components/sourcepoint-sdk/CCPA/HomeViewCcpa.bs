@@ -1,6 +1,7 @@
 sub init()
     m.navViewMap = {
         "button_nav_categories": "CategoriesView",
+        "button_nav_custom": "CustomView",
         "button_nav_privacy_policy": "PrivacyPolicyView",
         "button_nav_vendors": "VendorsView"
     }
@@ -17,7 +18,15 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
+    renderNav([ 
+        "accept_all", 
+        "reject_all", 
+        "save_and_exit", 
+        "button_nav_categories", 
+        "button_nav_vendors", 
+        "button_nav_privacy_policy", 
+        "button_nav_custom"
+    ])
     renderRightCol()
 
     setFocus(m.nav)
@@ -36,9 +45,10 @@ sub renderRightCol()
     dnsButton = {
         carat: "",
         on: m.top.userConsentNode.doNotSell,
+        settings: {}
     }
 
-    dnsButton.append(m.components.button_do_not_sell)
+    dnsButton.settings.append(m.components.button_do_not_sell.settings)
     dnsButton.settings.text = dnsButton.settings.dnsText
 
     if m.dnsButtonHolder = invalid then

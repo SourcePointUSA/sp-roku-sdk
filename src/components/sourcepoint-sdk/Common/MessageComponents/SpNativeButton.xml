@@ -7,6 +7,7 @@
         <field id="backgroundRect" type="node" />
         <field id="width" type="integer"/>
         <field id="focusFootprintColor" type="string" />
+        <field id="buttonLabel" type="node"/>
     </interface>
 
     <script uri="./SpNativeButton.bs" />

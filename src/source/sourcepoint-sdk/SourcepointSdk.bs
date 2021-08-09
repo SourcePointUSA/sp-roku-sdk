@@ -9,7 +9,6 @@ class SourcepointSdk
     private propertyId
     private scene
     private screen
-    private sdkPath = "sourcepoint-sdk"
 
     private userConsent
 
@@ -27,8 +26,7 @@ class SourcepointSdk
         validOptionalProperties = [
             "authId",
             "campaignEnv",
-            "consentLanguage",
-            "sdkPath"
+            "consentLanguage"
         ]
 
         for each k in validOptionalProperties
@@ -151,6 +149,15 @@ class SourcepointSdk
     private function makeRequestUUID() as string
         ' TODO implement this
         return "test"
+    end function
+
+    public function runCampaignLogic(legislationsEnabled = invalid as Object)
+        m.userConsent = invalid
+        if legislationsEnabled <> invalid then
+            m.legislationsEnabled = legislationsEnabled
+        end if
+
+        return m.getUserConsent()
     end function
 
     private sub showMessages(campaigns as Object)

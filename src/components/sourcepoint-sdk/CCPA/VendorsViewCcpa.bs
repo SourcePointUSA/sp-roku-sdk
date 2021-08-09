@@ -13,6 +13,8 @@ sub observeVendorList(event as Object)
 end sub
 
 sub renderRightCol()
+    hideRightColLoader()
+
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 
@@ -39,7 +41,11 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
-    getPrivacyManagerViewData(2)
+    hasPmvData = getPrivacyManagerViewData(2)
+
+    if hasPmvData = false then
+        renderRightColLoader()
+    end if
 
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
@@ -48,9 +54,9 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["button_nav_back"])
+    renderNav([])
 
     ' TODO add loader to the right col until it is rendered
 
-    setFocus(m.nav)
+    setFocus(m.back_button)
 end sub

@@ -34,11 +34,14 @@ sub init()
         "OnButton": "button_on",
         "OffButton": "button_off",
         "NavCategoriesButton": "button_nav_categories",
+        "NavCustomButton": "button_nav_custom",
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
         "PublisherDescription": "text_publisher_description",
         "PurposesHeader": "text_purposes_header",
         "PurposesDefinition": "text_purposes_def",
+        "RejectAllButton": "reject_all",
+        "SaveAndExitButton": "save_and_exit",
         "SaveButton": "save_and_exit",
         "SpecialPurposesHeader": "text_special_purposes_header",
         "SpecialPurposesDefinition": "text_special_purposes_def",
@@ -64,20 +67,17 @@ sub changeView(viewName as String, viewData = invalid as Object)
     spMessage.changeView = viewName
 end sub
 
-sub getPrivacyManagerViewData(messageCategoryId)
-    if m.privacyManagerViewTask = invalid then
-        ' if we haven't created the task create it and run it
-        m.privacyManagerViewTask = m.top.privacyManagerViewTask
-        m.privacyManagerViewTask.messageCategory = messageCategoryId
-        m.privacyManagerViewTask.propertyId = m.global.config.propertyId
-        m.privacyManagerViewTask.control = "RUN"
-        m.privacyManagerViewTask.observeField("state", "setPmvData")
-        m.privacyManagerViewTask.observeField("data", "setPmvData")
-    else
-        ' else we already have the data, another view is asking for it
-        setPmvData()
-    end if
-end sub
+function getPrivacyManagerViewData(messageCategoryId) as boolean
+    ' if we haven't created the task create it and run it
+    m.privacyManagerViewTask = m.top.privacyManagerViewTask
+    m.privacyManagerViewTask.messageCategory = messageCategoryId
+    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+    m.privacyManagerViewTask.control = "RUN"
+    m.privacyManagerViewTask.observeField("state", "setPmvData")
+    m.privacyManagerViewTask.observeField("data", "setPmvData")
+
+    return m.top.privacyManagerViewTask.data = invalid ? false : true
+end function
 
 sub mapComponents(view as object)
     m.components.view = view
@@ -88,6 +88,10 @@ sub mapComponents(view as object)
             end if
         end for
     end if
+end sub
+
+sub observeBackButton()
+    changeView("_go_back_")
 end sub
 
 sub observeNav(event as Object)
@@ -131,32 +135,69 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
 end function
 
 function _onKeyEvent(key as String, press as Boolean) as boolean
-    if key = "left" and press = true and m.nav <> invalid then
-        m.nav.setFocus(true)
-        m.previouslyFocusedChild = m.nav
-        return true
-    else if key = "right" and press = true and m.rightColFocus <> invalid then
-        m.rightColFocus.setFocus(true)
-        m.previouslyFocusedChild = m.rightColFocus
-        return true
+    newFocus = invalid
+
+    if key = "left" and press = true then
+        if m.nav = invalid or m.nav.isInFocusChain() = true then
+            ' if we're focused on the nav go to the back button
+            newFocus = m.back_button
+        else 
+            ' else we're focused on the right col go to the nav
+            newFocus = m.nav
+        end if
+    else if key = "right" and press = true then
+        if m.back_button <> invalid and m.back_button.isInFocusChain() then
+            ' if we're focused on the back button, go to nav
+            newFocus = m.nav
+        end if
+        if newFocus = invalid then
+            ' if the back button doesn't exist, we're focused on the nav - go to right col
+            ' if the nav doesn't exist, go to right col
+            newFocus = m.rightColFocus
+        end if
     end if 
+
+    if newFocus <> invalid then
+        newFocus.setFocus(true)
+        m.previouslyFocusedChild = newFocus
+        return true
+    end if
 
     return false
 end function
 
-sub renderLogo()
+sub renderBackButton()
+    if m.back_button = invalid and m.components.button_nav_back <> invalid then
+        m.back_button = createObject("roSGNode", "SpNativeButton")
+        m.back_button.settings = m.components.button_nav_back.settings
+        m.back_button.id = m.components.button_nav_back.id
+
+        m.back_button.observeField("buttonSelected", "observeBackButton")
+        m.back_button.minWidth = 50
+
+        m.top.appendChild(m.back_button)
+    end if
+end sub
+
+sub renderHeader()
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
     end if
+end sub
+
+sub renderLogo()
+    renderHeader()
 
     if m.components.image_logo <> invalid then
         component = createObject("roSGNode", "Poster")
         component.id = "image_logo"
+        component.loadDisplayMode = "limitSize"
+        component.loadHeight = 540
 
-        if m.components.image_logo.settings.style.width <> invalid then
-            component.loadDisplayMode = "limitSize"
-            component.loadWidth = m.components.image_logo.settings.style.width
-            component.loadHeight = 540
+        if m.components.image_logo.settings.style.width <> invalid and m.components.image_logo.settings.style.width.value then
+            component.loadWidth = m.components.image_logo.settings.style.width.value
+        else
+            component.loadWidth = 200
         end if 
 
         component.uri = m.components.image_logo.settings.src
@@ -167,29 +208,53 @@ sub renderLogo()
 end sub
 
 sub renderNav(buttonIds)
-    buttons = []
-    for each buttonId in buttonIds
-        if m.components[buttonId] <> invalid then
-            button = m.components[buttonId]
-            button.id = buttonId
-            buttons.push(button)
-        end if
-    end for
+    renderBackButton()
 
-    buttonGroup = createObject("roSGNode", "SpButtonGroup")
-    buttonGroup.buttonComponents = buttons
+    if buttonIds.count() > 0 then
+        buttons = []
+        for each buttonId in buttonIds
+            if m.components[buttonId] <> invalid then
+                button = m.components[buttonId]
+                button.id = buttonId
+                buttons.push(button)
+            end if
+        end for
 
-    m.colLeft.appendChild(buttonGroup)
-    m.nav = buttonGroup
-    m.nav.observeField("buttonSelected", "observeNav")
-    m.previouslyFocusedChild = m.nav
+        buttonGroup = createObject("roSGNode", "SpButtonGroup")
+        buttonGroup.buttonComponents = buttons
+
+        m.colLeft.appendChild(buttonGroup)
+        m.nav = buttonGroup
+        m.nav.observeField("buttonSelected", "observeNav")
+        m.previouslyFocusedChild = m.nav
+    else
+        m.previouslyFocusedChild = m.back_button
+    end if
+end sub
+
+sub renderRightColLoader()
+    m.loader = createObject("roSGNode", "BusySpinner")
+    m.loader.poster.uri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
+    m.loader.translation = [scalePixelDimension(960 - 64), scalePixelDimension(360 - 64)]
+    m.loader.inheritParentTransform = false
+    m.loader.control = "start"
+    m.top.appendChild(m.loader)
+end sub
+
+sub hideRightColLoader()
+    if m.loader <> invalid then
+        m.loader.control = "stop"
+        m.loader.visible = false
+    end if
 end sub
 
 ' Sets focus if none has been set yet
 ' allows startFocus to be respected
 sub setFocus(node as Object)
     if m.currentlyFocusedChild = invalid then
-        node.setFocus(true)
+        if node <> invalid then
+            node.setFocus(true)
+        end if
     end if    
 end sub
 

@@ -11,6 +11,7 @@ sub init()
     m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
+    m.top.height = 50
 
     m.focusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
@@ -64,6 +65,8 @@ sub render(event as Object)
                 m.footprintPoster = child
                 child.blendColor = m.unFocusBackgroundColor
             end if
+        else if child.subtype() = "Label" then
+            m.top.buttonLabel = child
         end if
     end for
 

@@ -15,6 +15,8 @@ sub showChannelSGScreen()
   scene.observeField("run_campaign_logic", m.port)
   scene.observeField("open_pm", m.port)
 
+  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"gdpr": {}})
+
   runCampaign()
 
   while(true)
@@ -37,8 +39,7 @@ sub showChannelSGScreen()
 end sub
 
 sub runCampaign()
-  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"gdpr": {}})
-  consent = m.spSdk.getUserConsent()
+  consent = m.spSdk.runCampaignLogic()
 
   print "consent object: "
   for each leg in consent

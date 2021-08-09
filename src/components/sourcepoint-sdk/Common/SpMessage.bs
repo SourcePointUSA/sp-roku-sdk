@@ -74,6 +74,7 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         "HomeView": "HomeView",
         "CategoriesView": "CategoriesView",
         "CategoryDetailsView": "CategoryView",
+        "CustomView": "PrivacyPolicyView",
         "PrivacyPolicyView": "PrivacyPolicyView",
         "VendorsView": "VendorsView",
         "VendorDetailsView": "VendorView"
@@ -100,13 +101,13 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)
+
+        setSceneBgColor()
     else
         print "error showing: " + viewName
         m.top.done = true
         m.top.error = "Invalid message JSON"
     end if
-
-    setSceneBgColor()
 end sub
 
 function createViewComponent(componentName, viewId, viewData, viewDataExtra) as Object
