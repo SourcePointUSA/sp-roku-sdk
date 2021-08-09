@@ -59,20 +59,17 @@ sub changeView(viewName as String, viewData = invalid as Object)
     spMessage.changeView = viewName
 end sub
 
-sub getPrivacyManagerViewData(messageCategoryId)
-    if m.privacyManagerViewTask = invalid then
-        ' if we haven't created the task create it and run it
-        m.privacyManagerViewTask = m.top.privacyManagerViewTask
-        m.privacyManagerViewTask.messageCategory = messageCategoryId
-        m.privacyManagerViewTask.propertyId = m.global.config.propertyId
-        m.privacyManagerViewTask.control = "RUN"
-        m.privacyManagerViewTask.observeField("state", "setPmvData")
-        m.privacyManagerViewTask.observeField("data", "setPmvData")
-    else
-        ' else we already have the data, another view is asking for it
-        setPmvData()
-    end if
-end sub
+function getPrivacyManagerViewData(messageCategoryId) as boolean
+    ' if we haven't created the task create it and run it
+    m.privacyManagerViewTask = m.top.privacyManagerViewTask
+    m.privacyManagerViewTask.messageCategory = messageCategoryId
+    m.privacyManagerViewTask.propertyId = m.global.config.propertyId
+    m.privacyManagerViewTask.control = "RUN"
+    m.privacyManagerViewTask.observeField("state", "setPmvData")
+    m.privacyManagerViewTask.observeField("data", "setPmvData")
+
+    return m.top.privacyManagerViewTask.data = invalid ? false : true
+end function
 
 sub mapComponents(view as object)
     m.components.view = view

@@ -38,8 +38,11 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
-    renderRightColLoader()
-    getPrivacyManagerViewData(2)
+    hasPmvData = getPrivacyManagerViewData(2)
+
+    if hasPmvData = false then
+        renderRightColLoader()
+    end if
     
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
