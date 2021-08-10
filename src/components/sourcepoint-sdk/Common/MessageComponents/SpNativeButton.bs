@@ -4,13 +4,14 @@ sub init()
     ' reset default look and feel
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
-    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"          ' note space here, empty string is the default and does not override...
-    m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
+    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
+    m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button_sq.9.png"
     m.top.minWidth = 0
-    m.top.showFocusFootprint = true
+    m.top.showFocusFootprint = false
     m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
+    m.top.observeField("focusedChild", "toggleBg")
     m.top.height = 50
 
     m.focusBackgroundColor = "0xFFFFFFFF"
@@ -24,7 +25,9 @@ end sub
 sub render(event as Object)
     settings = event.getData()
 
-    m.top.text = htmlEntityDecode(settings.text)
+    if settings.text <> invalid then
+        m.top.text = htmlEntityDecode(settings.text)
+    end if
 
     if settings.style <> invalid and settings.style <> invalid then
         if settings.style.onFocusTextColor <> invalid then
@@ -56,11 +59,11 @@ sub render(event as Object)
     children = m.top.getChildren(-1, 0)
     for each child in children
         if child.subtype() = "Poster" then
-            if child.uri.Instr("focus_button.jpg") >= 0 then
+            if child.uri.Instr("focus_button_sq.9.png") >= 0 then
                 ' this turns our button the right color in focus
                 m.focusPoster = child
                 child.blendColor = m.focusBackgroundColor
-            else if child.uri.Instr("focus_footprint_button.jpg") >= 0 then
+            else if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
                 ' this turns our footprint the right color 
                 m.footprintPoster = child
                 child.blendColor = m.unFocusBackgroundColor
@@ -73,10 +76,10 @@ sub render(event as Object)
     createBg()
 
     if m.unFocusBackgroundColor <> invalid then
-        m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
+        m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button_sq.9.png"
         m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
         m.top.backgroundRect.height = m.top.height
-        m.top.backgroundRect.width = 0
+        m.top.backgroundRect.width = m.top.boundingRect().width
     endif
 end sub
 
@@ -101,5 +104,15 @@ sub setWidths(event as Object)
     width = event.getData()
     if m.top.backgroundRect <> invalid then
         m.top.backgroundRect.width = width
+    end if
+end sub
+
+sub toggleBg(event as Object)
+    focusedChild = event.getData()
+
+    if focusedChild = invalid then
+        m.top.backgroundRect.visible = true
+    else
+        m.top.backgroundRect.visible = false
     end if
 end sub

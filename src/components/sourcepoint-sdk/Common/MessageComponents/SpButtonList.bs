@@ -10,7 +10,7 @@ sub init()
 
     ' default settings
     m.top.focusBitmapUri = ""
-    m.top.focusFootprintBitmapUri = ""
+    m.top.focusFootprintBitmapUri = " "             ' this will throw errors into the logs but an empty string doesn't reset the default
     m.top.itemSpacing = [0, scalePixelDimension(10)]
 
     m.buttonNodes = createObject("roSGNode", "ContentNode")
@@ -106,12 +106,8 @@ sub render(event as Object)
         ' set up focus bitmap and focus footprint bitmap based on settings
         if buttonSettings <> invalid and buttonSettings.style <> invalid then 
             if buttonSettings.style.onFocusBackgroundColor <> invalid then
-                m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"
+                m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
                 m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onFocusBackgroundColor)
-            end if
-            if buttonSettings.style.onUnfocusBackgroundColor <> invalid then
-                m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
-                m.top.focusFootprintBlendColor = colorConvert(buttonSettings.style.onUnfocusBackgroundColor)
             end if
         end if 
 

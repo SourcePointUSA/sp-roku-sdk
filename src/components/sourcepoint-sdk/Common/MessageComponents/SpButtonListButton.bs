@@ -115,7 +115,7 @@ sub addBackground(content as Object)
     m.background = createObject("roSGNode", "Poster")
     m.background.height = content.height
     m.background.width = content.width
-    m.background.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
+    m.background.uri = "pkg:/images/sourcepoint-sdk/unfocus_button_sq.9.png"
     m.background.blendColor = m.unFocusBackgroundColor
     m.background.visible = false
     m.top.insertChild(m.background, 0)
