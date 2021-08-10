@@ -15,6 +15,12 @@ end sub
 sub renderRightCol()
     hideRightColLoader()
 
+    if m.components.text_vendor_header <> invalid then
+        vendorsHeader = createObject("roSGNode", "SpNativeText")
+        vendorsHeader.settings = m.components.text_vendor_header.settings
+        m.colRight.appendChild(vendorsHeader)
+    end if
+
     buttons = []
     for each vendorId in m.top.privacyManagerViewData.vendors
         buttonSettings = { 

@@ -10,9 +10,15 @@ sub render(event as Object)
     settings = event.getData()
 
     textComponent = createObject("roSGNode", componentName)
+
+    m.top.textComponent = textComponent
+
+    if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
+        textComponent.color = colorConvert(settings.style.font.color)
+    end if
     
     if settings.text <> invalid then
-        textComponent.text = settings.text
+        m.top.text = settings.text
     end if 
 
     if settings.style <> invalid and settings.style.font <> invalid then
@@ -36,12 +42,15 @@ sub render(event as Object)
         end if
     end if
 
-    m.top.textComponent = textComponent
     m.top.appendChild(textComponent)
 end sub
 
 sub renderText(event as Object)
     text = event.getData()
 
-    m.top.textComponent.text = text
+    if text <> invalid then
+        m.top.textComponent.text = stripHtmlTags(text)
+    else 
+        m.top.textComponent.text = ""
+    end if
 end sub

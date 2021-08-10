@@ -24,7 +24,7 @@ end sub
 sub render(event as Object)
     settings = event.getData()
 
-    m.top.text = settings.text
+    m.top.text = htmlEntityDecode(settings.text)
 
     if settings.style <> invalid and settings.style <> invalid then
         if settings.style.onFocusTextColor <> invalid then
