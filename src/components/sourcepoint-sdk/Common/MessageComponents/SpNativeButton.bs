@@ -95,7 +95,22 @@ end sub
 sub setFocusFootprintColor(event as Object)
     color = event.getData()
 
-    if color <> invalid then
+    if m.top.showFocusFootprint = false then
+        m.top.showFocusFootprint = true
+        m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button_sq.9.png"
+
+        children = m.top.getChildren(-1, 0)
+        for each child in children
+            if child.subtype() = "Poster" then
+                if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
+                    ' this turns our footprint the right color 
+                    m.footprintPoster = child
+                end if
+            end if
+        end for
+    end if
+
+    if m.footprintPoster <> invalid and color <> invalid then
         m.footprintPoster.blendColor = color
     end if
 end sub
