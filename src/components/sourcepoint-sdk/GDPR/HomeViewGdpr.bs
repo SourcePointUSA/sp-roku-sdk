@@ -16,7 +16,14 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(["accept_all", "button_nav_categories", "button_nav_vendors", "button_nav_privacy_policy"])
+    renderNav([
+        "accept_all", 
+        "reject_all", 
+        "button_nav_categories", 
+        "button_nav_vendors", 
+        "button_nav_privacy_policy", 
+        "button_nav_custom"
+    ])
     renderRightCol()
 
     setFocus(m.nav)
