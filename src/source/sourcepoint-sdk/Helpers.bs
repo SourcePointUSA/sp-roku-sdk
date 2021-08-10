@@ -47,6 +47,10 @@ function getLocalState() as String
     return ""
 end function
 
+function htmlEntityDecode(baseStr as String) as string
+    return baseStr.replace("&quot;", """").replace("&apos;", "'").replace("&lt;", "<").replace("&gt;", ">").replace("&amp;", "&")
+end function
+
 sub setLocalState(localState)
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
 
@@ -96,4 +100,10 @@ function scalePixelDimension(value as Float, resolutionInfo = invalid as Object)
     end if
 
     return value
+end function
+
+function stripHtmlTags(baseStr as String) as String
+    baseStr = baseStr.replace("</p>", chr(10))
+    r = createObject("roRegex", "<[^<]+?>", "i")
+    return htmlEntityDecode(r.replaceAll(baseStr, "")).trim()
 end function
