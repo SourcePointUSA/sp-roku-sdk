@@ -5,7 +5,7 @@ sub init()
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
     m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
-    m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button_sq.9.png"
+    m.top.focusFootprintBitmapUri = " "     ' this will throw errors in the console but is the only way to reset
     m.top.minWidth = 0
     m.top.showFocusFootprint = false
     m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
