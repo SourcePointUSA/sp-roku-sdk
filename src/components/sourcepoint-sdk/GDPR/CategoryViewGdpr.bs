@@ -127,8 +127,6 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-
-    ' TODO add loader to the right col until it is rendered
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
