@@ -12,6 +12,18 @@ end sub
 sub renderRightCol()
     hideRightColLoader()
 
+    if m.components.text_categories_header <> invalid then
+        categoriesHeader = createObject("roSGNode", "SpNativeText")
+        categoriesHeader.settings = m.components.text_categories_header.settings
+        m.colRight.appendChild(categoriesHeader)
+    end if
+
+    if m.components.text_purposes_definition <> invalid then
+        purposesDefinition = createObject("roSGNode", "SpNativeText")
+        purposesDefinition.settings = m.components.text_purposes_definition.settings
+        m.colRight.appendChild(purposesDefinition)
+    end if
+
     buttons = []
     for each categoryId in m.top.privacyManagerViewData.categories
         buttonSettings = { 
