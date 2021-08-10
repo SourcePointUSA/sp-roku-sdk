@@ -14,7 +14,7 @@ end function
 function createFont(fontSettings as Object) as Object
     font = CreateObject("roSGNode", "Font")
 
-    if fontSettings.fontWeight <> invalid and fontSettings.fontWeight = "700" then
+    if fontSettings.fontWeight <> invalid and fontSettings.fontWeight <> "400" then
         font.uri = "font:BoldSystemFontFile"
     else
         font.uri = "font:SystemFontFile"
