@@ -4,10 +4,21 @@ sub init()
     m.userConsent = {}
 end sub
 
+sub addError(error as String)
+    errors = m.top.errors
+    errors.push(error)
+    m.top.errors = errors
+end sub
+
 sub closeMessage()
     if m.currentMessage <> invalid then
         m.top.removeChild(m.currentMessage)
         m.currentMessage.unobserveField("done")
+
+        if m.currentMessage.error <> "" then
+            addError(m.currentMessage.error)
+        end if
+
         m.userConsent[m.currentMessage.messageCategory] = m.currentMessage.userConsent
         m.currentMessage = invalid
     end if
@@ -32,12 +43,17 @@ sub showMessage()
     campaign = campaigns[m.top.activeCampaign]
 
     if campaign <> invalid then
-        m.currentMessage.observeField("done", "closeMessage")
-        m.currentMessage.userConsent = campaign.userConsent
-        m.currentMessage.message = campaign
+        try
+            m.currentMessage.observeField("done", "closeMessage")
+            m.currentMessage.userConsent = campaign.userConsent
+            m.currentMessage.message = campaign
 
-        m.top.appendChild(m.currentMessage)
-        m.currentMessage.setFocus(true)
+            m.top.appendChild(m.currentMessage)
+            m.currentMessage.setFocus(true)
+        catch e
+            addError(e.message)
+            closeMessage()
+        end try
     else 
         ' signal that we're done, return consent
         m.top.userConsent = m.userConsent

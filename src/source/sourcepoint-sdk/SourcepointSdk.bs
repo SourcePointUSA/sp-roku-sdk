@@ -2,6 +2,7 @@ class SourcepointSdk
     private accountId
     private authId
     private env = "stage"
+    private errors = []
     private campaignEnv = "prod"
     private consentLanguage
     private legislationsEnabled
@@ -81,6 +82,10 @@ class SourcepointSdk
         return formattedConsent
     end function
 
+    public function getErrors() as Object
+        return m.errors
+    end function
+
     public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
             return m.userConsent
@@ -109,6 +114,11 @@ class SourcepointSdk
         while true
             msg = wait(1000, port)
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
+                if getMessageTask.error <> "" then
+                    m.errors.push(getMessageTask.error)
+                    return invalid
+                end if
+
                 m.userConsent = getMessageTask.userConsent
                 m.setPropertyId(getMessageTask.propertyId)
                 exit while
@@ -119,7 +129,6 @@ class SourcepointSdk
 
         ' always call show messages, it will show or close our screen
         m.showMessages(getMessageTask.campaigns)
-
         
         return m.formatUserConsent(m.userConsent)
     end function
@@ -189,6 +198,7 @@ class SourcepointSdk
 
             if msgType = "roSGNodeEvent" and msg.getField() = "userConsent" then
                 m.userConsent = msg.getData()
+                m.errors = m.scene.errors
                 m.screen.close()
             end if
 
