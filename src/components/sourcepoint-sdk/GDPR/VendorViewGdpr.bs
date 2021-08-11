@@ -16,6 +16,32 @@ sub observeNav(event as Object)
     changeView("_go_back_")
 end sub
 
+sub renderPrivacyPolicyUrl()
+    if m.vendorData.policyUrl = invalid then
+        return
+    end if
+    
+    screenTitle = m.top.findNode("screen-title")
+
+    textColor = "0x000000FF"
+    if screenTitle <> invalid then
+        textColor = screenTitle.textComponent.color
+    end if
+
+    ppHeader = createObject("roSGNode", "SimpleLabel")
+    ppHeader.text = "Privacy Policy Url:"
+    ppHeader.color = textColor
+
+    ppUrl = createObject("roSGNode", "Label")
+    ppUrl.text = m.vendorData.policyUrl
+    ppUrl.wrap = true
+    ppUrl.color = textColor
+    ppUrl.width = m.colLeftWidth * .8
+
+    m.colLeft.appendChild(ppHeader)
+    m.colLeft.appendChild(ppUrl)
+end sub
+
 sub renderRightCol()
     m.top.findNode("screen-title").text = m.vendorData.name
 
@@ -27,24 +53,30 @@ sub renderRightCol()
     end for
     setFocus(m.nav)
 
-    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+    categories = []
+    if m.vendorData.isLi = true then
+        categories = m.vendorData.legIntCategories
+    else
+        categories = m.vendorData.consentCategories
+    end if
+
+    if categories <> invalid and categories.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
         m.categoryList.width = m.colRightWidth
         buttons = []
-        for each purpose in m.vendorData.purposes
+        for each purpose in categories
             if purpose <> invalid then
                 buttonSettings = { 
                     carat: "",
                     settings: {} 
                 } 
                 buttonSettings.settings.append(m.components.button_vendor.settings)
-                buttonSettings.settings.text = purpose
+                buttonSettings.settings.text = purpose.name
 
                 buttons.push(buttonSettings)
             end if
         end for
         m.categoryList.buttonComponents = buttons
-
 
         if buttons.count() > 0 then
             m.colRight.appendChild(m.categoryList)
@@ -54,16 +86,16 @@ sub renderRightCol()
 end sub
 
 sub renderView(event as Object)
+    m.vendorData = event.getData()
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
     
     view = m.top.view
     mapComponents(view)
 
-    renderLogo()
+    renderHeader()
+    renderPrivacyPolicyUrl()
     renderNav(m.navButtons)
-
-    m.vendorData = event.getData()
 
     renderRightCol()
 end sub

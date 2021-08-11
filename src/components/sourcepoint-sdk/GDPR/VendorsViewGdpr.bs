@@ -32,6 +32,7 @@ end sub
 sub showVendor(item as Object, isLi = false as Boolean)
     if item <> invalid then
         data = isLi = true ? m.top.privacyManagerViewData.legIntVendors[item.id] : m.top.privacyManagerViewData.vendors[item.id]
+        data.isLi = isLi
         changeView("VendorDetailsView", data)
     end if
 end sub
