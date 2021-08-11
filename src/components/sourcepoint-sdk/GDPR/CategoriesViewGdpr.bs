@@ -21,12 +21,45 @@ sub changeCategories(event as Object)
     end if
 end sub
 
+sub clearCategoryDesc(event as Object)
+    focusedChild = event.getData()
+
+    if focusedChild = invalid then
+        updateCategoryDesc(invalid)
+    end if
+end sub
+
 sub observeCategoryList(event as Object)
     showCategory(m.categoryList.focusedContentNode)
 end sub
 
+sub observeCategoryListFocus(event as Object)
+    updateCategoryDesc(m.categoryList.focusedContentNode)
+end sub
+
 sub observeCategoryListLi(event as Object)
     showCategory(m.categoryListLi.focusedContentNode)
+end sub
+
+sub observeCategoryListLiFocus(event as Object)
+    updateCategoryDesc(m.categoryListLi.focusedContentNode)
+end sub
+
+sub updateCategoryDesc(listItem as Object)
+    if listItem = invalid then
+        text = ""
+    else
+        cType = "categories"
+        if listItem.categoryType <> invalid then
+            ' legInt categories are pulled from same "categories" list
+            cType = listItem.categoryType = "legInt" ? "categories" : listItem.categoryType
+        end if
+        if m.top.privacyManagerViewData[cType] <> invalid and m.top.privacyManagerViewData[cType][listItem.id] <> invalid then
+            text = m.top.privacyManagerViewData[cType][listItem.id].friendlyDescription
+        end if
+    end if
+
+    m.categoryDescription.text = text
 end sub
 
 sub showCategory(listItem as Object)
@@ -64,7 +97,11 @@ sub renderCategoryDescription()
     if m.categoryDescription = invalid then
         m.categoryDescription = createObject("roSGNode", "SpNativeText")
         m.categoryDescription.settings = m.components.text_category_description.settings
+
         m.categoryDescription.textComponent.wrap = true
+        m.categoryDescription.textComponent.width = m.colLeftWidth * .8
+        m.categoryDescription.textComponent.maxLines = 3
+        m.colLeft.appendChild(m.categoryDescription)
     end if
 end sub
 
@@ -148,6 +185,8 @@ sub renderRightCol()
             m.categoryListTarget.appendChild(m.categoryList)
             m.rightColFocus = m.categoryList
             m.categoryList.observeField("itemSelected", "observeCategoryList")
+            m.categoryList.observeField("itemFocused", "observeCategoryListFocus")
+            m.categoryList.observeField("focusedChild", "clearCategoryDesc")
             if m.components.text_purposes_header <> invalid then
                 m.categoryList.sectionSettings = sections[0].settings
                 m.categoryList.sectionDescSettings = sections[0].settingsDesc
@@ -167,6 +206,8 @@ sub renderRightCol()
 
             m.categoryListTarget.appendChild(m.categoryListLi)
             m.categoryListLi.observeField("itemSelected", "observeCategoryListLi")
+            m.categoryListLi.observeField("itemFocused", "observeCategoryListLiFocus")
+            m.categoryListLi.observeField("focusedChild", "clearCategoryDesc")
             m.categoryLists["right"] = m.categoryListLi
 
             renderSlider()

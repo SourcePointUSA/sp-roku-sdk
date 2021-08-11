@@ -12,10 +12,6 @@ sub render(event as Object)
     textComponent = createObject("roSGNode", componentName)
 
     m.top.textComponent = textComponent
-
-    if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
-        textComponent.color = colorConvert(settings.style.font.color)
-    end if
     
     if settings.text <> invalid then
         m.top.text = settings.text
