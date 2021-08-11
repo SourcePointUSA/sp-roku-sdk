@@ -68,6 +68,19 @@ class SourcepointSdk
         m.screen.close()
     end sub
 
+    private function formatUserConsent(userConsent as Object) as Object
+        formattedConsent = {}
+        for each legislation in userConsent
+            formattedConsent[legislation] = {
+                grants: {}
+            }
+
+            formattedConsent[legislation].grants.append(userConsent[legislation].grants)
+        end for
+
+        return formattedConsent
+    end function
+
     public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
             return m.userConsent
@@ -107,8 +120,8 @@ class SourcepointSdk
         ' always call show messages, it will show or close our screen
         m.showMessages(getMessageTask.campaigns)
 
-        ' TODO - format userConsent here
-        return m.userConsent
+        
+        return m.formatUserConsent(m.userConsent)
     end function
 
     public sub openPrivacyManager(legislation as string, messageId as integer)
