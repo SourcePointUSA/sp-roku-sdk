@@ -5,7 +5,7 @@ class SourcepointSdk
     private campaignEnv = "prod"
     private consentLanguage
     private legislationsEnabled
-    private propertyHref    'TODO : is this what we should use? 
+    private propertyHref
     private propertyId
     private scene
     private screen
@@ -36,8 +36,6 @@ class SourcepointSdk
         end for
 
         if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
-
-        m.requestUUID = m.makeRequestUUID()
 
         m.globalConfig = {
             "accountId": m.accountId,
@@ -147,8 +145,8 @@ class SourcepointSdk
     end sub
 
     private function makeRequestUUID() as string
-        ' TODO implement this
-        return "test"
+        di = CreateObject("roDeviceInfo")
+        return di.getRandomUUID()
     end function
 
     public function runCampaignLogic(legislationsEnabled = invalid as Object)

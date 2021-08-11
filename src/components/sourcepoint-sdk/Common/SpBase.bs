@@ -203,9 +203,8 @@ sub renderLogo()
             component.loadWidth = 200
         end if 
 
+        component.loadingBitmapUri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
         component.uri = m.components.image_logo.settings.src
-        ' TODO - set this to something for loading
-        ' component.loadingBitmapUri = 
         m.colLeft.appendChild(component)
     end if
 end sub

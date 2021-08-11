@@ -50,8 +50,6 @@ sub renderRightCol()
             m.colRight.appendChild(m.categoryList)
             m.rightColFocus = m.categoryList
         end if
-    else
-        'TODO - what to show if no purposes?
     end if
 end sub
 

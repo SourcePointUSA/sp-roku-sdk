@@ -15,7 +15,6 @@ sub getMessage()
     response = makeRequest(addQueryParams(url, queryParams), "GET")
 
     if response <> invalid then
-        ' TODO set message data
         m.top.message = response
     end if 
 end sub
