@@ -2,6 +2,7 @@ import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
     m.top.itemComponentName = "SpButtonListButton"
+
     m.top.observeField("buttonComponents", "render")
     m.top.observeField("itemFocused", "focusButton")
     m.top.observeField("itemUnfocused", "unFocusButton")
@@ -22,6 +23,11 @@ end sub
 
 sub render(event as Object)
     buttons = event.getData()
+
+    if buttons = invalid or buttons.count() = 0 then
+        return
+    end if
+
     startFocus = false
     
     buttonHeight = scalePixelDimension(64)
@@ -40,11 +46,15 @@ sub render(event as Object)
         if section.children <> invalid then
             ' create section
             sectionNode = createObject("roSGNode", "ContentNode")
-            sectionNode.CONTENTTYPE = "SECTION"
-            sectionNode.title = section.settings.text
+            sectionNode.contentType = "SECTION"
+            
+            if section.settings <> invalid then
+                sectionNode.title = section.settings.text
+            end if
             if section.settingsDesc <> invalid and section.settingsDesc.text <> invalid then
                 sectionNode.description = section.settingsDesc.text
             end if
+
             sectionButtons = section.children
             hasSections = true
         else
@@ -60,9 +70,11 @@ sub render(event as Object)
             if buttonSettings.startFocus = true then
                 startFocus = true
             end if
+
             if button.id = invalid then
                 button.id = button.settings.text
             end if
+
             buttonContentNode = m.buttonNodesKeyed[button.id]
             if buttonContentNode = invalid then
                 buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
@@ -77,6 +89,7 @@ sub render(event as Object)
                     first = false
                 end if
             end if
+
             buttonContentNode.settings = button.settings
 
             if button.carat <> invalid then
@@ -138,10 +151,14 @@ end sub
 sub setFocus(index as Integer, focused as Boolean)
     if index <> invalid then
         buttonCn = m.buttonNodesArray[index]
+
         if buttonCn <> invalid then
             buttonCn.focused = focused
-            m.top.focusedContentNode = buttonCn
-            m.top.focusedSectionNode = buttonCn.getParent()
+
+            if focused = true then
+                m.top.focusedContentNode = buttonCn
+                m.top.focusedSectionNode = buttonCn.getParent()
+            end if
         end if 
     end if
 end sub
@@ -150,6 +167,7 @@ sub setSectionSettings(event as Object)
     settings = event.getData()
     if settings <> invalid then
         m.top.sectionDividerFont = createFont(settings)
+
         if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
             m.top.sectionDividerTextColor = settings.style.font.color
         end if
@@ -167,6 +185,7 @@ sub unFocusButtonList(event as Object)
 
     if focusedNode = invalid then
         index = m.lastFocusedButton <> invalid ? m.lastFocusedButton : 0
+        
         if m.lastFocusedButton <> invalid then
             setFocus(index, false)
         end if

@@ -25,31 +25,34 @@ end sub
 sub render(event as Object)
     settings = event.getData()
 
-    if settings.text <> invalid then
-        m.top.text = htmlEntityDecode(settings.text)
-    end if
+    if settings <> invalid then
+        if settings.text <> invalid then
+            m.top.text = htmlEntityDecode(settings.text)
+        end if
+    
+        if settings.style <> invalid then
+            if settings.style.onFocusTextColor <> invalid then
+                m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
+            end if
+            if settings.style.onUnfocusTextColor <> invalid then
+                m.textColor = colorConvert(settings.style.onUnfocusTextColor)
+            end if
+            if settings.style.onFocusBackgroundColor <> invalid then
+                m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
+            end if
+            if settings.style.onUnfocusBackgroundColor <> invalid then
+                m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
+            end if
 
-    if settings.style <> invalid and settings.style <> invalid then
-        if settings.style.onFocusTextColor <> invalid then
-            m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
-        end if
-        if settings.style.onUnfocusTextColor <> invalid then
-            m.textColor = colorConvert(settings.style.onUnfocusTextColor)
-        end if
-        if settings.style.onFocusBackgroundColor <> invalid then
-            m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
-        end if
-        if settings.style.onUnfocusBackgroundColor <> invalid then
-            m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
-        end if
-    end if
+            if settings.style.font <> invalid then
+                m.top.textFont = createFont(settings.style.font)
 
-    if settings.style.font <> invalid then
-        m.top.textFont = createFont(settings.style.font)
-        focusedTextSettings = {}
-        focusedTextSettings.append(settings.style.font)
-        focusedTextSettings.append({fontWeight: "700"})
-        m.top.focusedTextFont = createFont(focusedTextSettings)
+                focusedTextSettings = {}
+                focusedTextSettings.append(settings.style.font)
+                focusedTextSettings.append({fontWeight: "700"})
+                m.top.focusedTextFont = createFont(focusedTextSettings)
+            end if
+        end if
     end if
 
     m.top.textColor = m.textColor
@@ -66,7 +69,9 @@ sub render(event as Object)
             else if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
                 ' this turns our footprint the right color 
                 m.footprintPoster = child
-                child.blendColor = m.unFocusBackgroundColor
+                if m.unFocusBackgroundColor <> invalid then
+                    child.blendColor = m.unFocusBackgroundColor
+                end if
             end if
         else if child.subtype() = "Label" then
             m.top.buttonLabel = child
@@ -123,6 +128,10 @@ sub setWidths(event as Object)
 end sub
 
 sub toggleBg(event as Object)
+    if m.top.backgroundRect = invalid then
+        return
+    end if
+    
     focusedChild = event.getData()
 
     if focusedChild = invalid then

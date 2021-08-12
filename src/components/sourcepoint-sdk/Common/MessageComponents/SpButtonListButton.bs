@@ -11,6 +11,11 @@ sub init()
     m.button_label.translation = [m.buttonPadding, 0]
 
     m.rendered = false
+
+    ' defaults
+    m.textColor = "0x000000FF"
+    m.focusedTextColor = "0x000000FF"
+    m.unFocusBackgroundColor = "0xFFFFFFFF"
 end sub
 
 sub render(event as Object)
@@ -23,13 +28,8 @@ sub render(event as Object)
     else
         m.rendered = true
     end if 
-
-    ' defaults
-    m.textColor = "0x000000FF"
-    m.focusedTextColor = "0x000000FF"
-    m.unFocusBackgroundColor = "0xFFFFFFFF"
     
-    if settings.style <> invalid then
+    if settings <> invalid and settings.style <> invalid then
         if settings.style.onUnfocusTextColor <> invalid then
             m.textColor = colorConvert(settings.style.onUnfocusTextColor)
         end if
@@ -103,11 +103,13 @@ end sub
 sub addCarat(content as Object)
     m.caratNode = createObject("roSGNode", "SimpleLabel")
     m.caratNode.fontUri = "font:SystemFontFile"
-    m.caratNode.fontSize = m.button_label.textComponent.font.size
+    if m.button_label.textComponent <> invalid and m.button_label.textComponent.font <> invalid then
+        m.caratNode.fontSize = m.button_label.textComponent.font.size
+    end if
     m.caratNode.text = content.carat
     m.caratNode.horizOrigin = "right"
     m.caratNode.vertOrigin = "center"
-    m.caratNode.translation = [content.width  - m.buttonPadding, content.height / 2]
+    m.caratNode.translation = [content.width - m.buttonPadding, content.height / 2]
     m.top.appendChild(m.caratNode)
 end sub
 
@@ -125,7 +127,10 @@ sub addCustomText(content as Object, settings as Object)
     m.customText = createObject("roSGNode", "SimpleLabel")
     m.customText.text = settings.customText
     m.customText.fontUri = "font:SystemFontFile"
-    m.customText.fontSize = m.button_label.textComponent.font.size
+    
+    if m.button_label.textComponent <> invalid and m.button_label.textComponent.font <> invalid then
+        m.customText.fontSize = m.button_label.textComponent.font.size
+    end if
     
     rightOffset = 0
     if m.onOffNode <> invalid then

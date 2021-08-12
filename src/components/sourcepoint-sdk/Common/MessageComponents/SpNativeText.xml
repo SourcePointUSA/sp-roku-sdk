@@ -5,7 +5,7 @@
     <interface>
         <field id="componentName" type="string" value="Label" />
         <field id="settings" type="assocarray" />
-        <field id="text" type="string" />
+        <field id="text" type="string" alwaysNotify="true"/>
         <field id="textComponent" type="node" />
     </interface>
 

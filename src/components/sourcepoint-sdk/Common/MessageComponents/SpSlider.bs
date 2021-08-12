@@ -44,6 +44,7 @@ sub setFocus(event as Object)
     else if m.top.isSameNode(focusedChild) then
         m.top.buttonLeft.showFocusFootprint = false
         m.top.buttonRight.showFocusFootprint = false
+
         if m.top.buttonSelected = "left" then
             m.top.buttonLeft.setFocus(true)
         else
@@ -57,7 +58,7 @@ sub render(event as Object)
 
     ' normalize settings for buttons
     focusFootprintColor = invalid
-    if settings.style <> invalid then
+    if settings <> invalid and settings.style <> invalid then
         if settings.style.activeBackgroundColor <> invalid then
             settings.style.onFocusBackgroundColor = settings.style.activeBackgroundColor
             focusFootprintColor = settings.style.activeBackgroundColor
@@ -88,16 +89,18 @@ sub render(event as Object)
         m.top.buttonRight.showFocusFootprint = true
     end if
 
-    ' set button text
-    if settings.leftText <> invalid then
-        m.top.buttonLeft.text = settings.leftText
-    end if
-    if settings.rightText <> invalid then
-        m.top.buttonRight.text = settings.rightText
-    end if
+    if settings <> invalid then
+        ' set button text
+        if settings.leftText <> invalid then
+            m.top.buttonLeft.text = settings.leftText
+        end if
+        if settings.rightText <> invalid then
+            m.top.buttonRight.text = settings.rightText
+        end if
 
-    if settings.backgroundColor <> invalid then
-        m.background.blendColor = colorConvert(settings.backgroundColor)
+        if settings.backgroundColor <> invalid then
+            m.background.blendColor = colorConvert(settings.backgroundColor)
+        end if
     end if
 
     boundingRect = m.top.boundingRect()
