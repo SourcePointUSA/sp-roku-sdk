@@ -11,28 +11,48 @@ sub clearCategoryDesc(event as Object)
     end if
 end sub
 
-sub observeCategoryList(event as Object)
-    item = m.categoryList.content.getChild(event.getData())
+function getCategory(id) as Object
+    if id <> invalid and m.top.privacyManagerViewData <> invalid and m.top.privacyManagerViewData.categories <> invalid then
+        return m.top.privacyManagerViewData.categories[id]
+    end if
 
-    changeView("CategoryDetailsView", m.top.privacyManagerViewData.categories[item.id])
+    return invalid
+end function
+
+sub observeCategoryList(event as Object)
+    index = event.getData()
+
+    if m.categoryList <> invalid and m.categoryList.content <> invalid then
+        item = m.categoryList.content.getChild(event.getData())
+        category = getCategory(item.id)
+    
+        if category <> invalid then
+            changeView("CategoryDetailsView", category)
+        end if
+    end if
 end sub
 
 sub observeCategoryListFocus(event as Object)
-    updateCategoryDesc(m.categoryList.focusedContentNode)
+    if m.categoryList <> invalid then
+        updateCategoryDesc(m.categoryList.focusedContentNode)
+    end if
 end sub
 
 sub updateCategoryDesc(listItem as Object)
-    if listItem = invalid then
-        text = ""
-    else
-        text = m.top.privacyManagerViewData.categories[listItem.id].description
+    text = ""
+    
+    if listItem <> invalid then
+        category = getCategory(listItem.id)
+        if category <> invalid then
+            text = category.description
+        end if
     end if
 
     m.categoryDescription.text = text
 end sub
 
 sub renderCategoryDescription()
-    if m.categoryDescription = invalid then
+    if m.categoryDescription = invalid and m.components.text_category_description <> invalid then
         m.categoryDescription = createObject("roSGNode", "SpNativeText")
         m.categoryDescription.settings = m.components.text_category_description.settings
 
@@ -40,6 +60,7 @@ sub renderCategoryDescription()
         m.categoryDescription.textComponent.wrap = true
         m.categoryDescription.textComponent.width = m.colLeftWidth * .8
         m.categoryDescription.textComponent.maxLines = 3
+
         m.colLeft.appendChild(m.categoryDescription)
     end if
 end sub
@@ -60,19 +81,21 @@ sub renderRightCol()
     end if
 
     buttons = []
-    for each categoryId in m.top.privacyManagerViewData.categories
-        buttonSettings = { 
-            ' on: m.top.privacyManagerViewData.categories[categoryId].enabled
-            settings: {} 
-        } 
-        buttonSettings.settings.append(m.components.button_category.settings)
-        buttonSettings.id = categoryId
-        buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
+    if m.top.privacyManagerViewData <> invalid and m.top.privacyManagerViewData.categories <> invalid and m.components.button_category <> invalid then
+        for each categoryId in m.top.privacyManagerViewData.categories
+            buttonSettings = { 
+                ' on: m.top.privacyManagerViewData.categories[categoryId].enabled
+                settings: {} 
+            } 
+            buttonSettings.settings.append(m.components.button_category.settings)
+            buttonSettings.id = categoryId
+            buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
 
-        buttons.push(buttonSettings)
-    end for
+            buttons.push(buttonSettings)
+        end for
+    end if
 
-    if m.categoryList = invalid then
+    if m.categoryList = invalid and buttons.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
         m.categoryList.width = m.colRightWidth
 
@@ -83,7 +106,9 @@ sub renderRightCol()
         m.categoryList.observeField("focusedChild", "clearCategoryDesc")
     end if 
 
-    m.categoryList.buttonComponents = buttons
+    if m.categoryList <> invalid then
+        m.categoryList.buttonComponents = buttons
+    end if
 end sub
 
 sub renderView(event as Object)
@@ -97,9 +122,7 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-
     renderCategoryDescription()
-    
     renderNav([])
 
     setFocus(m.back_button)
