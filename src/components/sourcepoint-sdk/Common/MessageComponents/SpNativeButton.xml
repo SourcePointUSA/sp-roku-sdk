@@ -6,6 +6,7 @@
         <field id="settings" type="assocarray" />
         <field id="backgroundRect" type="node" />
         <field id="width" type="integer"/>
+        <field id="focusFootprintColor" type="string" />
         <field id="buttonLabel" type="node"/>
     </interface>
 

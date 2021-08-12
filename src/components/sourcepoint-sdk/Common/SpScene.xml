@@ -5,8 +5,10 @@
 <component name = "SpScene" extends = "Scene">
 
     <interface>
+
         <field id="activeCampaign" type="integer" value="-1" />
         <field id="campaigns" type="array" />
+        <field id="errors" type="array" value="[]" />
 
         <field id="userConsent" type="assocarray"  alwaysNotify="true" />
     </interface>

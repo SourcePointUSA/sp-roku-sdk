@@ -39,7 +39,6 @@ sub getMessage()
 
         m.top.campaigns = campaigns
 
-        ' TODO format userConsent with a helper?
         ' parse and set user consent
         userConsent = {}
         for each c in response.campaigns

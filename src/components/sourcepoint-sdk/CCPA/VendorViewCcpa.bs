@@ -51,8 +51,6 @@ sub renderRightCol()
             m.colRight.appendChild(m.categoryList)
             m.rightColFocus = m.categoryList
         end if
-    else
-        'TODO - what to show if no purposes?
     end if
 end sub
 
@@ -94,9 +92,6 @@ sub renderView(event as Object)
     renderHeader()
     renderPrivacyPolicyUrl()
     renderNav(m.navButtons)
-
-    ' TODO add loader to the right col until it is rendered
-
 
     renderRightCol()
 end sub

@@ -15,7 +15,7 @@ sub showChannelSGScreen()
   scene.observeField("run_campaign_logic", m.port)
   scene.observeField("open_pm", m.port)
 
-  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}}, {}, false)
+  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}, "gdpr": {}}, {}, false)
 
   runCampaign()
 
@@ -28,7 +28,8 @@ sub showChannelSGScreen()
     else if msgType = "roSGNodeEvent" then
       field = msg.getField()
       if field = "open_pm" then
-        m.spSdk.openPrivacyManager("ccpa", 15995)
+        ' m.spSdk.openPrivacyManager("ccpa", 15995)
+        m.spSdk.openPrivacyManager("gdpr", 16020)
       else if field = "run_campaign_logic" then
         runCampaign()
       end if
@@ -39,6 +40,9 @@ end sub
 
 sub runCampaign()
   consent = m.spSdk.runCampaignLogic()
+
+  print "errors: "
+  print m.spSdk.getErrors()
 
   print "consent object: "
   for each leg in consent

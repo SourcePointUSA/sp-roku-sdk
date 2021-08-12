@@ -4,23 +4,30 @@ sub init()
     ' reset default look and feel
     m.top.iconUri = ""
     m.top.focusedIconUri = ""
-    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button.jpg"          ' note space here, empty string is the default and does not override...
-    m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button.jpg"
-    m.top.showFocusFootprint = true
+    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
+    m.top.focusFootprintBitmapUri = " "     ' this will throw errors in the console but is the only way to reset
+    m.top.minWidth = 0
+    m.top.showFocusFootprint = false
+    m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
+    m.top.observeField("focusedChild", "toggleBg")
     m.top.height = 50
 
     m.focusBackgroundColor = "0xFFFFFFFF"
-    m.unFocusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
     m.textColor = "0x000000FF"
+
+    m.focusPoster = invalid
+    m.footprintPoster = invalid
 end sub
 
 sub render(event as Object)
     settings = event.getData()
 
-    m.top.text = htmlEntityDecode(settings.text)
+    if settings.text <> invalid then
+        m.top.text = htmlEntityDecode(settings.text)
+    end if
 
     if settings.style <> invalid and settings.style <> invalid then
         if settings.style.onFocusTextColor <> invalid then
@@ -52,11 +59,13 @@ sub render(event as Object)
     children = m.top.getChildren(-1, 0)
     for each child in children
         if child.subtype() = "Poster" then
-            if child.uri.Instr("focus_button.jpg") >= 0 then
+            if child.uri.Instr("focus_button_sq.9.png") >= 0 then
                 ' this turns our button the right color in focus
+                m.focusPoster = child
                 child.blendColor = m.focusBackgroundColor
-            else if child.uri.Instr("focus_footprint_button.jpg") >= 0 then
+            else if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
                 ' this turns our footprint the right color 
+                m.footprintPoster = child
                 child.blendColor = m.unFocusBackgroundColor
             end if
         else if child.subtype() = "Label" then
@@ -66,10 +75,12 @@ sub render(event as Object)
 
     createBg()
 
-    m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button.jpg"
-    m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
-    m.top.backgroundRect.height = m.top.height
-    m.top.backgroundRect.width = 0
+    if m.unFocusBackgroundColor <> invalid then
+        m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button_sq.9.png"
+        m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
+        m.top.backgroundRect.height = m.top.height
+        m.top.backgroundRect.width = m.top.boundingRect().width
+    endif
 end sub
 
 sub createBg()
@@ -81,17 +92,42 @@ sub createBg()
     end if
 end sub
 
+sub setFocusFootprintColor(event as Object)
+    color = event.getData()
+
+    if m.top.showFocusFootprint = false then
+        m.top.showFocusFootprint = true
+        m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button_sq.9.png"
+
+        children = m.top.getChildren(-1, 0)
+        for each child in children
+            if child.subtype() = "Poster" then
+                if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
+                    ' this turns our footprint the right color 
+                    m.footprintPoster = child
+                end if
+            end if
+        end for
+    end if
+
+    if m.footprintPoster <> invalid and color <> invalid then
+        m.footprintPoster.blendColor = color
+    end if
+end sub
+
 sub setWidths(event as Object)
     width = event.getData()
     if m.top.backgroundRect <> invalid then
         m.top.backgroundRect.width = width
     end if
+end sub
 
-    ' center the button text
-    children = m.top.getChildren(-1, 0)
-    for each c in children
-        if c.subType() = "Label" then
-            c.horizAlign = "center"
-        end if
-    end for
+sub toggleBg(event as Object)
+    focusedChild = event.getData()
+
+    if focusedChild = invalid then
+        m.top.backgroundRect.visible = true
+    else
+        m.top.backgroundRect.visible = false
+    end if
 end sub

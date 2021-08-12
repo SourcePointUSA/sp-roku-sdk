@@ -18,19 +18,21 @@
   <script uri="./SpBase.bs" />
 
   <children>
-    <Group>
-        <SpNativeText id="screen-title" componentName="SimpleLabel"/>
-    </Group>
-    
-    <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
-        <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
-            <Rectangle id="col-left-width-holder" height="0" />
-        </LayoutGroup>
-        <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
-            <Rectangle id="col-right-width-holder" height="0" />
-        </LayoutGroup>
+    <LayoutGroup layoutDirection="vert" itemSpacings="[20]">
+      <LayoutGroup id="title-holder" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
+          <Rectangle id="title-holder-width-holder" height="0"/>
+          <SpNativeText id="screen-title" componentName="Label"/>
+      </Layout>
+      
+      <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
+          <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
+              <Rectangle id="col-left-width-holder" height="0" />
+          </LayoutGroup>
+          <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
+              <Rectangle id="col-right-width-holder" height="0" />
+          </LayoutGroup>
+      </LayoutGroup>
     </LayoutGroup>
-
   </children>
 
 </component>

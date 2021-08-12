@@ -27,7 +27,8 @@ function _makeRequest(url as String, method as String, body = {} as Object, retr
     try
         responseBody = ParseJson(response)
     catch error
-        print "Invalid JSON response"
+        m.top.error = "Invalid JSON response"
+        print m.top.error
         return invalid
     end try
 
@@ -38,6 +39,7 @@ function _makeRequest(url as String, method as String, body = {} as Object, retr
         Sleep(2 * 1000)
         return _makeRequest(url, method, body, false)
     else if responseBody <> invalid
+        m.top.error = "Request failed with error:" + response.GetFailureReason()
         print "Request failed with error:"
         print responseBody
         print response.GetFailureReason()
@@ -47,6 +49,7 @@ function _makeRequest(url as String, method as String, body = {} as Object, retr
         print "=========================="
         return invalid
     else
+        m.top.error = "Request failed with error:" + response.GetFailureReason()
         print "Request failed with no response body"
         print response.GetFailureReason()
         return invalid

@@ -18,6 +18,7 @@
     <field id="localState" type="string" />
 
     <!-- updated by response -->
+    <field id="error" type="string" />
   </interface>
 
   <script uri="./RequestTask.bs" />

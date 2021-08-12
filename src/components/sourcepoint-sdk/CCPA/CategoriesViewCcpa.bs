@@ -65,7 +65,5 @@ sub renderView(event as Object)
     renderLogo()
     renderNav([])
 
-    ' TODO add loader to the right col until it is rendered
-
     setFocus(m.back_button)
 end sub

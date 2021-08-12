@@ -1,0 +1,9 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "CategoriesViewGdpr" extends = "SpBase" >
+
+    <script uri="./CategoriesViewGdpr.bs" />
+
+    <children></children>
+
+</component>

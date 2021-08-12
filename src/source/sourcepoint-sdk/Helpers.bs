@@ -54,9 +54,27 @@ end function
 sub setLocalState(localState)
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
 
+    if localState = invalid then
+        localState = ""
+    end if
+
     registry.write("localState", localState)
     registry.flush()
 end sub
+
+function getUuid(legislation) as String
+    localState = getLocalState()
+
+    if localState <> "" then
+        localState = ParseJson(localState)
+
+        if localState[legislation] <> invalid and localState[legislation].uuid <> invalid then
+            return localState[legislation].uuid
+        end if
+    end if 
+
+    return ""
+end function
 
 sub scalePixelDimensions(node as object, scaleMap as Object)
     resolutionInfo = m.top.getScene().currentDesignResolution

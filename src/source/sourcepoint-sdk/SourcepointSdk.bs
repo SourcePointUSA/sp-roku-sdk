@@ -2,10 +2,11 @@ class SourcepointSdk
     private accountId
     private authId
     private env = "stage"
+    private errors = []
     private campaignEnv = "prod"
     private consentLanguage
     private legislationsEnabled
-    private propertyHref    'TODO : is this what we should use? 
+    private propertyHref
     private propertyId
     private scene
     private screen
@@ -36,8 +37,6 @@ class SourcepointSdk
         end for
 
         if optional.baseEndpoint <> invalid then m.constants.baseEndpoint = optional.baseEndpoint
-
-        m.requestUUID = m.makeRequestUUID()
 
         m.globalConfig = {
             "accountId": m.accountId,
@@ -70,6 +69,23 @@ class SourcepointSdk
         m.screen.close()
     end sub
 
+    private function formatUserConsent(userConsent as Object) as Object
+        formattedConsent = {}
+        for each legislation in userConsent
+            formattedConsent[legislation] = {
+                grants: {}
+            }
+
+            formattedConsent[legislation].grants.append(userConsent[legislation].grants)
+        end for
+
+        return formattedConsent
+    end function
+
+    public function getErrors() as Object
+        return m.errors
+    end function
+
     public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
             return m.userConsent
@@ -98,6 +114,11 @@ class SourcepointSdk
         while true
             msg = wait(1000, port)
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
+                if getMessageTask.error <> "" then
+                    m.errors.push(getMessageTask.error)
+                    return invalid
+                end if
+
                 m.userConsent = getMessageTask.userConsent
                 m.setPropertyId(getMessageTask.propertyId)
                 exit while
@@ -108,9 +129,8 @@ class SourcepointSdk
 
         ' always call show messages, it will show or close our screen
         m.showMessages(getMessageTask.campaigns)
-
-        ' TODO - format userConsent here
-        return m.userConsent
+        
+        return m.formatUserConsent(m.userConsent)
     end function
 
     public sub openPrivacyManager(legislation as string, messageId as integer)
@@ -147,8 +167,8 @@ class SourcepointSdk
     end sub
 
     private function makeRequestUUID() as string
-        ' TODO implement this
-        return "test"
+        di = CreateObject("roDeviceInfo")
+        return di.getRandomUUID()
     end function
 
     public function runCampaignLogic(legislationsEnabled = invalid as Object)
@@ -178,6 +198,7 @@ class SourcepointSdk
 
             if msgType = "roSGNodeEvent" and msg.getField() = "userConsent" then
                 m.userConsent = msg.getData()
+                m.errors = m.scene.errors
                 m.screen.close()
             end if
 

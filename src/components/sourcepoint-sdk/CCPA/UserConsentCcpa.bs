@@ -78,7 +78,6 @@ sub ingestConsent(event as Object)
     m.rejectedAll = userConsent.rejectedAll
 end sub
 
-' TODO - do we need to update vendors that need this category?
 sub rejectCategory(event as Object)
     found = false
     rejectedCategory = event.getData()

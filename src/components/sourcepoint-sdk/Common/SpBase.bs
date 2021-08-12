@@ -9,11 +9,11 @@ sub init()
     translationMap = {
         "col-left-width-holder": [0,0,m.colLeftWidth,0],
         "col-right-width-holder": [0,0,m.colRightWidth,0],
-        "screen-title": [usableWidth/2, 0],
+        "title-holder-width-holder": [0, 0, usableWidth, 0],
+        ' "title-holder": [usableWidth/2, 0],
         ' "screen-title": function(node, sWidth, sHeight) as Object
         '     return [1180/2, 0] 
         ' end function,
-        "col-layout": [0, 50]
     }
     scalePixelDimensions(m.top, translationMap)
 
@@ -22,10 +22,15 @@ sub init()
         "Body": "privacy_policy_body",
         "BackButton": "button_nav_back",
         "CategoriesDescriptionText": "text_category_description",
+        "CategoriesSlider": "slider_categories",
         "CategoriesHeader": "text_categories_header",
         "CategoriesSubDescriptionText": "text_category_sub_description",
         "CategoryButton": "button_category",
+        "CategoryButtons": "button_categories",
+        "CategoryDescription": "text_category_description",
         "DoNotSellButton": "button_do_not_sell",
+        "FeaturesHeader": "text_features_header",
+        "FeaturesDefinition": "text_features_def",
         "Header": "text_header",
         "LogoImage": "image_logo",
         "OnButton": "button_on",
@@ -37,12 +42,16 @@ sub init()
         "PublisherDescription": "text_publisher_description",
         "PurposesDefinition": "text_purposes_definition",
         "PurposesHeader": "text_purposes_header",
+        "PurposesDefinition": "text_purposes_def",
         "RejectAllButton": "reject_all",
         "SaveAndExitButton": "save_and_exit",
         "SaveButton": "save_and_exit",
+        "SpecialPurposesHeader": "text_special_purposes_header",
+        "SpecialPurposesDefinition": "text_special_purposes_def",
         "VendorButton": "button_vendor",
         "VendorsHeader": "text_vendor_header",
         "VendorLongButton": "button_vendor",
+        "VendorsSlider": "slider_vendors"
     }
     m.components = {}
     m.currentlyFocusedChild = invalid
@@ -125,6 +134,10 @@ sub observeNav(event as Object)
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
+    return _onKeyEvent(key, press)
+end function
+
+function _onKeyEvent(key as String, press as Boolean) as boolean
     newFocus = invalid
 
     if key = "left" and press = true then
@@ -172,7 +185,6 @@ end sub
 sub renderHeader()
     if m.components.text_header <> invalid then
         m.top.findNode("screen-title").settings = m.components.text_header.settings
-        m.top.findNode("screen-title").textComponent.horizOrigin = "center"
     end if
 end sub
 
@@ -191,9 +203,8 @@ sub renderLogo()
             component.loadWidth = 200
         end if 
 
+        component.loadingBitmapUri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
         component.uri = m.components.image_logo.settings.src
-        ' TODO - set this to something for loading
-        ' component.loadingBitmapUri = 
         m.colLeft.appendChild(component)
     end if
 end sub
