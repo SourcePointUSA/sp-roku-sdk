@@ -98,6 +98,7 @@ sub renderCategoryDescription()
         m.categoryDescription = createObject("roSGNode", "SpNativeText")
         m.categoryDescription.settings = m.components.text_category_description.settings
 
+        m.categoryDescription.textComponent.horizAlign = "center"
         m.categoryDescription.textComponent.wrap = true
         m.categoryDescription.textComponent.width = m.colLeftWidth * .8
         m.categoryDescription.textComponent.maxLines = 3

@@ -16,6 +16,20 @@ sub observeNav(event as Object)
     changeView("_go_back_")
 end sub
 
+sub renderCategoryDescription()
+    if m.categoryDescription = invalid then
+        m.categoryDescription = createObject("roSGNode", "SpNativeText")
+        m.categoryDescription.settings = m.components.text_category_description.settings
+
+        m.categoryDescription.textComponent.wrap = true
+        m.categoryDescription.textComponent.width = m.colLeftWidth * .8
+        m.categoryDescription.textComponent.maxLines = 3
+
+        m.categoryDescription.text = m.categoryData.description
+        m.colRight.appendChild(m.categoryDescription)
+    end if
+end sub
+
 sub renderRightCol(event as Object)
     m.categoryData = event.getData()
 
@@ -29,6 +43,8 @@ sub renderRightCol(event as Object)
 
     setFocus(m.back_button)
     m.top.findNode("screen-title").text = m.categoryData.name
+
+    renderCategoryDescription()
 
     ' figure out which type of vendor this is
     if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
