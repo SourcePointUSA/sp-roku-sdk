@@ -5,6 +5,9 @@ sub init()
     usableWidth = scalePixelDimension(1280 - leftRightPadding)
     m.colLeftWidth = usableWidth / 2
     m.colRightWidth = usableWidth / 2
+
+    m.colLeft = m.top.findNode("col-left")
+    m.colRight = m.top.findNode("col-right")
     
     translationMap = {
         "col-left-width-holder": [0,0,m.colLeftWidth,0],

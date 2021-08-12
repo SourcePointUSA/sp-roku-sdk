@@ -134,9 +134,6 @@ sub renderView(event as Object)
         renderRightColLoader()
     end if
 
-    m.colLeft = m.top.findNode("col-left")
-    m.colRight = m.top.findNode("col-right")
-
     view = event.getData()
     mapComponents(view)
 

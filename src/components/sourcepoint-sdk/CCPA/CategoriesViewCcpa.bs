@@ -80,6 +80,7 @@ sub renderRightCol()
         m.rightColFocus = m.categoryList
         m.categoryList.observeField("itemSelected", "observeCategoryList")
         m.categoryList.observeField("itemFocused", "observeCategoryListFocus")
+        m.categoryList.observeField("focusedChild", "clearCategoryDesc")
     end if 
 
     m.categoryList.buttonComponents = buttons
@@ -91,9 +92,6 @@ sub renderView(event as Object)
     if hasPmvData = false then
         renderRightColLoader()
     end if
-    
-    m.colLeft = m.top.findNode("col-left")
-    m.colRight = m.top.findNode("col-right")
 
     view = event.getData()
     mapComponents(view)

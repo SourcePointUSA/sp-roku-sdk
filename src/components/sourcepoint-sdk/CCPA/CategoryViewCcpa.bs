@@ -85,9 +85,6 @@ sub renderRightCol(event as Object)
 end sub
 
 sub renderView(event as Object)
-    m.colLeft = m.top.findNode("col-left")
-    m.colRight = m.top.findNode("col-right")
-
     view = event.getData()
     mapComponents(view)
 
