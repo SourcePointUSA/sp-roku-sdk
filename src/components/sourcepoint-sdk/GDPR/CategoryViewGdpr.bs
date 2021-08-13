@@ -51,7 +51,7 @@ sub renderRightCol(event as Object)
     end for
 
     setFocus(m.nav)
-    m.top.findNode("screen-title").text = m.categoryData.name
+    m.screenTitle.text = m.categoryData.name
 
     if m.categoryData.description <> invalid then
         description = createObject("roSGNode", "SpNativeText")

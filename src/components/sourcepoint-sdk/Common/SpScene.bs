@@ -1,6 +1,7 @@
 sub init()
     m.top.observeField("activeCampaign", "showMessage")
     m.top.observeField("campaigns", "incrementCampaign")
+    
     m.userConsent = {}
 end sub
 

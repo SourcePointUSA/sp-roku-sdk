@@ -21,7 +21,7 @@ sub renderPrivacyPolicyUrl()
         return
     end if
     
-    screenTitle = m.top.findNode("screen-title")
+    screenTitle = m.screenTitle
 
     textColor = "0x000000FF"
     if screenTitle <> invalid then
@@ -43,7 +43,7 @@ sub renderPrivacyPolicyUrl()
 end sub
 
 sub renderRightCol()
-    m.top.findNode("screen-title").text = m.vendorData.name
+    m.screenTitle.text = m.vendorData.name
 
     for i = 0 to m.navButtons.count() step 1 
         if (m.vendorData.enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.enabled = false and m.navButtons[i] = "button_off") then

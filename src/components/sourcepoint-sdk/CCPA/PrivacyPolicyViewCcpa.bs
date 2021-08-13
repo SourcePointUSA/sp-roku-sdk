@@ -15,14 +15,16 @@ sub renderView(event as Object)
     renderLogo()
     renderNav([])
 
-    description = createObject("roSGNode", "SpNativeText")
-    description.componentName = "ScrollableText"
-    description.settings = m.components.privacy_policy_body.settings
-    description.textComponent.width = m.colRightWidth
-    description.textComponent.height = scalePixelDimension(530)
+    if m.components.privacy_policy_body <> invalid then
+        description = createObject("roSGNode", "SpNativeText")
+        description.componentName = "ScrollableText"
+        description.settings = m.components.privacy_policy_body.settings
+        description.textComponent.width = m.colRightWidth
+        description.textComponent.height = scalePixelDimension(530)
 
-    m.colRight.appendChild(description)
+        m.colRight.appendChild(description)
 
-    setFocus(description.textComponent)
-    m.rightColFocus = description.textComponent
+        setFocus(description.textComponent)
+        m.rightColFocus = description.textComponent
+    end if
 end sub

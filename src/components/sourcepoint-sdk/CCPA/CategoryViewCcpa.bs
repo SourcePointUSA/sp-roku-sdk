@@ -1,17 +1,18 @@
 sub init()
     m.top.observeField("view", "renderView")
     m.top.observeField("viewDataExtra", "renderRightCol")
-    m.navButtons = []
 end sub
 
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
-    if selectedButton.id = "button_on" then
-        m.top.userConsentNode.acceptCategory = m.categoryData._id
-    else if selectedButton.id = "button_off" then
-        m.top.userConsentNode.rejectCategory = m.categoryData._id
-    end if 
+    if selectedButton <> invalid then
+        if selectedButton.id = "button_on" then
+            m.top.userConsentNode.acceptCategory = m.categoryData._id
+        else if selectedButton.id = "button_off" then
+            m.top.userConsentNode.rejectCategory = m.categoryData._id
+        end if 
+    end if
 
     changeView("_go_back_")
 end sub
@@ -42,15 +43,14 @@ sub renderRightCol(event as Object)
     ' end for
 
     setFocus(m.back_button)
-    m.top.findNode("screen-title").text = m.categoryData.name
+    m.screenTitle.text = m.categoryData.name
 
     renderCategoryDescription()
 
     ' figure out which type of vendor this is
-    if m.top.vendorType = invalid or m.top.vendorType = "" or m.top.vendorType = "consent" then
+    vendors = []
+    if m.categoryData.requiringConsentVendors <> invalid then
         vendors = m.categoryData.requiringConsentVendors
-    else 
-        vendors = m.categoryData.legIntVendors
     end if
 
     ' render vendor header with count
@@ -64,8 +64,6 @@ sub renderRightCol(event as Object)
     end if
 
     ' render vendors
-    m.vendorList = createObject("roSGNode", "SpButtonList")
-    m.vendorList.width = m.colRightWidth
     buttons = []
     for each vendor in vendors
         buttonSettings = { 
@@ -78,10 +76,14 @@ sub renderRightCol(event as Object)
 
         buttons.push(buttonSettings)
     end for
-    m.vendorList.buttonComponents = buttons
-
-    m.colRight.appendChild(m.vendorList)
-    m.rightColFocus = m.vendorList
+    
+    if buttons.count() > 0 then
+        m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.width = m.colRightWidth
+        m.vendorList.buttonComponents = buttons
+        m.colRight.appendChild(m.vendorList)
+        m.rightColFocus = m.vendorList
+    end if
 end sub
 
 sub renderView(event as Object)
@@ -89,5 +91,5 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderLogo()
-    renderNav(m.navButtons)
+    renderNav([])
 end sub

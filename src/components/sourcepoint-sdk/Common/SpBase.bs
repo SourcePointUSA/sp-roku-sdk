@@ -8,6 +8,7 @@ sub init()
 
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
+    m.screenTitle = m.top.findNode("screen-title")
     
     translationMap = {
         "col-left-width-holder": [0,0,m.colLeftWidth,0],
@@ -65,6 +66,8 @@ sub init()
     m.top.translation=[scalePixelDimension(leftRightPadding/2), 50]
 
     m.top.observeField("focusedChild", "trackFocusedChild")
+
+    m.messagePort = CreateObject("roMessagePort")
 end sub
 
 sub changeView(viewName as String, viewData = invalid as Object)
@@ -74,7 +77,6 @@ sub changeView(viewName as String, viewData = invalid as Object)
 end sub
 
 function getPrivacyManagerViewData(messageCategoryId) as boolean
-    ' if we haven't created the task create it and run it
     m.privacyManagerViewTask = m.top.privacyManagerViewTask
     m.privacyManagerViewTask.messageCategory = messageCategoryId
     m.privacyManagerViewTask.propertyId = m.global.config.propertyId
@@ -86,8 +88,9 @@ function getPrivacyManagerViewData(messageCategoryId) as boolean
 end function
 
 sub mapComponents(view as object)
-    m.components.view = view
-    if m.componentIdMap <> invalid then
+    if view <> invalid then
+        m.components.view = view
+        
         for each component in view.children
             if m.componentIdMap[component.id] <> invalid then
                 m.components[m.componentIdMap[component.id]] = component
@@ -100,14 +103,24 @@ sub observeBackButton()
     changeView("_go_back_")
 end sub
 
+sub observeFieldWrapped(functionName as String)
+    m[functionName + "wrapped"] = function(event as Object)
+
+    end function
+end sub
+
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
+
+    if selectedButton = invalid then
+        return
+    end if
 
     if m.navViewMap <> invalid and m.navViewMap[selectedButton.id] <> invalid then
         changeView(m.navViewMap[selectedButton.id])
     else if selectedButton.id = "button_nav_back" then
         changeView("_go_back_")
-    else
+    else 
         consentTask = createObject("roSGNode", "ConsentTask")
         consentTask.messageCategory = m.top.messageMetadata.categoryId
 
@@ -147,7 +160,7 @@ function _onKeyEvent(key as String, press as Boolean) as boolean
         if m.nav = invalid or m.nav.isInFocusChain() = true then
             ' if we're focused on the nav go to the back button
             newFocus = m.back_button
-        else 
+        else
             ' else we're focused on the right col go to the nav
             newFocus = m.nav
         end if
@@ -187,7 +200,7 @@ end sub
 
 sub renderHeader()
     if m.components.text_header <> invalid then
-        m.top.findNode("screen-title").settings = m.components.text_header.settings
+        m.screenTitle.settings = m.components.text_header.settings
     end if
 end sub
 
@@ -225,25 +238,33 @@ sub renderNav(buttonIds)
             end if
         end for
 
-        buttonGroup = createObject("roSGNode", "SpButtonGroup")
-        buttonGroup.buttonComponents = buttons
+        if buttons.count() > 0 then
+            buttonGroup = createObject("roSGNode", "SpButtonGroup")
+            buttonGroup.buttonComponents = buttons
 
-        m.colLeft.appendChild(buttonGroup)
-        m.nav = buttonGroup
-        m.nav.observeField("buttonSelected", "observeNav")
-        m.previouslyFocusedChild = m.nav
+            m.colLeft.appendChild(buttonGroup)
+            m.nav = buttonGroup
+            m.nav.observeField("buttonSelected", "observeNav")
+            m.previouslyFocusedChild = m.nav
+        else 
+            m.previouslyFocusedChild = m.back_button    
+        end if
     else
         m.previouslyFocusedChild = m.back_button
     end if
 end sub
 
 sub renderRightColLoader()
-    m.loader = createObject("roSGNode", "BusySpinner")
-    m.loader.poster.uri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
-    m.loader.translation = [scalePixelDimension(960 - 64), scalePixelDimension(360 - 64)]
-    m.loader.inheritParentTransform = false
+    if m.loader = invalid then
+        m.loader = createObject("roSGNode", "BusySpinner")
+        m.loader.poster.uri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
+        m.loader.translation = [scalePixelDimension(960 - 64), scalePixelDimension(360 - 64)]
+        m.loader.inheritParentTransform = false
+        m.top.appendChild(m.loader)
+    end if
+
     m.loader.control = "start"
-    m.top.appendChild(m.loader)
+    m.loader.visible = true
 end sub
 
 sub hideRightColLoader()
@@ -273,8 +294,10 @@ sub setConsent(event as Object)
     spMessage = m.top.getParent()
     spMessage.userConsent = event.getData()
     spMessage.done = true
+    ' TODO add any errors?
 end sub
 
+' Enables us to refocus the correct element when we move between existing screens
 sub trackFocusedChild(event as Object)
     focusedChild = event.getData()
 

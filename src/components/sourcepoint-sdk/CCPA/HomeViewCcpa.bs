@@ -30,7 +30,7 @@ sub renderView(event as Object)
 end sub
 
 sub renderRightCol()
-    if m.description = invalid then
+    if m.description = invalid and m.components.text_publisher_description <> invalid then
         m.description = createObject("roSGNode", "SpNativeText")
         m.description.settings = m.components.text_publisher_description.settings
         m.description.textComponent.wrap = true
@@ -39,25 +39,27 @@ sub renderRightCol()
         m.colRight.appendChild(m.description)
     end if
 
-    dnsButton = {
-        carat: "",
-        on: m.top.userConsentNode.doNotSell,
-        settings: {}
-    }
+    if m.components.button_do_not_sell <> invalid then
+        dnsButton = {
+            carat: "",
+            on: m.top.userConsentNode.doNotSell,
+            settings: {}
+        }
 
-    dnsButton.settings.append(m.components.button_do_not_sell.settings)
-    dnsButton.settings.text = dnsButton.settings.dnsText
+        dnsButton.settings.append(m.components.button_do_not_sell.settings)
+        dnsButton.settings.text = dnsButton.settings.dnsText
 
-    if m.dnsButtonHolder = invalid then
-        m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
-        m.dnsButtonHolder.width = m.colRightWidth
+        if m.dnsButtonHolder = invalid then
+            m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
+            m.dnsButtonHolder.width = m.colRightWidth
 
-        m.colRight.appendChild(m.dnsButtonHolder)
-        m.rightColFocus = m.dnsButtonHolder
-        m.dnsButtonHolder.observeField("itemSelected", "observeDns")
-    end if 
+            m.colRight.appendChild(m.dnsButtonHolder)
+            m.rightColFocus = m.dnsButtonHolder
+            m.dnsButtonHolder.observeField("itemSelected", "observeDns")
+        end if 
 
-    m.dnsButtonHolder.buttonComponents = [dnsButton]
+        m.dnsButtonHolder.buttonComponents = [dnsButton]
+    end if
 end sub
 
 sub observedConsentChanged()

@@ -1,23 +1,23 @@
 sub init()
     m.top.observeField("viewDataExtra", "renderView")
-
-    m.navButtons = []
 end sub
 
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
-    if selectedButton.id = "button_on" then
-        m.top.userConsentNode.acceptVendor = m.vendorData._id
-    else if selectedButton.id = "button_off" then
-        m.top.userConsentNode.rejectVendor = m.vendorData._id
-    end if 
+    if selectedButton <> invalid then
+        if selectedButton.id = "button_on" then
+            m.top.userConsentNode.acceptVendor = m.vendorData._id
+        else if selectedButton.id = "button_off" then
+            m.top.userConsentNode.rejectVendor = m.vendorData._id
+        end if 
+    end if
 
     changeView("_go_back_")
 end sub
 
 sub renderRightCol()
-    m.top.findNode("screen-title").text = m.vendorData.name
+    m.screenTitle.text = m.vendorData.name
 
     ' Supports button_on and button_off
     ' for i = 0 to m.navButtons.count() step 1 
@@ -59,7 +59,7 @@ sub renderPrivacyPolicyUrl()
         return
     end if
     
-    screenTitle = m.top.findNode("screen-title")
+    screenTitle = m.screenTitle
 
     textColor = "0x000000FF"
     if screenTitle <> invalid then
@@ -88,7 +88,7 @@ sub renderView(event as Object)
 
     renderHeader()
     renderPrivacyPolicyUrl()
-    renderNav(m.navButtons)
+    renderNav([])
 
     renderRightCol()
 end sub

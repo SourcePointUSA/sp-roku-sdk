@@ -34,16 +34,18 @@ sub renderRightCol()
         buttons.push(buttonSettings)
     end for
 
-    if m.vendorList = invalid then
-        m.vendorList = createObject("roSGNode", "SpButtonList")
-        m.vendorList.width = m.colRightWidth
-        
-        m.colRight.appendChild(m.vendorList)
-        m.rightColFocus = m.vendorList
-        m.vendorList.observeField("itemSelected", "observeVendorList")
-    end if 
+    if buttons.count() > 0 then
+        if m.vendorList = invalid then
+            m.vendorList = createObject("roSGNode", "SpButtonList")
+            m.vendorList.width = m.colRightWidth
+            
+            m.colRight.appendChild(m.vendorList)
+            m.rightColFocus = m.vendorList
+            m.vendorList.observeField("itemSelected", "observeVendorList")
+        end if 
 
-    m.vendorList.buttonComponents = buttons
+        m.vendorList.buttonComponents = buttons
+    end if
 end sub
 
 sub renderView(event as Object)

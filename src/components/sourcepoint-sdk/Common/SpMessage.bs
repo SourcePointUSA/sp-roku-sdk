@@ -9,9 +9,10 @@ end sub
 
 sub changeView(event as object)
     viewName = event.getData()
+
     if viewName = "_go_back_" then
         goBack()
-    else
+    else if viewName <> invalid then
         showView(viewName, m.top.changeViewDataExtra)
     end if
 end sub
@@ -52,13 +53,16 @@ sub showMessage(event as Object)
 
     m.message = event.getData()
 
-    if m.message.messageMetadata <> invalid and type(m.message.messageMetadata.categoryId) = "roInt" then
-        m.top.messageCategory = messageCategoryMap[m.message.messageMetadata.categoryId.ToStr()]
+    if m.message.messageMetadata <> invalid and m.message.messageMetadata.categoryId <> invalid then
+        messageCategoryId = m.message.messageMetadata.categoryId
+        if type(messageCategoryId) = "roInt" then
+            messageCategoryId = messageCategoryId.toStr()
+        end if
+        m.top.messageCategory = messageCategoryMap[messageCategoryId]
 
         m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
         m.userConsentNode = createObject("roSGNode", "UserConsent" + m.top.messageCategory)
         m.userConsentNode.userConsent = m.top.userConsent
-        ' m.userConsentNode.privacyManagerViewTask = m.privacyManagerViewTask
         m.userConsentNode.messageId = m.message.messageMetadata.messageId
         m.privacyManagerViewTask.userConsentNode = m.userConsentNode
 
@@ -95,8 +99,6 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
 
     viewData = getViewData(viewName)
     if viewData <> invalid then
-        print "showing view: " + viewName
-        
         viewComponent = createViewComponent(viewMap[viewName] + m.top.messageCategory, viewMap[viewName], viewData, viewDataExtra)
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
@@ -104,7 +106,6 @@ sub showView(viewName as String, viewDataExtra = invalid as Object)
 
         setSceneBgColor()
     else
-        print "error showing: " + viewName
         m.top.done = true
         m.top.error = "Invalid message JSON"
     end if
