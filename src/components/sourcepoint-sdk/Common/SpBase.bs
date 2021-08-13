@@ -66,8 +66,6 @@ sub init()
     m.top.translation=[scalePixelDimension(leftRightPadding/2), 50]
 
     m.top.observeField("focusedChild", "trackFocusedChild")
-
-    m.messagePort = CreateObject("roMessagePort")
 end sub
 
 sub changeView(viewName as String, viewData = invalid as Object)
@@ -101,12 +99,6 @@ end sub
 
 sub observeBackButton()
     changeView("_go_back_")
-end sub
-
-sub observeFieldWrapped(functionName as String)
-    m[functionName + "wrapped"] = function(event as Object)
-
-    end function
 end sub
 
 sub observeNav(event as Object)
