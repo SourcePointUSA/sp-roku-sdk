@@ -94,7 +94,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
 end function
 
 sub renderCategoryDescription()
-    if m.categoryDescription = invalid then
+    if m.categoryDescription = invalid and m.components.text_category_description <> invalid then
         m.categoryDescription = createObject("roSGNode", "SpNativeText")
         m.categoryDescription.settings = m.components.text_category_description.settings
 
@@ -124,6 +124,12 @@ sub renderRightCol()
         }
     }
 
+    buttonCategorySettings = {}
+
+    if m.components.button_category <> invalid and m.components.button_category.settings <> invalid then
+        buttonCategorySettings.append(m.components.button_category.settings)
+    end if
+
     buttonsLi = []
     if m.top.privacyManagerViewData.legIntCategories <> invalid then
         for each id in m.top.privacyManagerViewData.legIntCategories
@@ -133,7 +139,7 @@ sub renderRightCol()
                 settings: {} 
             } 
 
-            buttonSettings.settings.append(m.components.button_category.settings)
+            buttonSettings.settings.append(buttonCategorySettings)
             buttonSettings.id = id
             buttonSettings.settings.text = m.top.privacyManagerViewData.legIntCategories[id].name
     
@@ -146,29 +152,37 @@ sub renderRightCol()
     for each cType in categoryTypeOrder
         buttons = []
 
-        for each id in m.top.privacyManagerViewData[cType]
-            listItem = m.top.privacyManagerViewData[cType][id]
+        if m.top.privacyManagerViewData[cType] <> invalid then
+            for each id in m.top.privacyManagerViewData[cType]
+                listItem = m.top.privacyManagerViewData[cType][id]
 
-            if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
-                buttonSettings = {
-                    categoryType: cType, 
-                    on: m.top.privacyManagerViewData[cType][id].enabled
-                    settings: {} 
-                } 
-                buttonSettings.settings.append(m.components.button_category.settings)
-                buttonSettings.id = id
-                buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
-        
-                buttons.push(buttonSettings)
-            end if
-        end for
+                if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
+                    buttonSettings = {
+                        categoryType: cType, 
+                        on: m.top.privacyManagerViewData[cType][id].enabled
+                        settings: {} 
+                    } 
+                    buttonSettings.settings.append(buttonCategorySettings)
+                    buttonSettings.id = id
+                    buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
+            
+                    buttons.push(buttonSettings)
+                end if
+            end for
+        end if
     
         if buttons.count() > 0 then
             section = {
-                children: buttons,
-                settings: categoryTypes[cType].headerComponent.settings,
-                settingsDesc: categoryTypes[cType].defComponent.settings
+                children: buttons
             }
+
+            if categoryTypes[cType].headerComponent <> invalid then
+                section.settings = categoryTypes[cType].headerComponent.settings
+            end if
+
+            if categoryTypes[cType].defComponent <> invalid then
+                section.settings = categoryTypes[cType].defComponent.settings
+            end if
 
             sections.push(section)
         end if
@@ -188,10 +202,8 @@ sub renderRightCol()
             m.categoryList.observeField("itemSelected", "observeCategoryList")
             m.categoryList.observeField("itemFocused", "observeCategoryListFocus")
             m.categoryList.observeField("focusedChild", "clearCategoryDesc")
-            if m.components.text_purposes_header <> invalid then
-                m.categoryList.sectionSettings = sections[0].settings
-                m.categoryList.sectionDescSettings = sections[0].settingsDesc
-            end if
+            m.categoryList.sectionSettings = sections[0].settings
+            m.categoryList.sectionDescSettings = sections[0].settingsDesc
     
             m.categoryLists["left"] = m.categoryList
         end if 
@@ -199,6 +211,7 @@ sub renderRightCol()
         m.categoryList.buttonComponents = sections
     end if
     ' Create LI category list if needed
+    ' TODO what if there are only LI categories
     if buttonsLi.count() > 0 then
         if m.categoryListLi = invalid then
             m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
@@ -221,7 +234,9 @@ end sub
 sub renderSlider()
     if m.categorySlider = invalid then
         categorySlider = createObject("roSGNode", "SpSlider")
-        categorySlider.settings = m.components.slider_categories.settings
+        if m.components.slider_categories <> invalid then
+            categorySlider.settings = m.components.slider_categories.settings
+        end if
         titleHolder = m.top.findNode("title-holder")
         titleHolder.appendChild(categorySlider)
         m.categorySlider = categorySlider

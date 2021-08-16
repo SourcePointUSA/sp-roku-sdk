@@ -7,11 +7,13 @@ end sub
 sub observeNav(event as Object)
     selectedButton = m.nav.getChild(event.getData())
 
-    if selectedButton.id = "button_on" then
-        m.top.userConsentNode.acceptVendor = m.vendorData._id
-    else if selectedButton.id = "button_off" then
-        m.top.userConsentNode.rejectVendor = m.vendorData._id
-    end if 
+    if selectedButton <> invalid then
+        if selectedButton.id = "button_on" then
+            m.top.userConsentNode.acceptVendor = m.vendorData._id
+        else if selectedButton.id = "button_off" then
+            m.top.userConsentNode.rejectVendor = m.vendorData._id
+        end if 
+    end if
 
     changeView("_go_back_")
 end sub
@@ -70,7 +72,9 @@ sub renderRightCol()
                     carat: "",
                     settings: {} 
                 } 
-                buttonSettings.settings.append(m.components.button_vendor.settings)
+                if m.components.button_vendor <> invalid then
+                    buttonSettings.settings.append(m.components.button_vendor.settings)
+                end if
                 buttonSettings.settings.text = purpose.name
 
                 buttons.push(buttonSettings)

@@ -38,14 +38,14 @@ sub showVendor(item as Object, isLi = false as Boolean)
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
-    if key = "up" and m.nav.isInFocusChain() = true then 
+    if key = "up" and m.nav <> invalid and m.nav.isInFocusChain() = true then 
         ' ButtonGroup intercepts the press = true events if it moves focus
         ' if we get a press = true event on up that means we're trying to escape the ButtonGroup
         if press = true then
             m.vendorSlider.setFocus(true)
         end if
         return true
-    else if key = "down" and m.vendorSlider.isInFocusChain() = true then
+    else if key = "down" and m.vendorSlider <> invalid and m.vendorSlider.isInFocusChain() = true then
         m.nav.setFocus(true)
         return true
     end if 
@@ -62,17 +62,19 @@ sub renderRightCol()
     end if
 
     buttons = []
-    for each vendorId in m.top.privacyManagerViewData.vendors
-        buttonSettings = { 
-            on: m.top.privacyManagerViewData.vendors[vendorId].enabled
-            settings: {} 
-        } 
-        buttonSettings.settings.append(m.components.button_vendor.settings)
-        buttonSettings.id = vendorId
-        buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
+    if m.top.privacyManagerViewData.vendors <> invalid then
+        for each vendorId in m.top.privacyManagerViewData.vendors
+            buttonSettings = { 
+                on: m.top.privacyManagerViewData.vendors[vendorId].enabled
+                settings: {} 
+            } 
+            buttonSettings.settings.append(m.components.button_vendor.settings)
+            buttonSettings.id = vendorId
+            buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
 
-        buttons.push(buttonSettings)
-    end for
+            buttons.push(buttonSettings)
+        end for
+    end if
 
     if m.vendorList = invalid then
         m.vendorList = createObject("roSGNode", "SpButtonList")
@@ -117,7 +119,7 @@ sub renderRightCol()
 end sub
 
 sub renderSlider()
-    if m.vendorSlider = invalid then
+    if m.vendorSlider = invalid and m.components.slider_vendors <> invalid then
         vendorSlider = createObject("roSGNode", "SpSlider")
         vendorSlider.settings = m.components.slider_vendors.settings
         titleHolder = m.top.findNode("title-holder")
