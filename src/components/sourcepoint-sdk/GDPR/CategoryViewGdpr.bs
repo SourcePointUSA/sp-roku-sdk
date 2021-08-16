@@ -34,7 +34,7 @@ end sub
 sub renderRightCol(event as Object)
     m.categoryData = event.getData()
 
-    ' Show back button if it's not a toggle-able category
+    ' no buttons if it's not toggleable
     if m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt" then
         renderNav([])
     else
@@ -57,7 +57,9 @@ sub renderRightCol(event as Object)
         description = createObject("roSGNode", "SpNativeText")
         description.componentName = "ScrollableText"
         settings = {}
-        settings.append(m.components.text_category_description.settings)
+        if m.components.text_category_description <> invalid then
+            settings.append(m.components.text_category_description.settings)
+        end if
         settings.text = m.categoryData.description
         description.settings = settings
         description.textComponent.height = 250
@@ -103,7 +105,9 @@ sub renderRightCol(event as Object)
             carat: "",
             settings: {} 
         } 
-        buttonSettings.settings.append(m.components.button_vendor.settings)
+        if m.components.button_vendor <> invalid then
+            buttonSettings.settings.append(m.components.button_vendor.settings)
+        end if
         buttonSettings.id = vendor._id
         buttonSettings.settings.text = vendor.name
 
@@ -135,7 +139,7 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
         ' for the right key, we first see if the category text is overflowing
         ' if it is we go there,
         ' if not we will go to the vendor list
-        if m.descriptionScrollPoster.visible = true then
+        if m.descriptionScrollPoster <> invalid and m.descriptionScrollPoster.visible = true then
             m.description.setFocus(true)
             m.previouslyFocusedChild = m.description
             return true
