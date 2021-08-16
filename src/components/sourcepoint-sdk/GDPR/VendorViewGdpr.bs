@@ -9,9 +9,9 @@ sub observeNav(event as Object)
 
     if selectedButton <> invalid then
         if selectedButton.id = "button_on" then
-            m.top.userConsentNode.acceptVendor = m.vendorData._id
+            m.top.userConsentNode.acceptVendor = m.vendorData.vendorId
         else if selectedButton.id = "button_off" then
-            m.top.userConsentNode.rejectVendor = m.vendorData._id
+            m.top.userConsentNode.rejectVendor = m.vendorData.vendorId
         end if 
     end if
 
