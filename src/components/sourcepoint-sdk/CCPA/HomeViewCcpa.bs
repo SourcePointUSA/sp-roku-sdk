@@ -53,6 +53,7 @@ sub renderRightCol()
 
         if m.dnsButtonHolder = invalid then
             m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
+            m.dnsButtonHolder.id = "dns_button_holder"
             m.dnsButtonHolder.width = m.colRightWidth
 
             m.colRight.appendChild(m.dnsButtonHolder)

@@ -101,7 +101,7 @@ class Library {
         return new Promise(resolve => setTimeout(resolve, milliseconds));
     }
 
-    async sendKey(key, delay = 2) {
+    async sendKey(key, delay = .1) {
         await this.sleep(delay*1000);
         await this.client.sendKeypress(key);
         return true;

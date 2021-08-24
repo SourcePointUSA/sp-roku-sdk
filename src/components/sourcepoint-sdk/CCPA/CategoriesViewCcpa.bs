@@ -97,6 +97,7 @@ sub renderRightCol()
 
     if m.categoryList = invalid and buttons.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
 
         m.colRight.appendChild(m.categoryList)

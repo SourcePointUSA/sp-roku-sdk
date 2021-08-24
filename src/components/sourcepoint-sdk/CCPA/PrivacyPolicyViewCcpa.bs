@@ -17,6 +17,7 @@ sub renderView(event as Object)
 
     if m.components.privacy_policy_body <> invalid then
         description = createObject("roSGNode", "SpNativeText")
+        description.id = "privacy_policy_body"
         description.componentName = "ScrollableText"
         description.settings = m.components.privacy_policy_body.settings
         description.textComponent.width = m.colRightWidth
