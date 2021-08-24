@@ -58,6 +58,10 @@ Run Brighterscript compiler with auto channel reloading:
 
 `ROKU_DEV_HOST=[roku device ip] ROKU_DEV_PASSWORD=[roku device password] npm run develop`
 
+# Testing the SDK
+
+Note: contents of `tests/bin` and `tests/lib` are from https://github.com/rokudev/automated-channel-testing
+
 # Releasing the SDK
 
 Compile Brighterscript to Brightscript:
