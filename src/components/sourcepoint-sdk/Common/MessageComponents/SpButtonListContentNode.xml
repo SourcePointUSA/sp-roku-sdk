@@ -10,6 +10,7 @@
         <field id="carat" type="string" value=">" />
         <field id="on" type="boolean" alwaysNotify="true"/>
         <field id="off" type="boolean" value="false" />
+        <field id="showCustom" type="boolean" value="false" />
         <field id="categoryType" type="string" />
     </interface>
 

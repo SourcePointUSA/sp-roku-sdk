@@ -81,6 +81,7 @@ sub render(event as Object)
                 buttonContentNode.id = button.id
                 buttonContentNode.height = buttonHeight
                 buttonContentNode.width = width
+                buttonContentNode.showCustom = button.showCustom
 
                 ' fake that the first element is focused when rendering
                 ' this will give us the correct focus footprint state

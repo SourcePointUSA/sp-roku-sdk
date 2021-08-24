@@ -135,8 +135,9 @@ sub renderRightCol()
         for each id in m.top.privacyManagerViewData.legIntCategories
             buttonSettings = { 
                 categoryType: "legInt",
-                on: m.top.privacyManagerViewData.legIntCategories[id].enabled
-                settings: {} 
+                on: m.top.privacyManagerViewData.legIntCategories[id].enabled,
+                settings: {},
+                showCustom: m.top.privacyManagerViewData.legIntCategories[id].type = "CUSTOM"
             } 
 
             buttonSettings.settings.append(buttonCategorySettings)
@@ -159,9 +160,11 @@ sub renderRightCol()
                 if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
                     buttonSettings = {
                         categoryType: cType, 
-                        on: m.top.privacyManagerViewData[cType][id].enabled
-                        settings: {} 
-                    } 
+                        on: m.top.privacyManagerViewData[cType][id].enabled,
+                        settings: {},
+                        showCustom: m.top.privacyManagerViewData[cType][id].type = "CUSTOM"
+                    }
+
                     buttonSettings.settings.append(buttonCategorySettings)
                     buttonSettings.id = id
                     buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name

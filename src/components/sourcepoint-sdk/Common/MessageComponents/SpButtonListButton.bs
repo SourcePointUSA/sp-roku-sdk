@@ -55,9 +55,9 @@ sub render(event as Object)
         addOnOff(content, settings)
     end if
 
-    ' if settings.customText <> invalid then
-    '     addCustomText(content, settings)
-    ' end if
+    if settings.customText <> invalid and content.showCustom = true then
+        addCustomText(content, settings)
+    end if
     
 
     m.button_label.textComponent.vertAlign = "center"
