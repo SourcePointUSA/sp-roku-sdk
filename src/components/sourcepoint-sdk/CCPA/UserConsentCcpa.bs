@@ -8,7 +8,7 @@ sub init()
 
     m.rejectedCategories = []
     m.rejectedVendors = []
-    m.rejectedAll = invalid
+    m.newUser = invalid
 end sub
 
 sub acceptCategory(event as Object)
@@ -39,12 +39,16 @@ function addConsentToPmvData(privacyManagerViewData as Object) as Object
     if privacyManagerViewData = invalid then
         return {}
     end if
+    
     for each categoryId in privacyManagerViewData.categories
-        privacyManagerViewData.categories[categoryId].enabled = true
+        ' for existing users, turn all on, we will turn off rejected below
+        ' for new users, look at defaultOptedIn flag
+        privacyManagerViewData.categories[categoryId].enabled = m.newUser ? privacyManagerViewData.categories[categoryId].defaultOptedIn : true
     end for
     
     for each vendorId in privacyManagerViewData.vendors
-        privacyManagerViewData.vendors[vendorId].enabled = true
+        ' same for vendors
+        privacyManagerViewData.vendors[vendorId].enabled = m.newUser ? privacyManagerViewData.vendors[vendorId].defaultOptedIn : true
     end for
 
     for each categoryId in m.rejectedCategories
@@ -75,7 +79,7 @@ sub ingestConsent(event as Object)
         m.rejectedVendors = userConsent.rejectedVendors
     end if
 
-    m.rejectedAll = userConsent.rejectedAll
+    m.newUser = userConsent.newUser
 end sub
 
 sub rejectCategory(event as Object)

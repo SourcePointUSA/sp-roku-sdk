@@ -47,7 +47,9 @@ sub renderRightCol()
         }
 
         dnsButton.settings.append(m.components.button_do_not_sell.settings)
-        dnsButton.settings.text = dnsButton.settings.dnsText
+        if dnsButton.settings.text = invalid then
+            dnsButton.settings.text = dnsButton.settings.dnsText
+        end if
 
         if m.dnsButtonHolder = invalid then
             m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
