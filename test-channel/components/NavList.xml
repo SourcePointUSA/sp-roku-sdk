@@ -14,7 +14,7 @@
 
     sub init()
       m.buttonGroup = m.top.findNode("navigationLabelList")
-      m.buttonGroup.buttons = ["Run campaign logic", "Open PM" , "Clear User Data"]
+      m.buttonGroup.buttons = ["Run campaign logic", "run ccpa campaign", "run gdpr campaign", "Open PM" , "Clear User Data"]
 
       m.buttonGroup.setFocus(true)
     end sub

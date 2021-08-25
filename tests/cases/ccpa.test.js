@@ -58,6 +58,8 @@ describe(`CCPA view validation`, () => {
         const verified = await library.verifyIsChannelLoaded('dev');
 
         expect(verified).toBe(true);
+
+        library.sendKeys(["down", "select"])
     })
 
     it(`should show the home screen`, async () => {

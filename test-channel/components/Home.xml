@@ -6,6 +6,8 @@
 
   <interface>
     <field id="run_campaign_logic" type="boolean" alwaysNotify="true"/>
+    <field id="run_ccpa" type="boolean" alwaysNotify="true"/>
+    <field id="run_gdpr" type="boolean" alwaysNotify="true"/>
     <field id="open_pm" type="boolean" alwaysNotify="true"/>
   </interface>
 

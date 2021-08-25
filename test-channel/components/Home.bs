@@ -16,12 +16,15 @@ sub observeHomeNav(event as Object)
   index = event.getData()
   if index = 0 then
     ' run logic
-    print "setting run campaign logic"
     m.top.run_campaign_logic = true
+  else if index = 1 then
+    m.top.run_ccpa = true
   else if index = 2 then
+    m.top.run_gdpr = true
+  else if index = 4 then
     ' clear user data
     setLocalState("")
-  else if index = 1 then
+  else if index = 3 then
     ' open pm
     m.top.open_pm = true
   end if
