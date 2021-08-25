@@ -214,7 +214,7 @@ describe(`CCPA view validation`, () => {
 
         expect(elements.length).toBe(1)
 
-        await expectIds(["image_logo", "privacy_policy_url", "category_list"])
+        await expectIds(["privacy_policy_url", "category_list"])
     })
 
     it(`should let us navigate back to home`, async () => {
