@@ -20,7 +20,21 @@ describe(`GDPR view validation`, () => {
 
         expect(verified).toBe(true);
 
-        await library.sendKeys(["down", "down", "select"])
+        const buttonSearchData = [{"using": "attr", attribute: "text", "value": "run gdpr campaign"}];
+        let focusedEl = await library.getFocusedElement()
+        let buttonLabel = await library.getChildNodes(focusedEl, buttonSearchData)
+        let presses = 0;
+
+        while(buttonLabel.length === 0 && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            buttonLabel = await library.getChildNodes(focusedEl, buttonSearchData)
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
     })
 
     it(`should show the home screen`, async () => {
@@ -56,5 +70,43 @@ describe(`GDPR view validation`, () => {
         })
 
         expect(elements.length).toBe(expectedButtonIds.length)
+    })
+
+    it(`should let us navigate to the categories view`, async () => {
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "button_nav_categories" && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "CategoriesViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should show the logo, category list, back button`, async () => {
+        await expectIds(library, [
+            'category_list', 
+            'category_list_li',
+            'category_slider',
+            'image_logo', 
+            'button_nav_back',
+            'accept_all',
+            'save_and_exit'
+        ])
     })
 })

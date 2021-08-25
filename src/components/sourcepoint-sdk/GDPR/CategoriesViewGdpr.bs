@@ -198,6 +198,7 @@ sub renderRightCol()
     if sections.count() > 0 then
         if m.categoryList = invalid then
             m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
+            m.categoryList.id = "category_list"
             m.categoryList.width = m.colRightWidth
     
             m.categoryListTarget.appendChild(m.categoryList)
@@ -218,6 +219,7 @@ sub renderRightCol()
     if buttonsLi.count() > 0 then
         if m.categoryListLi = invalid then
             m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
+            m.categoryListLi.id = "category_list_li"
             m.categoryListLi.width = m.colRightWidth
             m.categoryListLi.visible = false
 
@@ -237,6 +239,7 @@ end sub
 sub renderSlider()
     if m.categorySlider = invalid then
         categorySlider = createObject("roSGNode", "SpSlider")
+        categorySlider.id = "category_slider"
         if m.components.slider_categories <> invalid then
             categorySlider.settings = m.components.slider_categories.settings
         end if
