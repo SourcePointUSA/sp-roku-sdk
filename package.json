@@ -9,7 +9,7 @@
   "scripts": {
     "compile": "bsc --staging-folder-path dist --root-dir src --create-package false --retain-staging-folder true",
     "develop": "bsc --watch --deploy --host $ROKU_DEV_HOST --password $ROKU_DEV_PASSWORD",
-    "test": "bsc && jest --verbose ./tests/cases"
+    "test": "bsc && jest --verbose --runInBand ./tests/cases"
   },
   "repository": {
     "type": "git",
@@ -31,5 +31,9 @@
     "axios": "0.19.1",
     "form-data": "3.0.0",
     "jest": "^27.0.6"
+  },
+  "jest": {
+    "globalSetup": "./tests/helpers/jest/setup.js",
+    "globalTeardown": "./tests/helpers/jest/teardown.js"
   }
 }

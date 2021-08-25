@@ -1,25 +1,5 @@
 const rokuLibrary = require("../lib/rokuLibrary");
-const { spawn } = require('child_process');
-
-let path;
-
-switch(process.platform) {
-    case "linux": 
-        path = './tests/bin/RokuWebDriver_linux'
-        break;
-    case "win32":
-        path = './tests/bin/RokuWebDriver_win.exe'
-        break;
-    case "darwin":
-        path = './tests/bin/RokuWebDriver_mac'
-        break;
-    default:
-        throw new Error("Unsupported OS")
-        break;
-        
-}
-
-const childProcess = spawn(path);
+const { expectIds } = require('../helpers')
 
 let library;
 
@@ -32,26 +12,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
     await library.close();
-    childProcess.kill()
 });
-
-const expectIds = async (idsToFind) => {
-    for(let i = 0; i < idsToFind.length; i++) {
-        let id = idsToFind[i];
-
-        let elements = await library.getElements({ 
-            elementData: [
-                {
-                    using: "attr",
-                    attribute: "name",
-                    value: id
-                }
-            ]
-        })
-
-        expect(elements.length).toBe(1)
-    }
-}
 
 describe(`CCPA view validation`, () => {
     it(`should launch the test channel`, async () => {
@@ -59,7 +20,7 @@ describe(`CCPA view validation`, () => {
 
         expect(verified).toBe(true);
 
-        library.sendKeys(["down", "select"])
+        await library.sendKeys(["down", "select"])
     })
 
     it(`should show the home screen`, async () => {
@@ -98,7 +59,7 @@ describe(`CCPA view validation`, () => {
     })
 
     it(`should show the logo, DNS button`, async () => {
-        await expectIds(['image_logo', 'dns_button_holder'])
+        await expectIds(library, ['image_logo', 'dns_button_holder'])
     })
 
     it(`should let us navigate to the categories view`, async () => {
@@ -128,7 +89,7 @@ describe(`CCPA view validation`, () => {
     })
 
     it(`should show the logo, category list, back button`, async () => {
-        await expectIds(['category_list', 'image_logo', 'button_nav_back'])
+        await expectIds(library, ['category_list', 'image_logo', 'button_nav_back'])
     })
 
     it(`should let us navigate to a category detail view`, async () => {
@@ -144,7 +105,7 @@ describe(`CCPA view validation`, () => {
 
         expect(elements.length).toBe(1)
 
-        await expectIds(['image_logo', 'button_nav_back', 'vendor_list'])
+        await expectIds(library, ['image_logo', 'button_nav_back', 'vendor_list'])
     })
 
     it(`should let us navigate back to home`, async () => {
@@ -200,7 +161,7 @@ describe(`CCPA view validation`, () => {
     })
 
     it(`should show the logo, vendor list, back button`, async () => {
-        await expectIds(["image_logo", "vendor_list", "button_nav_back"])
+        await expectIds(library, ["image_logo", "vendor_list", "button_nav_back"])
     })
 
     it(`should let us navigate to a vendor detail view`, async () => {
@@ -216,7 +177,7 @@ describe(`CCPA view validation`, () => {
 
         expect(elements.length).toBe(1)
 
-        await expectIds(["privacy_policy_url", "category_list"])
+        await expectIds(library, ["privacy_policy_url", "category_list"])
     })
 
     it(`should let us navigate back to home`, async () => {
@@ -272,6 +233,26 @@ describe(`CCPA view validation`, () => {
     })
 
     it(`should show privacy policy`, async () => {
-        await expectIds(["privacy_policy_body", "button_nav_back", "image_logo"])
+        await expectIds(library, ["privacy_policy_body", "button_nav_back", "image_logo"])
+    })
+
+    it(`should let us go back home and accept all`, async () => {
+        await library.sendKey("left")
+        await library.sendKey("select")
+
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "accept_all" && presses <= 10) {
+            await library.sendKey("up")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
     })
 })

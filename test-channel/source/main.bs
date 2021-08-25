@@ -13,11 +13,11 @@ sub showChannelSGScreen()
   screen.show()
 
   scene.observeField("run_campaign_logic", m.port)
+  scene.observeField("run_ccpa", m.port)
+  scene.observeField("run_gdpr", m.port)
   scene.observeField("open_pm", m.port)
 
   m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}, "gdpr": {}}, {}, false)
-
-  runCampaign()
 
   while(true)
     msg = wait(0, m.port)
@@ -31,15 +31,19 @@ sub showChannelSGScreen()
         ' m.spSdk.openPrivacyManager("ccpa", 15995)
         m.spSdk.openPrivacyManager("gdpr", 16020)
       else if field = "run_campaign_logic" then
-        runCampaign()
+        runCampaign({"ccpa": {}, "gdpr": {}})
+      else if field = "run_gdpr" then
+        runCampaign({"gdpr": {}})
+      else if field = "run_ccpa" then
+        runCampaign({"ccpa": {}})
       end if
     end if
   end while
 
 end sub
 
-sub runCampaign()
-  consent = m.spSdk.runCampaignLogic()
+sub runCampaign(legislations = invalid as Object)
+  consent = m.spSdk.runCampaignLogic(legislations)
 
   print "errors: "
   print m.spSdk.getErrors()
