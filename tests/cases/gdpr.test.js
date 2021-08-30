@@ -1,5 +1,5 @@
 const rokuLibrary = require("../lib/rokuLibrary");
-const { expectIds } = require('../helpers')
+const { expectIds, getToggleButtonValue } = require('../helpers')
 
 let library;
 
@@ -279,5 +279,251 @@ describe(`GDPR view validation`, () => {
         })
 
         expect(elements.length).toBe(1)
+    })
+
+    it(`should let us go back and accept`, async () => {
+        await library.sendKeys(["back"])
+
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "accept_all" && presses <= 10) {
+            await library.sendKey("up")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+    })
+})
+
+describe(`it should maintain state when we re-open the message`, () => {
+    it(`should open the message again`, async () => {
+        await library.sendKeys(["select"])
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "HomeViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should let us navigate to categories`, async () => {
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "button_nav_categories" && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "CategoriesViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should show categories as on (checking the first one)`, async () => {
+        await library.sendKey("right")
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("on")
+    })
+
+    it(`should show LI categories as on (checking the first one)`, async () => {
+        await library.sendKeys(["left", "up", "right", "down", "right"])
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("on")
+    })
+
+    it(`should let us navigate to the vendors`, async () => {
+        await library.sendKeys(["back"])
+
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "button_nav_vendors" && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "VendorsViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should show vendors as on (checking the first one)`, async () => {
+        await library.sendKey("right")
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("on")
+    })
+
+    it(`should show LI vendors as on (checking the first one)`, async () => {
+        await library.sendKeys(["left", "up", "right", "down", "right"])
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("on")
+    })
+
+    it(`should let us go back and reject`, async () => {
+        await library.sendKeys(["back"])
+
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "reject_all" && presses <= 10) {
+            await library.sendKey("up")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+    })
+
+    it(`should open the message again`, async () => {
+        await library.sendKeys(["select"])
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "HomeViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should let us navigate to categories`, async () => {
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "button_nav_categories" && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "CategoriesViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should show categories as off (checking the first one)`, async () => {
+        await library.sendKey("right")
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("off")
+    })
+
+    it(`should show LI categories as off (checking the first one)`, async () => {
+        await library.sendKeys(["left", "up", "right", "down", "right"])
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("off")
+    })
+
+    it(`should let us navigate to the vendors`, async () => {
+        await library.sendKeys(["back"])
+
+        let focusedEl = await library.getFocusedElement()
+        let focusedElName = library.getAttribute(focusedEl, 'name');
+        let presses = 0;
+
+        while(focusedElName !== "button_nav_vendors" && presses <= 10) {
+            await library.sendKey("down")
+
+            focusedEl = await library.getFocusedElement()
+            focusedElName = library.getAttribute(focusedEl, 'name');
+
+            presses ++;
+        }
+
+        await library.sendKey("select")
+
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "VendorsViewGdpr"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+    })
+
+    it(`should show vendors as off (checking the first one)`, async () => {
+        await library.sendKey("right")
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("off")
+    })
+
+    it(`should show LI vendors as off (checking the first one)`, async () => {
+        await library.sendKeys(["left", "up", "right", "down", "right"])
+
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("off")
     })
 })
