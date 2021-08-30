@@ -1,13 +1,13 @@
 const rokuLibrary = require("../lib/rokuLibrary");
-const { expectIds } = require('../helpers')
+const { expectIds, getToggleButtonValue } = require('../helpers')
 
 let library;
 
 jest.setTimeout(30 * 1000);
 
 beforeAll(async () => {
-    library = new rokuLibrary.Library(process.env.ROKU_HOST);
-    await library.sideLoad("./out/sp-roku-sdk.zip", process.env.ROKU_USER, process.env.ROKU_PASSWORD);
+    library = new rokuLibrary.Library(process.env.ROKU_DEV_HOST);
+    await library.sideLoad("./out/sp-roku-sdk.zip", process.env.ROKU_DEV_USER, process.env.ROKU_DEV_PASSWORD);
 });
 
 afterAll(async () => {
@@ -236,10 +236,12 @@ describe(`CCPA view validation`, () => {
         await expectIds(library, ["privacy_policy_body", "button_nav_back", "image_logo"])
     })
 
-    it(`should let us go back home and accept all`, async () => {
+    it(`should let us go back home`, async () => {
         await library.sendKey("left")
         await library.sendKey("select")
+    })
 
+    it(`should let us accept all`, async () => {
         let focusedEl = await library.getFocusedElement()
         let focusedElName = library.getAttribute(focusedEl, 'name');
         let presses = 0;
@@ -254,5 +256,50 @@ describe(`CCPA view validation`, () => {
         }
 
         await library.sendKey("select")
+    })
+})
+
+describe(`it should maintain our choice when we select DNS`, () => {
+    it(`should show the message again`, async () => {
+        // select "run ccpa campaign" again
+        await library.sendKeys(["select"])
+    })
+
+    it(`should show the home screen and DNS button`, async () => {
+        const elements = await library.getElements({ 
+            elementData: [{
+                using: "tag",
+                value: "HomeViewCcpa"
+            }]
+        })
+
+        expect(elements.length).toBe(1)
+
+        expectIds(library, ["dns_button_holder"])
+    })
+
+    it(`should let us navigate to the DNS button`, async () => {
+        await library.sendKeys(["right"])
+
+        const focusedEl = await library.getFocusedElement();
+        expect(focusedEl.XMLName.Local).toBe("SpButtonListButton")
+    })
+
+    it(`should show DNS as "off"`, async () => {
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("off")
+    })
+
+    it(`should let us toggle the DNS button`, async () => {
+        await library.sendKey("select")
+    }) 
+
+    it(`should show DNS as "on"`, async () => {
+        let focusedEl = await library.getFocusedElement()
+        const toggleValue = await getToggleButtonValue(library, focusedEl)
+
+        expect(toggleValue).toBe("on")
     })
 })

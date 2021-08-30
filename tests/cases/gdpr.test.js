@@ -6,8 +6,8 @@ let library;
 jest.setTimeout(30 * 1000);
 
 beforeAll(async () => {
-    library = new rokuLibrary.Library(process.env.ROKU_HOST);
-    await library.sideLoad("./out/sp-roku-sdk.zip", process.env.ROKU_USER, process.env.ROKU_PASSWORD);
+    library = new rokuLibrary.Library(process.env.ROKU_DEV_HOST);
+    await library.sideLoad("./out/sp-roku-sdk.zip", process.env.ROKU_DEV_USER, process.env.ROKU_DEV_PASSWORD);
 });
 
 afterAll(async () => {

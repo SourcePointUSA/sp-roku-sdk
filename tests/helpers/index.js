@@ -16,6 +16,24 @@ const expectIds = async (library, idsToFind) => {
     }
 }
 
+const getToggleButtonValue = async (library, buttonNode) => {
+    const buttonSearchData = [
+        {
+            using: "attr",
+            attribute: "name",
+            value: "on_off_toggle"
+        }
+    ];
+    let onOffToggle = await library.getChildNodes(buttonNode, buttonSearchData)
+    
+    try {
+        return library.getAttribute(onOffToggle[0].Nodes[0], "text").toLowerCase()
+    } catch(e) {
+        return null
+    }
+}
+
 module.exports = {
-    expectIds
+    expectIds,
+    getToggleButtonValue
 }

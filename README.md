@@ -62,7 +62,7 @@ Run Brighterscript compiler with auto channel reloading:
 
 Running tests:
 
-`ROKU_HOST=[ device ip ] ROKU_USER=[ device user ] ROKU_PASSWORD=[ device password ] npm run test`
+`ROKU_DEV_HOST=[ device ip ] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[ device password ] npm run test`
 
 Note: contents of `tests/bin` and `tests/lib` are from https://github.com/rokudev/automated-channel-testing
 
