@@ -93,6 +93,10 @@ end sub
 
 sub renderView(event as Object)
     m.vendorData = event.getData()
+
+    if m.vendorData.disclosureOnly = true then
+        m.navButtons = []
+    end if
     
     view = m.top.view
     mapComponents(view)
