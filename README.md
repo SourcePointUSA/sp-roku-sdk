@@ -50,6 +50,8 @@ For example: `m.spSdk.runCampaignLogic({ "gdpr": { "targetingParams": { "showPm"
 
 # Developing the SDK
 
+Enable development mode for your Roku device: https://developer.roku.com/en-gb/docs/developer-program/getting-started/developer-setup.md
+
 Install dependencies:
 
 `npm install`
