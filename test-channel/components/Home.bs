@@ -63,6 +63,6 @@ end sub
 sub updateLabels(event as Object)
   customConfig = event.getData()
 
-  m.top.findNode("accountIdLabel").text = customConfig.accountId
-  m.top.findNode("propertyHrefLabel").text = customConfig.propertyHref
+  m.top.findNode("accountIdLabel").text = "Account ID: " + customConfig.accountId.toStr()
+  m.top.findNode("propertyHrefLabel").text = "Property Href: " + customConfig.propertyHref
 end sub
