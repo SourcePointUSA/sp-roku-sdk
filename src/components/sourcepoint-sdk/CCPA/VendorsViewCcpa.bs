@@ -37,6 +37,7 @@ sub renderRightCol()
     if buttons.count() > 0 then
         if m.vendorList = invalid then
             m.vendorList = createObject("roSGNode", "SpButtonList")
+            m.vendorList.id = "vendor_list"
             m.vendorList.width = m.colRightWidth
             
             m.colRight.appendChild(m.vendorList)

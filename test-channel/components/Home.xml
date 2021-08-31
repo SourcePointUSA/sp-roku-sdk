@@ -6,8 +6,21 @@
 
   <interface>
     <field id="run_campaign_logic" type="boolean" alwaysNotify="true"/>
+    <field id="run_ccpa" type="boolean" alwaysNotify="true"/>
+    <field id="run_gdpr" type="boolean" alwaysNotify="true"/>
     <field id="open_pm" type="boolean" alwaysNotify="true"/>
+    <field id="custom_config" type="assocarray" alwaysNotify="true"/>
   </interface>
 
   <script uri="./Home.bs" />
+  
+  <children>
+    <LayoutGroup id="layout" translation="[50, 50]" itemSpacings="[50,50]">
+      <LayoutGroup>
+        <Label text="Current Config:" />
+        <Label id="accountIdLabel" />
+        <Label id="propertyHrefLabel" />
+      </LayoutGroup>
+    </LayoutGroup>
+  </children>
 </component>

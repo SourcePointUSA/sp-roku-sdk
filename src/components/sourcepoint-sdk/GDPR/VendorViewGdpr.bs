@@ -35,6 +35,7 @@ sub renderPrivacyPolicyUrl()
     ppHeader.color = textColor
 
     ppUrl = createObject("roSGNode", "Label")
+    ppUrl.id = "privacy_policy_url"
     ppUrl.text = m.vendorData.policyUrl
     ppUrl.wrap = true
     ppUrl.color = textColor
@@ -64,6 +65,7 @@ sub renderRightCol()
 
     if categories <> invalid and categories.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
         buttons = []
         for each purpose in categories

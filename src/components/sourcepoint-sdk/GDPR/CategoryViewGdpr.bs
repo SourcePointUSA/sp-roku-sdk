@@ -55,6 +55,7 @@ sub renderRightCol(event as Object)
 
     if m.categoryData.description <> invalid then
         description = createObject("roSGNode", "SpNativeText")
+        description.id = "category_description"
         description.componentName = "ScrollableText"
         settings = {}
         if m.components.text_category_description <> invalid then
@@ -116,6 +117,7 @@ sub renderRightCol(event as Object)
 
     if buttons.count() > 0 then
         m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.id = "vendor_list"
         m.vendorList.width = m.colRightWidth
         m.vendorList.buttonComponents = buttons
 
@@ -132,8 +134,12 @@ end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean
     if key = "left" and press = true and m.nav <> invalid and m.nav.isInFocusChain() = false then
-        m.nav.setFocus(true)
-        m.previouslyFocusedChild = m.nav
+        if m.back_button = invalid or m.back_button.isInFocusChain() = false then
+            ' if we're focused on the back button leave it there
+            m.nav.setFocus(true)
+            m.previouslyFocusedChild = m.nav
+        end if
+
         return true
     else if key = "right" and press = true and (m.nav = invalid or m.nav.isInFocusChain() = true) then
         ' for the right key, we first see if the category text is overflowing

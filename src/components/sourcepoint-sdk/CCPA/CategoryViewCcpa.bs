@@ -20,6 +20,7 @@ end sub
 sub renderCategoryDescription()
     if m.categoryDescription = invalid then
         m.categoryDescription = createObject("roSGNode", "SpNativeText")
+        m.categoryDescription.id = "category_description"
         m.categoryDescription.settings = m.components.text_category_description.settings
 
         m.categoryDescription.textComponent.wrap = true
@@ -79,6 +80,7 @@ sub renderRightCol(event as Object)
     
     if buttons.count() > 0 then
         m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.id = "vendor_list"
         m.vendorList.width = m.colRightWidth
         m.vendorList.buttonComponents = buttons
         m.colRight.appendChild(m.vendorList)

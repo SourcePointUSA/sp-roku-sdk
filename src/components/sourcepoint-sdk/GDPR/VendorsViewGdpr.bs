@@ -78,6 +78,7 @@ sub renderRightCol()
 
     if m.vendorList = invalid then
         m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.id = "vendor_list"
         m.vendorList.width = m.colRightWidth
         
         m.vendorListTarget.appendChild(m.vendorList)
@@ -104,6 +105,7 @@ sub renderRightCol()
 
         if m.vendorListLi = invalid then
             m.vendorListLi = createObject("roSGNode", "SpButtonList")
+            m.vendorListLi.id = "vendor_list_li"
             m.vendorListLi.width = m.colRightWidth
             m.vendorListLi.visible = false
             
@@ -121,6 +123,7 @@ end sub
 sub renderSlider()
     if m.vendorSlider = invalid and m.components.slider_vendors <> invalid then
         vendorSlider = createObject("roSGNode", "SpSlider")
+        vendorSlider.id = "vendor_slider"
         vendorSlider.settings = m.components.slider_vendors.settings
         titleHolder = m.top.findNode("title-holder")
         titleHolder.appendChild(vendorSlider)

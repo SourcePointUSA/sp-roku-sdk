@@ -12,12 +12,18 @@ sub showChannelSGScreen()
   scene = screen.CreateScene("Home")
   screen.show()
 
+  accountId = 22
+  propertyHref = "https://dan2.multicampaign.com"
+
+  scene.custom_config = {accountId: accountId, propertyHref: propertyHref}
+
   scene.observeField("run_campaign_logic", m.port)
+  scene.observeField("run_ccpa", m.port)
+  scene.observeField("run_gdpr", m.port)
   scene.observeField("open_pm", m.port)
+  scene.observeField("custom_config", m.port)
 
-  m.spSdk = new SourcepointSdk(22, "https://dan2.multicampaign.com", {"ccpa": {}, "gdpr": {}}, {}, false)
-
-  runCampaign()
+  m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {}, "gdpr": {}}, {}, false)
 
   while(true)
     msg = wait(0, m.port)
@@ -29,17 +35,24 @@ sub showChannelSGScreen()
       field = msg.getField()
       if field = "open_pm" then
         ' m.spSdk.openPrivacyManager("ccpa", 15995)
-        m.spSdk.openPrivacyManager("gdpr", 16020)
+        ' m.spSdk.openPrivacyManager("gdpr", 16020)
       else if field = "run_campaign_logic" then
-        runCampaign()
+        runCampaign({"ccpa": {}, "gdpr": {}})
+      else if field = "run_gdpr" then
+        runCampaign({"gdpr": {}})
+      else if field = "run_ccpa" then
+        runCampaign({"ccpa": {}})
+      else if field = "custom_config" then
+        data = msg.getData()
+        m.spSdk = new SourcepointSdk(data.accountId.toInt(), data.propertyHref, {"ccpa": {}, "gdpr": {}}, {}, false)
       end if
     end if
   end while
 
 end sub
 
-sub runCampaign()
-  consent = m.spSdk.runCampaignLogic()
+sub runCampaign(legislations = invalid as Object)
+  consent = m.spSdk.runCampaignLogic(legislations)
 
   print "errors: "
   print m.spSdk.getErrors()

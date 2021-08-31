@@ -5,9 +5,9 @@ sub init()
   m.top.backgroundURI = "pkg:/images/blue-background-dark-texture.jpeg"
   m.nav = createObject("roSGNode", "NavList")
 
-  m.top.appendChild(m.nav)
-
+  m.top.findNode("layout").appendChild(m.nav)
   m.nav.observeField("buttonSelected", "observeHomeNav")
+  m.top.observeField("custom_config", "updateLabels")
 end sub
 
 sub observeHomeNav(event as Object)
@@ -16,13 +16,53 @@ sub observeHomeNav(event as Object)
   index = event.getData()
   if index = 0 then
     ' run logic
-    print "setting run campaign logic"
     m.top.run_campaign_logic = true
+  else if index = 1 then
+    m.top.run_ccpa = true
   else if index = 2 then
+    m.top.run_gdpr = true
+  else if index = 4 then
     ' clear user data
     setLocalState("")
-  else if index = 1 then
+  else if index = 3 then
     ' open pm
     m.top.open_pm = true
+  else if index = 5 then
+    showAccountDialog()
   end if
+end sub
+
+sub showAccountDialog()
+    keyboardDialog = createObject("roSGNode", "KeyboardDialog")
+    keyboardDialog.buttons = ["Next >"]
+    keyboardDialog.title = "Enter Account ID:"
+    keyboardDialog.text = m.accountId <> invalid ? m.accountId : ""
+    keyboardDialog.buttonGroup.observeField("buttonSelected", "showPropertyHrefDialog")
+    m.top.dialog = keyboardDialog
+end sub
+
+sub showPropertyHrefDialog()
+    m.accountId = m.top.dialog.text
+    print m.accountId
+
+    keyboardDialog = createObject("roSGNode", "KeyboardDialog")
+    keyboardDialog.buttons = ["Next >"]
+    keyboardDialog.title = "Enter Property Href:"
+    keyboardDialog.text = m.propertyHref <> invalid ? m.propertyHref : "https://"
+    keyboardDialog.buttonGroup.observeField("buttonSelected", "closeDialogs")
+    m.top.dialog = keyboardDialog
+end sub
+
+sub closeDialogs()
+    m.propertyHref = m.top.dialog.text
+    m.top.dialog.close = true
+
+    m.top.custom_config = { accountId: m.accountId, propertyHref: m.propertyHref }
+end sub
+
+sub updateLabels(event as Object)
+  customConfig = event.getData()
+
+  m.top.findNode("accountIdLabel").text = "Account ID: " + customConfig.accountId.toStr()
+  m.top.findNode("propertyHrefLabel").text = "Property Href: " + customConfig.propertyHref
 end sub

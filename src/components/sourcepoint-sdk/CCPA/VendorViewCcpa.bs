@@ -30,6 +30,7 @@ sub renderRightCol()
 
     if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
         buttons = []
         for each purpose in m.vendorData.purposes
@@ -71,6 +72,7 @@ sub renderPrivacyPolicyUrl()
     ppHeader.color = textColor
 
     ppUrl = createObject("roSGNode", "Label")
+    ppUrl.id = "privacy_policy_url"
     ppUrl.text = m.vendorData.policyUrl
     ppUrl.wrap = true
     ppUrl.color = textColor

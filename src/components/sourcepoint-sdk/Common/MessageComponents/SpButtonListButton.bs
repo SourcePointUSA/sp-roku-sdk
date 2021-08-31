@@ -144,6 +144,7 @@ end sub
 
 sub addOnOff(content as Object, settings as Object)
     m.onOffNode = createObject("roSGNode", "SpNativeText")
+    m.onOffNode.id = "on_off_toggle"
     m.onOffNode.componentName = "SimpleLabel"
     settings = {
         style: {}
