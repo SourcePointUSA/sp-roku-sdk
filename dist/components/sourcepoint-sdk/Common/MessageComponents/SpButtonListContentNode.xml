@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpButtonListContentNode" extends="ContentNode">
+    <interface>
+        <field id="settings" type="assocarray" />
+        <field id="focused" type="boolean" />
+        <field id="height" type="float" value="64" />
+        <field id="width" type="float" value="100" />
+        <field id="carat" type="string" value=">" />
+        <field id="on" type="boolean" alwaysNotify="true" />
+        <field id="off" type="boolean" value="false" />
+        <field id="showCustom" type="boolean" value="false" />
+        <field id="categoryType" type="string" />
+    </interface>
+    <script uri="./SpButtonListContentNode.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

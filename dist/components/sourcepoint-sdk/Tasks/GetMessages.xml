@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="GetMessages" extends="RequestTask">
+    <interface>
+        <field id="legislationsEnabled" type="assocarray" />
+        <field id="propertyId" type="integer" />
+        <field id="campaigns" type="array" />
+        <field id="userConsent" type="assocarray" />
+    </interface>
+    <script uri="./GetMessages.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

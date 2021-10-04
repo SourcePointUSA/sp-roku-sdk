@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpNativeButton" extends="Button">
+    <interface>
+        <field id="settings" type="assocarray" />
+        <field id="backgroundRect" type="node" />
+        <field id="width" type="integer" />
+        <field id="focusFootprintColor" type="string" />
+        <field id="buttonLabel" type="node" />
+    </interface>
+    <script uri="./SpNativeButton.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

@@ -1,0 +1,71 @@
+sub init()
+    m.navViewMap = {
+        "button_nav_categories": "CategoriesView",
+        "button_nav_custom": "CustomView",
+        "button_nav_privacy_policy": "PrivacyPolicyView",
+        "button_nav_vendors": "VendorsView"
+    }
+    m.top.observeField("view", "renderView")
+    m.top.observeField("userConsentNode", "observedConsentChanged")
+end sub
+
+sub renderView(event as object)
+    view = event.getData()
+    mapComponents(view)
+    renderLogo()
+    renderNav([
+        "accept_all",
+        "reject_all",
+        "save_and_exit",
+        "button_nav_categories",
+        "button_nav_vendors",
+        "button_nav_privacy_policy",
+        "button_nav_custom"
+    ])
+    renderRightCol()
+    setFocus(m.nav)
+end sub
+
+sub renderRightCol()
+    if m.description = invalid and m.components.text_publisher_description <> invalid then
+        m.description = createObject("roSGNode", "SpNativeText")
+        m.description.settings = m.components.text_publisher_description.settings
+        m.description.textComponent.wrap = true
+        m.description.textComponent.width = m.colRightWidth
+        m.colRight.appendChild(m.description)
+    end if
+    if m.components.button_do_not_sell <> invalid then
+        dnsButton = {
+            carat: "",
+            on: m.top.userConsentNode.doNotSell,
+            settings: {}
+        }
+        dnsButton.settings.append(m.components.button_do_not_sell.settings)
+        if dnsButton.settings.text = invalid then
+            dnsButton.settings.text = dnsButton.settings.dnsText
+        end if
+        if m.dnsButtonHolder = invalid then
+            m.dnsButtonHolder = createObject("roSGNode", "SpButtonList")
+            m.dnsButtonHolder.id = "dns_button_holder"
+            m.dnsButtonHolder.width = m.colRightWidth
+            m.colRight.appendChild(m.dnsButtonHolder)
+            m.rightColFocus = m.dnsButtonHolder
+            m.dnsButtonHolder.observeField("itemSelected", "observeDns")
+        end if
+        m.dnsButtonHolder.buttonComponents = [
+            dnsButton
+        ]
+    end if
+end sub
+
+sub observedConsentChanged()
+    m.top.userConsentNode.observeField("consentChanged", "renderRightCol")
+end sub
+
+sub observeDns(event as object)
+    if m.top.userConsentNode.doNotSell = true then
+        m.top.userConsentNode.doNotSell = false
+    else
+        m.top.userConsentNode.doNotSell = true
+    end if
+end sub

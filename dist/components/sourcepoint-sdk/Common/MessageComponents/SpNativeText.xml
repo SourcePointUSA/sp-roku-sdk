@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpNativeText" extends="Group">
+    <interface>
+        <field id="componentName" type="string" value="Label" />
+        <field id="settings" type="assocarray" />
+        <field id="text" type="string" alwaysNotify="true" />
+        <field id="textComponent" type="node" />
+    </interface>
+    <script uri="./SpNativeText.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

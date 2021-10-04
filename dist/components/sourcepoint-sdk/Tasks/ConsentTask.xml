@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="ConsentTask" extends="RequestTask">
+    <interface>
+        <field id="action" type="string" />
+        <field id="messageCategory" type="integer" />
+        <field id="saveAndExitVariables" type="assocarray" />
+        <field id="userConsent" type="assocarray" />
+    </interface>
+    <script uri="./ConsentTask.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

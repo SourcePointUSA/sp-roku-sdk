@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="CategoryViewGdpr" extends="SpBase">
+    <interface>
+        <field id="categoryId" type="string" />
+    </interface>
+    <script uri="./CategoryViewGdpr.brs" type="text/brightscript" />
+    <children />
+</component>

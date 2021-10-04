@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpBase" extends="Group">
+    <interface>
+        <field id="message" type="assocarray" />
+        <field id="messageMetadata" type="assocarray" />
+        <field id="view" type="assocarray" />
+        <field id="viewDataExtra" type="assocarray" />
+        <field id="privacyManagerViewTask" type="node" />
+        <field id="privacyManagerViewData" type="assocarray" />
+        <field id="userConsentNode" type="node" />
+    </interface>
+    <script uri="./SpBase.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children>
+        <LayoutGroup layoutDirection="vert" itemSpacings="[20]">
+            <LayoutGroup id="title-holder" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
+                <Rectangle id="title-holder-width-holder" height="0" />
+                <SpNativeText id="screen-title" componentName="Label" />
+            </LayoutGroup>
+            <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
+                <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
+                    <Rectangle id="col-left-width-holder" height="0" />
+                </LayoutGroup>
+                <LayoutGroup id="col-right" layoutDirection="vert" itemSpacings="[20]">
+                    <Rectangle id="col-right-width-holder" height="0" />
+                </LayoutGroup>
+            </LayoutGroup>
+        </LayoutGroup>
+    </children>
+</component>
