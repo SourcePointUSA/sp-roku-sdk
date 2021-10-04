@@ -94,3 +94,9 @@ npm run compile
 Push the updates.
 
 Create a new release.
+
+# Side loading the test channel
+
+Enable developer mode on your roku device - https://blog.roku.com/developer/developer-setup-guide
+
+Upload the `test-channel.zip` file to your Roku device
