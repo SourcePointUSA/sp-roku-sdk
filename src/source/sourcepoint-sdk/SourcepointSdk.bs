@@ -1,7 +1,7 @@
 class SourcepointSdk
     private accountId
     private authId
-    private env = "stage"
+    private env = "prod"
     private errors = []
     private campaignEnv = "prod"
     private consentLanguage
@@ -14,9 +14,8 @@ class SourcepointSdk
     private userConsent
 
     public constants = {
-        baseEndpoint: "https://cdn.sp-stage.net",
-        pathGET: "/wrapper/v2/get_messages",
-        pathPOST: "/"
+        baseEndpoint: "https://cdn.privacy-mgmt.com",
+        pathGET: "/wrapper/v2/get_messages"
     }
 
     sub new(accountId as Integer, propertyHref as String, legislationsEnabled = {} as Object, optional = {} as Object, showMessages = true as boolean)
