@@ -1,0 +1,91 @@
+'import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.functionName = "privacyManagerView"
+    m.top.observeField("userConsentNode", "addUcnObserver")
+end sub
+
+sub addUcnObserver()
+    m.top.unObserveField("userConsentNode")
+    m.top.userConsentNode.observeField("consentChanged", "updateData")
+end sub
+
+sub privacyManagerView()
+    ' don't re-retrieve data
+    if m.top.data <> invalid then
+        return
+    end if
+    if m.top.messageCategory = 1 then
+        url = m.global.config.baseEndpoint + "/wrapper/v2/privacy-manager/privacy-manager-view/gdpr"
+        queryParams = {
+            "consentLanguage": m.top.consentLanguage,
+            "propertyId": m.top.propertyId,
+            "env": m.global.config.env,
+            "uuid": getUuid("gdpr")
+        }
+    else if m.top.messageCategory = 2 then
+        url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
+        queryParams = {
+            "consentLanguage": m.top.consentLanguage,
+            "siteId": m.top.propertyId
+        }
+    else
+        return
+    end if
+    url = addQueryParams(url, queryParams)
+    response = makeRequest(url, "GET")
+    if response <> invalid then
+        data = {
+            categories: {},
+            legIntCategories: {},
+            vendors: {},
+            legIntVendors: {}
+        }
+        if response.categories <> invalid then
+            for each category in response.categories
+                data.categories[category._id] = category
+            end for
+        end if
+        if response.legIntCategories <> invalid then
+            for each category in response.legIntCategories
+                data.legIntCategories[category._id] = category
+            end for
+        end if
+        if response.vendors <> invalid then
+            for each vendor in response.vendors
+                key = "_id"
+                if m.top.messageCategory = 1 then
+                    key = "vendorId"
+                end if
+                data.vendors[vendor[key]] = vendor
+            end for
+        end if
+        if response.legIntVendors <> invalid then
+            for each vendor in response.legIntVendors
+                key = "_id"
+                if m.top.messageCategory = 1 then
+                    key = "vendorId"
+                end if
+                data.legIntVendors[vendor[key]] = vendor
+            end for
+        end if
+        if response.specialPurposes <> invalid then
+            data.specialPurposes = {}
+            for each sp in response.specialPurposes
+                data.specialPurposes[sp._id] = sp
+            end for
+        end if
+        ' TODO - get a VL that has data for these to verify
+        if response.specialFeatures <> invalid then
+            data.specialFeatures = {}
+            for each sf in response.specialFeatures
+                data.specialFeatures[sf._id] = sf
+            end for
+        end if
+        m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", data)
+    end if
+end sub
+
+sub updateData()
+    m.top.data = m.top.userConsentNode.callFunc("addConsentToPmvData", m.top.data)
+end sub

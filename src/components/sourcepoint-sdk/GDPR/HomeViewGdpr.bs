@@ -1,0 +1,70 @@
+sub init()
+    m.navViewMap = {
+        "button_nav_categories": "CategoriesView",
+        "button_nav_custom": "CustomView",
+        "button_nav_privacy_policy": "PrivacyPolicyView",
+        "button_nav_vendors": "VendorsView"
+    }
+
+    m.top.observeField("view", "renderView")
+end sub
+
+sub renderView(event as Object)
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav([
+        "accept_all", 
+        "reject_all", 
+        "button_nav_categories", 
+        "button_nav_vendors", 
+        "button_nav_privacy_policy", 
+        "button_nav_custom"
+    ])
+    renderRightCol()
+
+    setFocus(m.nav)
+end sub
+
+sub renderCategories(categories)
+    categoryButtons = []
+    for each c in categories
+        buttonSettings = {
+            carat: "",
+            settings: {
+                text: c.name
+            }
+        }
+        if m.components.button_categories <> invalid then
+            buttonSettings.settings.append(m.components.button_categories.settings)
+        end if
+        categoryButtons.push(buttonSettings)
+    end for
+
+    if m.categoryList = invalid then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.width = m.colRightWidth
+        
+        m.colRight.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+    end if
+
+    m.categoryList.buttonComponents = categoryButtons
+end sub
+
+sub renderRightCol()
+    if m.components.text_publisher_description <> invalid then
+        description = createObject("roSGNode", "SpNativeText")
+            description.settings = m.components.text_publisher_description.settings
+        description.textComponent.wrap = true
+        description.textComponent.width = m.colRightWidth
+        
+        m.colRight.appendChild(description)
+    end if
+
+    if m.top.message <> invalid and m.top.message.categories <> invalid then
+        renderCategories(m.top.message.categories)
+    end if
+end sub
+

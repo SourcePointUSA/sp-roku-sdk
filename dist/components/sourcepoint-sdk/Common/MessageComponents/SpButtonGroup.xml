@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpButtonGroup" extends="ButtonGroup">
+    <interface>
+        <field id="buttonComponents" type="array" />
+        <field id="buttonComponentName" type="string" value="SpNativeButton" />
+    </interface>
+    <script uri="./SpButtonGroup.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

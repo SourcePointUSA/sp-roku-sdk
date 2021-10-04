@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="GetMessage" extends="RequestTask">
+    <interface>
+        <field id="messageId" type="integer" />
+        <field id="legislation" type="string" />
+        <field id="message" type="assocarray" />
+    </interface>
+    <script uri="./GetMessage.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

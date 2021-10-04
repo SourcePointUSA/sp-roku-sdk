@@ -1,0 +1,146 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.observeField("changeView", "changeView")
+    m.top.observeField("message", "showMessage")
+
+    m.viewHistory = []
+end sub
+
+sub changeView(event as object)
+    viewName = event.getData()
+
+    if viewName = "_go_back_" then
+        goBack()
+    else if viewName <> invalid then
+        showView(viewName, m.top.changeViewDataExtra)
+    end if
+end sub
+
+sub goBack()
+    if m.viewHistory.count() > 0 then
+        previousView = m.viewHistory.pop()
+
+        if m.currentView <> invalid then
+            m.top.removeChild(m.currentView)
+            m.currentView = invalid
+        end if 
+        
+        m.currentView = previousView
+        m.top.appendChild(previousView)
+        previousView.setFocus(true)
+    else
+        m.top.changeView = "HomeView"
+    end if
+
+    setSceneBgColor()
+end sub
+
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if key = "back" and press = true then
+        if m.currentView <> invalid and m.currentView.id <> "HomeView" then
+            goBack()
+        end if
+        return true
+    end if 
+end function
+
+sub showMessage(event as Object)
+    messageCategoryMap = {
+        "1": "Gdpr",
+        "2": "Ccpa"
+    }
+
+    m.message = event.getData()
+
+    if m.message.messageMetadata <> invalid and m.message.messageMetadata.categoryId <> invalid then
+        messageCategoryId = m.message.messageMetadata.categoryId
+        if type(messageCategoryId) = "roInt" then
+            messageCategoryId = messageCategoryId.toStr()
+        end if
+        m.top.messageCategory = messageCategoryMap[messageCategoryId]
+
+        m.privacyManagerViewTask = createObject("roSGNode", "PrivacyManagerView")
+        m.userConsentNode = createObject("roSGNode", "UserConsent" + m.top.messageCategory)
+        m.userConsentNode.userConsent = m.top.userConsent
+        m.userConsentNode.messageId = m.message.messageMetadata.messageId
+        m.privacyManagerViewTask.userConsentNode = m.userConsentNode
+
+        showView("HomeView")
+    else
+        m.top.done = true
+        m.top.error = "Invalid message JSON"
+    endif
+end sub
+
+sub showView(viewName as String, viewDataExtra = invalid as Object)
+    viewMap = {
+        "HomeView": "HomeView",
+        "CategoriesView": "CategoriesView",
+        "CategoryDetailsView": "CategoryView",
+        "CustomView": "PrivacyPolicyView",
+        "PrivacyPolicyView": "PrivacyPolicyView",
+        "VendorsView": "VendorsView",
+        "VendorDetailsView": "VendorView"
+    }
+
+    if viewName = "HomeView" then
+        ' reset history when we go back Home
+        m.viewHistory = []
+    else 
+        ' add to History if we're going deeper
+        m.viewHistory.push(m.currentView)
+    end if
+
+    if m.currentView <> invalid then
+        m.top.removeChild(m.currentView)
+        m.currentView = invalid
+    end if 
+
+    viewData = getViewData(viewName)
+    if viewData <> invalid then
+        viewComponent = createViewComponent(viewMap[viewName] + m.top.messageCategory, viewMap[viewName], viewData, viewDataExtra)
+        m.currentView = viewComponent
+        m.top.appendChild(viewComponent)
+        viewComponent.setFocus(true)
+
+        setSceneBgColor()
+    else
+        m.top.done = true
+        m.top.error = "Invalid message JSON"
+    end if
+end sub
+
+function createViewComponent(componentName, viewId, viewData, viewDataExtra) as Object
+    viewComponent = CreateObject("roSGNode", componentName)
+    viewComponent.id = viewId
+
+    ' this order is important for observers 
+    ' (a viewDataExtra observer will have access to all of the before)
+    viewComponent.privacyManagerViewTask = m.privacyManagerViewTask
+    viewComponent.userConsentNode = m.userConsentNode
+    viewComponent.message = m.message.message
+    viewComponent.messageMetadata = m.message.messageMetadata
+    viewComponent.view = viewData
+    viewComponent.viewDataExtra = viewDataExtra
+
+    return viewComponent
+end function
+
+function getViewData(view as String) as Object
+    for each component in m.message.message.message_json.children
+        if component.id = view
+            return component
+        end if
+    end for
+
+    return invalid
+end function
+
+sub setSceneBgColor()
+    if m.currentView.view.settings.style.backgroundColor <> invalid then
+        spScene = m.top.getScene()
+        spScene.backgroundUri = ""
+        spScene.backgroundColor = colorConvert(m.currentView.view.settings.style.backgroundColor)
+    end if 
+end sub

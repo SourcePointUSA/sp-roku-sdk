@@ -1,0 +1,15 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "CategoryViewCcpa" extends = "SpBase" >
+
+    <interface>
+        <field id="vendorType" type="string" />
+
+        <field id="categoryId" type="string" />
+    </interface>
+
+    <script uri="./CategoryViewCcpa.bs" />
+
+    <children></children>
+
+</component>

@@ -1,0 +1,31 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "NavList" extends = "Group" >
+
+  <interface >
+    <field id="buttonSelected" alias="navigationLabelList.buttonSelected" />
+  </interface>
+
+  <script type = "text/brightscript" >
+
+    <![CDATA[
+
+    sub init()
+      m.buttonGroup = m.top.findNode("navigationLabelList")
+      m.buttonGroup.buttons = ["Run campaign logic", "run ccpa campaign", "run gdpr campaign", "Open PM" , "Clear User Data", "Change Config"]
+
+      m.buttonGroup.setFocus(true)
+    end sub
+
+    ]]>
+
+  </script>
+
+    <children>
+        <ButtonGroup id = "navigationLabelList" >
+        </ButtonGroup>
+    </children>
+
+</component>

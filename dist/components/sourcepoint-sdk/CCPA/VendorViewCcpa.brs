@@ -1,0 +1,81 @@
+sub init()
+    m.top.observeField("viewDataExtra", "renderView")
+end sub
+
+sub observeNav(event as object)
+    selectedButton = m.nav.getChild(event.getData())
+    if selectedButton <> invalid then
+        if selectedButton.id = "button_on" then
+            m.top.userConsentNode.acceptVendor = m.vendorData._id
+        else if selectedButton.id = "button_off" then
+            m.top.userConsentNode.rejectVendor = m.vendorData._id
+        end if
+    end if
+    changeView("_go_back_")
+end sub
+
+sub renderRightCol()
+    m.screenTitle.text = m.vendorData.name
+    ' Supports button_on and button_off
+    ' for i = 0 to m.navButtons.count() step 1 
+    '     if (m.vendorData.enabled = true and m.navButtons[i] = "button_on") or (m.vendorData.enabled = false and m.navButtons[i] = "button_off") then
+    '         m.nav.focusButton = i
+    '         exit for
+    '     end if
+    ' end for
+    setFocus(m.back_button)
+    if m.vendorData.purposes <> invalid and m.vendorData.purposes.count() > 0 then
+        m.categoryList = createObject("roSGNode", "SpButtonList")
+        m.categoryList.id = "category_list"
+        m.categoryList.width = m.colRightWidth
+        buttons = []
+        for each purpose in m.vendorData.purposes
+            if purpose <> invalid then
+                buttonSettings = {
+                    carat: "",
+                    settings: {}
+                }
+                buttonSettings.settings.append(m.components.button_vendor.settings)
+                buttonSettings.settings.text = purpose
+                buttons.push(buttonSettings)
+            end if
+        end for
+        m.categoryList.buttonComponents = buttons
+        if buttons.count() > 0 then
+            m.colRight.appendChild(m.categoryList)
+            m.rightColFocus = m.categoryList
+        end if
+    end if
+end sub
+
+sub renderPrivacyPolicyUrl()
+    if m.vendorData.policyUrl = invalid then
+        return
+    end if
+    screenTitle = m.screenTitle
+    textColor = "0x000000FF"
+    if screenTitle <> invalid then
+        textColor = screenTitle.textComponent.color
+    end if
+    ppHeader = createObject("roSGNode", "SimpleLabel")
+    ppHeader.text = "Privacy Policy Url:"
+    ppHeader.color = textColor
+    ppUrl = createObject("roSGNode", "Label")
+    ppUrl.id = "privacy_policy_url"
+    ppUrl.text = m.vendorData.policyUrl
+    ppUrl.wrap = true
+    ppUrl.color = textColor
+    ppUrl.width = m.colLeftWidth * .8
+    m.colLeft.appendChild(ppHeader)
+    m.colLeft.appendChild(ppUrl)
+end sub
+
+sub renderView(event as object)
+    m.vendorData = event.getData()
+    view = m.top.view
+    mapComponents(view)
+    renderHeader()
+    renderPrivacyPolicyUrl()
+    renderNav([])
+    renderRightCol()
+end sub

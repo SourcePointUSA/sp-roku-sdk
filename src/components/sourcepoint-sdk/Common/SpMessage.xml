@@ -1,0 +1,26 @@
+<?xml version = "1.0" encoding = "utf-8" ?> 
+
+<!--********** Copyright 2016 Roku Corp.  All Rights Reserved. **********-->
+
+<component name = "SpMessage" extends = "Group">
+
+    <interface>
+        <!-- Updated by Children -->
+        <field id="changeView" type="string" alwaysNotify="true"/>
+        <field id="changeViewDataExtra" type="assocarray" />
+
+        <!-- Updated by Parent -->
+        <field id="message" type="assocarray" />
+
+        <!-- Updated by Both -->
+        <field id="userConsent" type="assocarray" />
+
+        <!-- Updated by SpMessage -->
+        <field id="messageCategory" type="string" />
+        <field id="done" type="boolean" />
+        <field id="error" type="string" />
+    </interface>
+
+    <script uri="./SpMessage.bs" />
+
+</component>

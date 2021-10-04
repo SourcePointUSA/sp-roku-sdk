@@ -1,0 +1,9 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "HomeViewCcpa" extends = "SpBase" >
+
+    <script uri="./HomeViewCcpa.bs" />
+
+    <children></children>
+
+</component>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="HomeViewGdpr" extends="SpBase">
+    <script uri="./HomeViewGdpr.brs" type="text/brightscript" />
+    <children />
+</component>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PrivacyManagerView" extends="RequestTask">
+    <interface>
+        <field id="messageCategory" type="integer" />
+        <field id="propertyId" type="integer" />
+        <field id="vendorList" type="string" />
+        <field id="userConsentNode" type="node" />
+        <field id="data" type="assocarray" />
+    </interface>
+    <script uri="./PrivacyManagerView.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

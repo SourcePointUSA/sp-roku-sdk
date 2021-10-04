@@ -1,0 +1,97 @@
+sub init()
+    m.top.observeField("view", "renderView")
+    m.top.observeField("viewDataExtra", "renderRightCol")
+end sub
+
+sub observeNav(event as Object)
+    selectedButton = m.nav.getChild(event.getData())
+
+    if selectedButton <> invalid then
+        if selectedButton.id = "button_on" then
+            m.top.userConsentNode.acceptCategory = m.categoryData._id
+        else if selectedButton.id = "button_off" then
+            m.top.userConsentNode.rejectCategory = m.categoryData._id
+        end if 
+    end if
+
+    changeView("_go_back_")
+end sub
+
+sub renderCategoryDescription()
+    if m.categoryDescription = invalid then
+        m.categoryDescription = createObject("roSGNode", "SpNativeText")
+        m.categoryDescription.id = "category_description"
+        m.categoryDescription.settings = m.components.text_category_description.settings
+
+        m.categoryDescription.textComponent.wrap = true
+        m.categoryDescription.textComponent.width = m.colLeftWidth * .8
+        m.categoryDescription.textComponent.maxLines = 3
+
+        m.categoryDescription.text = m.categoryData.description
+        m.colRight.appendChild(m.categoryDescription)
+    end if
+end sub
+
+sub renderRightCol(event as Object)
+    m.categoryData = event.getData()
+
+    ' Supports button_on and button_off
+    ' for i = 0 to m.navButtons.count() step 1 
+    '     if (m.categoryData.enabled = true and m.navButtons[i] = "button_on") or (m.categoryData.enabled = false and m.navButtons[i] = "button_off") then
+    '         m.nav.focusButton = i
+    '         exit for
+    '     end if
+    ' end for
+
+    setFocus(m.back_button)
+    m.screenTitle.text = m.categoryData.name
+
+    renderCategoryDescription()
+
+    ' figure out which type of vendor this is
+    vendors = []
+    if m.categoryData.requiringConsentVendors <> invalid then
+        vendors = m.categoryData.requiringConsentVendors
+    end if
+
+    ' render vendor header with count
+    if m.components.text_vendor_header <> invalid then
+        vendorsHeader = createObject("roSGNode", "SpNativeText")
+        settings = {}
+        settings.append(m.components.text_vendor_header.settings)
+        settings.text = settings.text + " (" + vendors.count().toStr() + ")"
+        vendorsHeader.settings = settings
+        m.colRight.appendChild(vendorsHeader)
+    end if
+
+    ' render vendors
+    buttons = []
+    for each vendor in vendors
+        buttonSettings = { 
+            carat: "",
+            settings: {} 
+        } 
+        buttonSettings.settings.append(m.components.button_vendor.settings)
+        buttonSettings.id = vendor._id
+        buttonSettings.settings.text = vendor.name
+
+        buttons.push(buttonSettings)
+    end for
+    
+    if buttons.count() > 0 then
+        m.vendorList = createObject("roSGNode", "SpButtonList")
+        m.vendorList.id = "vendor_list"
+        m.vendorList.width = m.colRightWidth
+        m.vendorList.buttonComponents = buttons
+        m.colRight.appendChild(m.vendorList)
+        m.rightColFocus = m.vendorList
+    end if
+end sub
+
+sub renderView(event as Object)
+    view = event.getData()
+    mapComponents(view)
+
+    renderLogo()
+    renderNav([])
+end sub

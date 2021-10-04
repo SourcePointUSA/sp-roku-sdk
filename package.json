@@ -1,0 +1,42 @@
+{
+  "ropm": {
+    "rootDir": "dist"
+  },
+  "name": "sp-roku-sdk",
+  "description": "SP SDK for ROKU.",
+  "version": "2.0.0",
+  "main": "index.js",
+  "scripts": {
+    "compile": "npm run compile-sdk && npm run compile-test-channel",
+    "compile-sdk": "bsc --staging-folder-path dist --root-dir src --create-package false --retain-staging-folder true",
+    "compile-test-channel": "bsc --root-dir test-channel --out-file ./test-channel.zip --retain-staging-folder false",
+    "debug": "telnet $ROKU_DEV_HOST 8085",
+    "develop": "bsc --watch --deploy --host $ROKU_DEV_HOST --password $ROKU_DEV_PASSWORD",
+    "test": "bsc && jest --verbose --runInBand ./tests/cases"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SourcePointUSA/sp-roku-sdk.git"
+  },
+  "keywords": [
+    "ropm"
+  ],
+  "author": "Sourcepoint",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SourcePointUSA/sp-roku-sdk/issues"
+  },
+  "homepage": "https://github.com/SourcePointUSA/sp-roku-sdk#readme",
+  "dependencies": {
+    "brighterscript": "^0.39.3"
+  },
+  "devDependencies": {
+    "axios": "0.19.1",
+    "form-data": "3.0.0",
+    "jest": "^27.0.6"
+  },
+  "jest": {
+    "globalSetup": "./tests/helpers/jest/setup.js",
+    "globalTeardown": "./tests/helpers/jest/teardown.js"
+  }
+}

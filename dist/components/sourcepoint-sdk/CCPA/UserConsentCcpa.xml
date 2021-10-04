@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="UserConsentCcpa" extends="Node">
+    <interface>
+        <field id="privacyManagerViewTask" type="node" />
+        <field id="userConsent" type="assocarray" />
+        <field id="messageId" type="integer" />
+        <field id="acceptCategory" type="string" alwaysNotify="true" />
+        <field id="acceptVendor" type="string" alwaysNotify="true" />
+        <field id="rejectCategory" type="string" alwaysNotify="true" />
+        <field id="rejectVendor" type="string" alwaysNotify="true" />
+        <field id="doNotSell" type="boolean" value="false" />
+        <field id="consentChanged" type="assocarray" />
+        <function name="addConsentToPmvData" />
+        <function name="getSaveAndExitVariables" />
+    </interface>
+    <script uri="./UserConsentCcpa.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "GetMessage" extends = "RequestTask" >
+
+  <interface>
+    <!-- updated for request -->
+    <field id="messageId" type="integer" />
+    <field id="legislation" type="string" />
+
+    <!-- updated by response -->
+    <field id="message" type="assocarray" />
+  </interface>
+
+  <script uri="./GetMessage.bs" />
+
+</component>

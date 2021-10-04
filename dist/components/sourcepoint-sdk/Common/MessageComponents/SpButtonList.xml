@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="SpButtonList" extends="MarkupList">
+    <interface>
+        <field id="buttonComponents" type="array" />
+        <field id="width" type="integer" />
+        <field id="sectionSettings" type="assocarray" />
+        <field id="focusedContentNode" type="node" />
+        <field id="focusedSectionNode" type="node" />
+    </interface>
+    <script uri="./SpButtonList.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+    <children />
+</component>

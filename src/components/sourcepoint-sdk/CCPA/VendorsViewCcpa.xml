@@ -1,0 +1,9 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "VendorsViewCcpa" extends = "SpBase" >
+
+    <script uri="./VendorsViewCcpa.bs" />
+
+    <children></children>
+
+</component>

@@ -1,0 +1,194 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    m.top.itemComponentName = "SpButtonListButton"
+
+    m.top.observeField("buttonComponents", "render")
+    m.top.observeField("itemFocused", "focusButton")
+    m.top.observeField("itemUnfocused", "unFocusButton")
+    m.top.observeField("sectionSettings", "setSectionSettings")
+    m.top.observeField("focusedChild", "unFocusButtonList")
+
+    ' default settings
+    m.top.focusBitmapUri = ""
+    m.top.focusFootprintBitmapUri = " "             ' this will throw errors into the logs but an empty string doesn't reset the default
+    m.top.itemSpacing = [0, scalePixelDimension(10)]
+
+    m.buttonNodes = createObject("roSGNode", "ContentNode")
+    m.buttonNodesKeyed = {}
+    m.buttonNodesArray = []
+
+    m.rendered = false
+end sub
+
+sub render(event as Object)
+    buttons = event.getData()
+
+    if buttons = invalid or buttons.count() = 0 then
+        return
+    end if
+
+    startFocus = false
+    
+    buttonHeight = scalePixelDimension(64)
+    width = 100
+    if m.top.width <> invalid then
+        width = m.top.width
+    end if
+
+    m.top.itemSize = [width, buttonHeight]
+    m.top.numRows = 8
+
+    buttonSettings = invalid
+    hasSections = false
+    first = true
+    for each section in buttons
+        if section.children <> invalid then
+            ' create section
+            sectionNode = createObject("roSGNode", "ContentNode")
+            sectionNode.contentType = "SECTION"
+            
+            if section.settings <> invalid then
+                sectionNode.title = section.settings.text
+            end if
+            if section.settingsDesc <> invalid and section.settingsDesc.text <> invalid then
+                sectionNode.description = section.settingsDesc.text
+            end if
+
+            sectionButtons = section.children
+            hasSections = true
+        else
+            sectionNode = m.buttonNodes
+            sectionButtons = [section]
+        end if
+
+        for each button in sectionButtons 
+            if buttonSettings = invalid then
+                buttonSettings = button.settings
+            end if
+
+            if buttonSettings.startFocus = true then
+                startFocus = true
+            end if
+
+            if button.id = invalid then
+                button.id = button.settings.text
+            end if
+
+            buttonContentNode = m.buttonNodesKeyed[button.id]
+            if buttonContentNode = invalid then
+                buttonContentNode = createObject("roSGNode", "SpButtonListContentNode")
+                buttonContentNode.id = button.id
+                buttonContentNode.height = buttonHeight
+                buttonContentNode.width = width
+                buttonContentNode.showCustom = button.showCustom
+
+                ' fake that the first element is focused when rendering
+                ' this will give us the correct focus footprint state
+                if m.rendered = false and first = true then
+                    buttonContentNode.focused = true
+                    first = false
+                end if
+            end if
+
+            buttonContentNode.settings = button.settings
+
+            if button.carat <> invalid then
+                buttonContentNode.carat = button.carat
+            end if
+            if button.on <> invalid then
+                buttonContentNode.on = button.on
+            end if
+            if button.categoryType <> invalid then
+                buttonContentNode.categoryType = button.categoryType
+            end if
+
+            if m.buttonNodesKeyed[button.id] = invalid then
+                ' node is new, add it
+                m.buttonNodesKeyed[button.id] = buttonContentNode
+                m.buttonNodesArray.push(buttonContentNode)
+                sectionNode.appendChild(buttonContentNode)
+            end if
+        end for
+
+        if section.children <> invalid then
+            m.buttonNodes.appendChild(sectionNode)
+        end if
+    end for
+
+    if m.rendered = false then
+        ' set up focus bitmap and focus footprint bitmap based on settings
+        if buttonSettings <> invalid and buttonSettings.style <> invalid then 
+            if buttonSettings.style.onFocusBackgroundColor <> invalid then
+                m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
+                m.top.focusBitmapBlendColor = colorConvert(buttonSettings.style.onFocusBackgroundColor)
+            end if
+        end if 
+
+        ' update focused nodes so we render our SpHeaderButtonList components correctly
+        if m.buttonNodesArray[0] <> invalid then
+            m.top.focusedContentNode = m.buttonNodesArray[0]
+            m.top.focusedSectionNode = m.top.focusedContentNode.getParent()
+        end if
+
+        m.top.content = m.buttonNodes
+
+        if startFocus = true then
+            m.top.setFocus(true)
+        end if
+
+        m.rendered = true
+    end if
+end sub
+
+sub focusButton(event as Object)
+    index = event.getData()
+
+    m.lastFocusedButton = index
+
+    setFocus(index, true)
+end sub
+
+sub setFocus(index as Integer, focused as Boolean)
+    if index <> invalid then
+        buttonCn = m.buttonNodesArray[index]
+
+        if buttonCn <> invalid then
+            buttonCn.focused = focused
+
+            if focused = true then
+                m.top.focusedContentNode = buttonCn
+                m.top.focusedSectionNode = buttonCn.getParent()
+            end if
+        end if 
+    end if
+end sub
+
+sub setSectionSettings(event as Object)
+    settings = event.getData()
+    if settings <> invalid then
+        m.top.sectionDividerFont = createFont(settings)
+
+        if settings.style <> invalid and settings.style.font <> invalid and settings.style.font.color <> invalid then
+            m.top.sectionDividerTextColor = settings.style.font.color
+        end if
+    end if
+end sub
+
+sub unFocusButton(event as Object)
+    index = event.getData()
+
+    setFocus(index, false)
+end sub
+
+sub unFocusButtonList(event as Object)
+    focusedNode = event.getData()
+
+    if focusedNode = invalid then
+        index = m.lastFocusedButton <> invalid ? m.lastFocusedButton : 0
+        
+        if m.lastFocusedButton <> invalid then
+            setFocus(index, false)
+        end if
+    end if
+end sub

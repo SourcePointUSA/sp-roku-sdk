@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="PrivacyPolicyViewGdpr" extends="SpBase">
+    <script uri="./PrivacyPolicyViewGdpr.brs" type="text/brightscript" />
+    <children />
+</component>

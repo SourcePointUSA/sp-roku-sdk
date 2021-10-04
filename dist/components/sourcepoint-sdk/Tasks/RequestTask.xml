@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="RequestTask" extends="Task">
+    <interface>
+        <field id="url" type="string" />
+        <field id="accountId" type="integer" />
+        <field id="authId" type="string" />
+        <field id="campaignEnv" type="string" />
+        <field id="consentLanguage" type="string" />
+        <field id="clientMMSOrigin" type="string" />
+        <field id="propertyHref" type="string" />
+        <field id="pubData" type="assocarray" />
+        <field id="requestUUID" type="string" />
+        <field id="localState" type="string" />
+        <field id="error" type="string" />
+    </interface>
+    <script uri="./RequestTask.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/sourcepoint-sdk/Helpers.brs" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

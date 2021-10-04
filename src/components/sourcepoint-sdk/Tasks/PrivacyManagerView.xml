@@ -1,0 +1,19 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "PrivacyManagerView" extends = "RequestTask" >
+
+  <interface>
+    <!-- updated for request -->
+    <field id="messageCategory" type="integer" />
+    <field id="propertyId" type="integer" />
+    <field id="vendorList" type="string" />
+
+    <field id="userConsentNode" type="node" />
+
+    <!-- updated by response -->
+    <field id="data" type="assocarray" />
+  </interface>
+
+  <script uri="./PrivacyManagerView.bs" />
+
+</component>

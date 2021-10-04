@@ -1,0 +1,16 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "SpButtonListButton" extends = "Group" >
+
+    <interface>
+        <field id = "itemContent" type = "node"/>
+    </interface>
+
+    <script uri="./SpButtonListButton.bs" />
+
+    <children>
+        <Rectangle id="button_background" />
+        <SpNativeText id="button_label" componentName="Label" />
+    </children>
+
+</component>

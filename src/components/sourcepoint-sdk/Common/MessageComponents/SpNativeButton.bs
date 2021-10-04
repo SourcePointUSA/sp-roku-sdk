@@ -1,0 +1,142 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
+sub init()
+    ' reset default look and feel
+    m.top.iconUri = ""
+    m.top.focusedIconUri = ""
+    m.top.focusBitmapUri = "pkg:/images/sourcepoint-sdk/focus_button_sq.9.png"
+    m.top.focusFootprintBitmapUri = " "     ' this will throw errors in the console but is the only way to reset
+    m.top.minWidth = 0
+    m.top.showFocusFootprint = false
+    m.top.observeField("focusFootprintColor", "setFocusFootprintColor")
+    m.top.observeField("settings", "render")
+    m.top.observeField("width", "setWidths")
+    m.top.observeField("focusedChild", "toggleBg")
+    m.top.height = 50
+
+    m.focusBackgroundColor = "0xFFFFFFFF"
+    m.focusedTextColor = "0x000000FF"
+    m.textColor = "0x000000FF"
+
+    m.focusPoster = invalid
+    m.footprintPoster = invalid
+end sub
+
+sub render(event as Object)
+    settings = event.getData()
+
+    if settings <> invalid then
+        if settings.text <> invalid then
+            m.top.text = htmlEntityDecode(settings.text)
+        end if
+    
+        if settings.style <> invalid then
+            if settings.style.onFocusTextColor <> invalid then
+                m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
+            end if
+            if settings.style.onUnfocusTextColor <> invalid then
+                m.textColor = colorConvert(settings.style.onUnfocusTextColor)
+            end if
+            if settings.style.onFocusBackgroundColor <> invalid then
+                m.focusBackgroundColor = colorConvert(settings.style.onFocusBackgroundColor)
+            end if
+            if settings.style.onUnfocusBackgroundColor <> invalid then
+                m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
+            end if
+
+            if settings.style.font <> invalid then
+                m.top.textFont = createFont(settings.style.font)
+
+                focusedTextSettings = {}
+                focusedTextSettings.append(settings.style.font)
+                focusedTextSettings.append({fontWeight: "700"})
+                m.top.focusedTextFont = createFont(focusedTextSettings)
+            end if
+        end if
+    end if
+
+    m.top.textColor = m.textColor
+    m.top.focusedTextColor = m.focusedTextColor
+
+    ' blend focus button color
+    children = m.top.getChildren(-1, 0)
+    for each child in children
+        if child.subtype() = "Poster" then
+            if child.uri.Instr("focus_button_sq.9.png") >= 0 then
+                ' this turns our button the right color in focus
+                m.focusPoster = child
+                child.blendColor = m.focusBackgroundColor
+            else if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
+                ' this turns our footprint the right color 
+                m.footprintPoster = child
+                if m.unFocusBackgroundColor <> invalid then
+                    child.blendColor = m.unFocusBackgroundColor
+                end if
+            end if
+        else if child.subtype() = "Label" then
+            m.top.buttonLabel = child
+        end if
+    end for
+
+    createBg()
+
+    if m.unFocusBackgroundColor <> invalid then
+        m.top.backgroundRect.uri = "pkg:/images/sourcepoint-sdk/unfocus_button_sq.9.png"
+        m.top.backgroundRect.blendColor = m.unFocusBackgroundColor
+        m.top.backgroundRect.height = m.top.height
+        m.top.backgroundRect.width = m.top.boundingRect().width
+    endif
+end sub
+
+sub createBg()
+    if m.top.backgroundRect = invalid then
+        ' create regular background image
+        bg = createObject("roSGNode", "Poster")
+        m.top.backgroundRect = bg
+        m.top.insertChild(bg, 0)
+    end if
+end sub
+
+sub setFocusFootprintColor(event as Object)
+    color = event.getData()
+
+    if m.top.showFocusFootprint = false then
+        m.top.showFocusFootprint = true
+        m.top.focusFootprintBitmapUri = "pkg:/images/sourcepoint-sdk/focus_footprint_button_sq.9.png"
+
+        children = m.top.getChildren(-1, 0)
+        for each child in children
+            if child.subtype() = "Poster" then
+                if child.uri.Instr("focus_footprint_button_sq.9.png") >= 0 then
+                    ' this turns our footprint the right color 
+                    m.footprintPoster = child
+                end if
+            end if
+        end for
+    end if
+
+    if m.footprintPoster <> invalid and color <> invalid then
+        m.footprintPoster.blendColor = color
+    end if
+end sub
+
+sub setWidths(event as Object)
+    width = event.getData()
+    if m.top.backgroundRect <> invalid then
+        m.top.backgroundRect.width = width
+    end if
+end sub
+
+sub toggleBg(event as Object)
+    if m.top.backgroundRect = invalid then
+        return
+    end if
+    
+    focusedChild = event.getData()
+
+    if focusedChild = invalid then
+        m.top.backgroundRect.visible = true
+    else
+        m.top.backgroundRect.visible = false
+    end if
+end sub
