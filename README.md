@@ -99,4 +99,4 @@ Create a new release.
 
 Enable developer mode on your roku device - https://blog.roku.com/developer/developer-setup-guide
 
-Upload the `test-channel.zip` file to your Roku device
+Upload the `test-channel.zip` file in the root of this repository to your Roku device
