@@ -8,6 +8,8 @@
   "main": "index.js",
   "scripts": {
     "compile": "bsc --staging-folder-path dist --root-dir src --create-package false --retain-staging-folder true",
+    "compile-test-channel": "bsc --root-dir test-channel --out-file ./test-channel.zip --retain-staging-folder false",
+    "debug": "telnet $ROKU_DEV_HOST 8085",
     "develop": "bsc --watch --deploy --host $ROKU_DEV_HOST --password $ROKU_DEV_PASSWORD",
     "test": "bsc && jest --verbose --runInBand ./tests/cases"
   },

@@ -13,7 +13,7 @@ sub showChannelSGScreen()
   screen.show()
 
   accountId = 22
-  propertyHref = "https://dan2.multicampaign.com"
+  propertyHref = "https://Roku-Demo-Property"
 
   scene.custom_config = {accountId: accountId, propertyHref: propertyHref}
 

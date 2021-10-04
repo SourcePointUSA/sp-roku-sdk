@@ -342,7 +342,7 @@ describe(`it should maintain state when we re-open the message`, () => {
     })
 
     it(`should show categories as on (checking the first one)`, async () => {
-        await library.sendKey("right")
+        await library.sendKeys(["right", "down"])
 
         let focusedEl = await library.getFocusedElement()
         const toggleValue = await getToggleButtonValue(library, focusedEl)
@@ -464,7 +464,7 @@ describe(`it should maintain state when we re-open the message`, () => {
     })
 
     it(`should show categories as off (checking the first one)`, async () => {
-        await library.sendKey("right")
+        await library.sendKeys(["right", "down"])
 
         let focusedEl = await library.getFocusedElement()
         const toggleValue = await getToggleButtonValue(library, focusedEl)
