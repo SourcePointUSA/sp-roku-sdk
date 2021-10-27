@@ -44,12 +44,13 @@ If `showMessage` is `true` when SourcepointSdk is created this will be called au
 ### Open a Privacy Manager
 To open a privacy manager you can hardcode the ID of the privacy manager to open by running:
 ```
-m.spSdk.openPrivacyManager(privacyManagerId)
+m.spSdk.openPrivacyManager(legislation, privacyManagerId)
 ```
 The above accepts the following as an argument:
 
 | Argument           | Data Type | Description                            |
 |--------------------|-----------|----------------------------------------|
+| `legislation`      | String    | "ccpa" or "gdpr"                       |
 | `privacyManagerId` | Integer   | The ID of the privacy manager to open. |
 
 
