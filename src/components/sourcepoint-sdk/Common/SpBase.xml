@@ -22,7 +22,7 @@
       <LayoutGroup id="title-holder" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
           <Rectangle id="title-holder-width-holder" height="0"/>
           <SpNativeText id="screen-title" componentName="Label"/>
-      </Layout>
+      </LayoutGroup>
       
       <LayoutGroup id="col-layout" layoutDirection="horiz" itemSpacings="[0]">
           <LayoutGroup id="col-left" horizAlignment="center" layoutDirection="vert" itemSpacings="[20]">
