@@ -75,22 +75,27 @@ class SourcepointSdk
                 formattedConsent = userConsent.gdpr["TCData"]
             endif
 
-            formattedConsent["gdpr"] = {}
-
-            userConsentKeys = ["grants"]
-            for each key in userConsentKeys
-                formattedConsent["gdpr"][key] = userConsent.gdpr[key]
-            end for
+            formattedConsent["gdpr"] = {
+                applies: m.applies.gdpr,
+                consents: {
+                    euconsent: userConsent.gdpr["euconsent"],
+                    tcfData: userConsent.gdpr["TCData"],
+                    vendorGrants: userConsent.gdpr["grants"]
+                }
+            }
         endif
         if userConsent.ccpa <> invalid then
             formattedConsent["IABUSPrivacy_String"] = userConsent.ccpa.uspstring
 
-            formattedConsent["ccpa"] = {}
-
-            userConsentKeys = ["uspstring"]
-            for each key in userConsentKeys
-                formattedConsent["ccpa"][key] = userConsent.ccpa[key]
-            end for
+            formattedConsent["ccpa"] = {
+                applies: m.applies.ccpa,
+                consents: {
+                    rejectedCategories: userConsent.ccpa["rejectedCategories"],
+                    rejectedVendors: userConsent.ccpa["rejectedVendors"],
+                    status: userConsent.ccpa["status"],
+                    uspstring: userConsent.ccpa["uspstring"]
+                }
+            }
         endif
 
         return formattedConsent
@@ -133,6 +138,7 @@ class SourcepointSdk
                     return invalid
                 end if
 
+                m.applies = getMessageTask.applies
                 m.userConsent = getMessageTask.userConsent
                 m.setPropertyId(getMessageTask.propertyId)
                 exit while

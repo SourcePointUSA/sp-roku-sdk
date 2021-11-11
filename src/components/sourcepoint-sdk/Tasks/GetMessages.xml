@@ -8,6 +8,7 @@
     <field id="propertyId" type="integer" />
 
     <!-- updated by response -->
+    <field id="applies" type="assocarray" />
     <field id="campaigns" type="array" />
     <field id="userConsent" type="assocarray" />
   </interface>
