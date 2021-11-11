@@ -61,12 +61,16 @@ function __SourcepointSdk_builder()
     end sub
     instance.formatUserConsent = function(userConsent as object) as object
         formattedConsent = {}
-        for each legislation in userConsent
-            formattedConsent[legislation] = {
-                grants: {}
+        if userConsent.ccpa <> invalid then
+            formattedConsent["ccpa"] = {
+                uspstring: userConsent.ccpa.uspstring
             }
-            formattedConsent[legislation].grants.append(userConsent[legislation].grants)
-        end for
+        endif
+        if userConsent.gdpr <> invalid then
+            formattedConsent["gdpr"] = {
+                grants: userConsent.gdpr.grants
+            }
+        endif
         return formattedConsent
     end function
     instance.getErrors = function() as object
