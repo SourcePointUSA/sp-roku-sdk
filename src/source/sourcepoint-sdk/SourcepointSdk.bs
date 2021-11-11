@@ -70,15 +70,27 @@ class SourcepointSdk
 
     private function formatUserConsent(userConsent as Object) as Object
         formattedConsent = {}
-        if userConsent.ccpa <> invalid then
-            formattedConsent["ccpa"] = {
-                uspstring: userConsent.ccpa.uspstring
-            }
-        endif
         if userConsent.gdpr <> invalid then
-            formattedConsent["gdpr"] = {
-                grants: userConsent.gdpr.grants
-            }
+            if userConsent.gdpr["TCData"] <> invalid then
+                formattedConsent = userConsent.gdpr["TCData"]
+            endif
+
+            formattedConsent["gdpr"] = {}
+
+            userConsentKeys = ["grants"]
+            for each key in userConsentKeys
+                formattedConsent["gdpr"][key] = userConsent.gdpr[key]
+            end for
+        endif
+        if userConsent.ccpa <> invalid then
+            formattedConsent["IABUSPrivacy_String"] = userConsent.ccpa.uspstring
+
+            formattedConsent["ccpa"] = {}
+
+            userConsentKeys = ["uspstring"]
+            for each key in userConsentKeys
+                formattedConsent["ccpa"][key] = userConsent.ccpa[key]
+            end for
         endif
 
         return formattedConsent

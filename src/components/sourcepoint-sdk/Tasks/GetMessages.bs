@@ -13,7 +13,8 @@ sub getMessage()
         "hasCSP": true, 
         "includeData": {
             "localState": { "type": "string" },
-            "customVendorsResponse": { "type": "string" }
+            "customVendorsResponse": { "type": "string" },
+            "TCData": { "type": "RecordString" }
         },
         "localState": m.top.localState,
         "propertyHref": m.top.propertyHref,
