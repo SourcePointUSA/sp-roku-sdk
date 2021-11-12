@@ -82,6 +82,8 @@ Running tests:
 ROKU_DEV_HOST=[ device ip ] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[ device password ] npm run test
 ```
 
+> **_Important:_** please update the propertyHref in test-channel/main.bs to "https://tests.roku.dan.sourcepoint.com"
+
 Note: contents of `tests/bin` and `tests/lib` are from https://github.com/rokudev/automated-channel-testing
 
 # Releasing the SDK
