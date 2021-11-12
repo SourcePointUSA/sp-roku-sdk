@@ -175,10 +175,15 @@ class SourcepointSdk
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
                 message = getMessageTask.message
                 ' set user consent if we have it (which we should)
-                if m.userConsent <> invalid and m.userConsent[legislation] <> invalid then
-                    message.userConsent = m.userConsent[legislation]
+                if message <> invalid 
+                    if m.userConsent <> invalid and m.userConsent[legislation] <> invalid then
+                        message.userConsent = m.userConsent[legislation]
+                    end if
+                    m.showMessages([message])
+                else
+                    ' close screen
+                    m.showMessages([])
                 end if
-                m.showMessages([message])
                 exit while
             end if
         end while

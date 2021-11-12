@@ -33,8 +33,12 @@ sub getMessage()
 
         campaigns = []
         for each c in response.campaigns
-            if c.message <> invalid then
-                campaigns.push(c)
+            if c.message <> invalid and c.messageMetaData <> invalid then
+                if (c.messageMetaData.categoryId = 1 or c.messageMetaData.categoryId = 2) and c.messageMetaData.subCategoryId = 14 then
+                    campaigns.push(c)
+                else
+                    print "WARNING: invalid message type found in campaign of type " + c.type + ", ignoring"
+                end if
             end if
         end for
 
