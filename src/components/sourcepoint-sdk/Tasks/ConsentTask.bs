@@ -31,7 +31,8 @@ sub postConsent()
         "requestUUID": m.global.config.requestUUID,
         "localState": getLocalState(),
         "includeData": { 
-            "customVendorsResponse": { "type": "RecordString"}
+            "customVendorsResponse": { "type": "RecordString"},
+            "TCData": { "type": "RecordString" }
         }
     }
 

@@ -61,14 +61,29 @@ function __SourcepointSdk_builder()
     end sub
     instance.formatUserConsent = function(userConsent as object) as object
         formattedConsent = {}
-        if userConsent.ccpa <> invalid then
-            formattedConsent["ccpa"] = {
-                uspstring: userConsent.ccpa.uspstring
+        if userConsent.gdpr <> invalid then
+            if userConsent.gdpr["TCData"] <> invalid then
+                formattedConsent.append(userConsent.gdpr["TCData"])
+            endif
+            formattedConsent["gdpr"] = {
+                applies: m.applies.gdpr,
+                consents: {
+                    euconsent: userConsent.gdpr["euconsent"],
+                    tcfData: userConsent.gdpr["TCData"],
+                    vendorGrants: userConsent.gdpr["grants"]
+                }
             }
         endif
-        if userConsent.gdpr <> invalid then
-            formattedConsent["gdpr"] = {
-                grants: userConsent.gdpr.grants
+        if userConsent.ccpa <> invalid then
+            formattedConsent["IABUSPrivacy_String"] = userConsent.ccpa.uspstring
+            formattedConsent["ccpa"] = {
+                applies: m.applies.ccpa,
+                consents: {
+                    rejectedCategories: userConsent.ccpa["rejectedCategories"],
+                    rejectedVendors: userConsent.ccpa["rejectedVendors"],
+                    status: userConsent.ccpa["status"],
+                    uspstring: userConsent.ccpa["uspstring"]
+                }
             }
         endif
         return formattedConsent
@@ -112,6 +127,7 @@ function __SourcepointSdk_builder()
                     m.errors.push(getMessageTask.error)
                     return invalid
                 end if
+                m.applies = getMessageTask.applies
                 m.userConsent = getMessageTask.userConsent
                 m.setPropertyId(getMessageTask.propertyId)
                 exit while
@@ -139,12 +155,16 @@ function __SourcepointSdk_builder()
             if type(msg) = "roSGNodeEvent" and msg.getField() = "state" and msg.getData() = "stop" then
                 message = getMessageTask.message
                 ' set user consent if we have it (which we should)
-                if m.userConsent <> invalid and m.userConsent[legislation] <> invalid then
-                    message.userConsent = m.userConsent[legislation]
+                if message <> invalid then
+                    if m.userConsent <> invalid and m.userConsent[legislation] <> invalid then
+                        message.userConsent = m.userConsent[legislation]
+                    end if
+                    m.showMessages([
+                        message
+                    ])
+                else ' close screen
+                    m.showMessages([])
                 end if
-                m.showMessages([
-                    message
-                ])
                 exit while
             end if
         end while

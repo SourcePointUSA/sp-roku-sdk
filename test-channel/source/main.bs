@@ -13,7 +13,7 @@ sub showChannelSGScreen()
   screen.show()
 
   accountId = 22
-  propertyHref = "https://Roku-Demo-Property"
+  propertyHref = "https://roku.dan.sourcepoint.com"
 
   scene.custom_config = {accountId: accountId, propertyHref: propertyHref}
 
@@ -58,9 +58,5 @@ sub runCampaign(legislations = invalid as Object)
   print m.spSdk.getErrors()
 
   print "consent object: "
-  for each leg in consent
-    print "-----"
-    print leg
-    print consent[leg]
-  end for
+  print FormatJson(consent)
 end sub

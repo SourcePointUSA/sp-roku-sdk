@@ -9,6 +9,7 @@ sub init()
     m.top.buttonLeft = m.top.findNode("button-left")
     m.top.buttonRight = m.top.findNode("button-right")
     m.top.buttonSelected = "left"
+    m.handledKeyPress = false
     m.padding = scalePixelDimension(20)
     m.buttonGroup.translation = [
         m.padding / 2,
@@ -17,17 +18,24 @@ sub init()
 end sub
 
 function onKeyEvent(key as string, press as boolean) as boolean
-    if key = "right" then
+    if press = false then
+        return m.handledKeyPress
+    end if
+    if key = "right" and m.top.buttonSelected = "left" then
         m.top.buttonSelected = "right"
         m.top.buttonRight.setFocus(true)
+        m.handledKeyPress = true
         return true
-    else if key = "left" then
+    else if key = "left" and m.top.buttonSelected = "right" then
         m.top.buttonSelected = "left"
         m.top.buttonLeft.setFocus(true)
+        m.handledKeyPress = true
         return true
     else if key = "OK" then
+        m.handledKeyPress = true
         return true
     end if
+    m.handledKeyPress = false
     return false
 end function
 

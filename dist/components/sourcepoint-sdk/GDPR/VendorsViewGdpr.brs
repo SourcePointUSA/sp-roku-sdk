@@ -50,6 +50,11 @@ function onKeyEvent(key as string, press as boolean) as boolean
     else if key = "down" and m.vendorSlider <> invalid and m.vendorSlider.isInFocusChain() = true then
         m.nav.setFocus(true)
         return true
+    else if key = "left" and m.vendorSlider <> invalid and m.vendorSlider.isInFocusChain() = true then
+        if m.back_button <> invalid then
+            m.back_button.setFocus(true)
+            return true
+        end if
     end if
     return _onKeyEvent(key, press)
 end function

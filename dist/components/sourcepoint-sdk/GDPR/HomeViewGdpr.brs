@@ -35,16 +35,19 @@ sub renderCategories(categories)
         }
         if m.components.button_categories <> invalid then
             buttonSettings.settings.append(m.components.button_categories.settings)
+            buttonSettings.settings.text = c.name ' add text again, it may be in settings
         end if
         categoryButtons.push(buttonSettings)
     end for
-    if m.categoryList = invalid then
-        m.categoryList = createObject("roSGNode", "SpButtonList")
-        m.categoryList.width = m.colRightWidth
-        m.colRight.appendChild(m.categoryList)
-        m.rightColFocus = m.categoryList
+    if categoryButtons.count() > 0 then
+        if m.categoryList = invalid then
+            m.categoryList = createObject("roSGNode", "SpButtonList")
+            m.categoryList.width = m.colRightWidth
+            m.colRight.appendChild(m.categoryList)
+            m.rightColFocus = m.categoryList
+        end if
+        m.categoryList.buttonComponents = categoryButtons
     end if
-    m.categoryList.buttonComponents = categoryButtons
 end sub
 
 sub renderRightCol()

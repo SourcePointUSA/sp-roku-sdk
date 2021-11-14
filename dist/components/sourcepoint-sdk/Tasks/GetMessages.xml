@@ -3,9 +3,9 @@
     <interface>
         <field id="legislationsEnabled" type="assocarray" />
         <field id="propertyId" type="integer" />
+        <field id="applies" type="assocarray" />
         <field id="campaigns" type="array" />
         <field id="userConsent" type="assocarray" />
     </interface>
     <script uri="./GetMessages.brs" type="text/brightscript" />
-    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
 </component>
