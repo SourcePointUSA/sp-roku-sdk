@@ -72,7 +72,7 @@ class SourcepointSdk
         formattedConsent = {}
         if userConsent.gdpr <> invalid then
             if userConsent.gdpr["TCData"] <> invalid then
-                formattedConsent = userConsent.gdpr["TCData"]
+                formattedConsent.append(userConsent.gdpr["TCData"])
             endif
 
             formattedConsent["gdpr"] = {

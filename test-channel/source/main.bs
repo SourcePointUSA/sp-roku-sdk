@@ -58,17 +58,5 @@ sub runCampaign(legislations = invalid as Object)
   print m.spSdk.getErrors()
 
   print "consent object: "
-  legislations = ["ccpa", "gdpr"]
-  for each leg in legislations
-    if consent[leg] <> invalid then
-      print "-----"
-      print leg
-      print consent[leg]
-      for each c in consent[leg].consents
-        print "-------------"
-        print c
-        print consent[leg].consents[c]
-      end for
-    end if
-  end for
+  print FormatJson(consent)
 end sub
