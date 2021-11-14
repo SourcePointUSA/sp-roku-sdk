@@ -41,6 +41,41 @@ If your scenarios dictate a message(s) should be shown, this will create a new s
 
 If `showMessage` is `true` when SourcepointSdk is created this will be called automatically.
 
+Consent will be returned keyed by legislation. See below for keys and values. You can safely ignore top-level keys prefixed with IAB, they are included as part of the IAB standard.
+
+#### `userConsent.ccpa`
+
+| Key                           | Data Type     | Description                                                                                           |
+|-------------------------------|---------------|-------------------------------------------------------------------------------------------------------|
+| `applies`                     | Boolean       | True if this user is subject to this legislation based on Vendor List settings.                       |
+| `consents.rejectedCategories` | Array<string> | List of category IDs that have been rejected by the user.*                                            |
+| `consents.rejectedVendors`    | Array<string> | List of vendor IDs that have been rejected by the user.*                                              |
+| `consents.status`             | String        | The user's consent status. Possible values are: consentedAll, rejectedAll, rejectedSome, rejectedNone |
+| `consents.uspstring`          | String        | The user's IAB US Privacy string                                                                      |
+  
+* These lists will always be empty in our current implementation because categories and vendors are not individually toggleable.
+  
+#### `userConsent.gdpr`
+| Key                     | Data Type | Description                                                                                           |
+|-------------------------|---------- |-------------------------------------------------------------------------------------------------------|
+| `applies`               | Boolean   | True if this user is subject to this legislation based on Vendor List settings.                       |
+| `consents.euconsent`    | String    | The user's IAB TCF consent string                                                                     |
+| `consents.tcfData`      | Object    | Object containing IAB standardized consent keys and values.                                           |
+| `consents.vendorGrants` | Object    | An object containing information about which vendors are consented to. Keyed by vendor ID. See below  |
+| `consents.uspstring`    | String    | The user's IAB US Privacy string                                                                      |
+
+#### `userConsent.gdpr.vendorGrants`
+| Key             | Data Type               | Description                                                                   |
+|-----------------|-------------------------|-------------------------------------------------------------------------------|
+| `purposeGrants` | Object<String: Boolean> | An object keyed by purpose ID, true if the user has consented to that purpose |
+| `vendorGrant`   | Boolean                 | True if the user has consented to this vendor, false otherwise                |
+
+### Retrieve SDK errors
+```
+errors = m.spSdk.getErrors()
+```
+Any errors encountered by the SDK will be reported via this method. Expected possible errors include network errors, or unrecognized JSON schemas. 
+
 ### Open a Privacy Manager
 To open a privacy manager you can hardcode the ID of the privacy manager to open by running:
 ```
