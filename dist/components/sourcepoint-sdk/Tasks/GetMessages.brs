@@ -17,6 +17,9 @@ sub getMessage()
             },
             "customVendorsResponse": {
                 "type": "string"
+            },
+            "TCData": {
+                "type": "RecordString"
             }
         },
         "localState": m.top.localState,
@@ -32,18 +35,25 @@ sub getMessage()
         m.top.propertyId = response.propertyId
         campaigns = []
         for each c in response.campaigns
-            if c.message <> invalid then
-                campaigns.push(c)
+            if c.message <> invalid and c.messageMetaData <> invalid then
+                if (c.messageMetaData.categoryId = 1 or c.messageMetaData.categoryId = 2) and c.messageMetaData.subCategoryId = 14 then
+                    campaigns.push(c)
+                else
+                    print "WARNING: invalid message type found in campaign of type " + c.type + ", ignoring"
+                end if
             end if
         end for
         m.top.campaigns = campaigns
         ' parse and set user consent
+        applies = {}
         userConsent = {}
         for each c in response.campaigns
             if c.userConsent <> invalid then
                 userConsent[c.type] = c.userConsent
+                applies[c.type] = c.applies
             end if
         end for
+        m.top.applies = applies
         m.top.userConsent = userConsent
     end if
 end sub

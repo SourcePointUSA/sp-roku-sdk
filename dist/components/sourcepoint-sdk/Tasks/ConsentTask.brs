@@ -31,6 +31,9 @@ sub postConsent()
         "includeData": {
             "customVendorsResponse": {
                 "type": "RecordString"
+            },
+            "TCData": {
+                "type": "RecordString"
             }
         }
     }
