@@ -2,9 +2,12 @@
 
 sub init()
     leftRightPadding = 180
-    usableWidth = scalePixelDimension(1280 - leftRightPadding)
-    m.colLeftWidth = usableWidth / 2
-    m.colRightWidth = usableWidth / 2
+    usableWidth = 1280 - leftRightPadding
+    colLeftWidth = usableWidth / 2
+    colRightWidth = usableWidth / 2
+    scaledUsableWidth = scalePixelDimension(usableWidth)
+    m.colLeftWidth = scaledUsableWidth / 2
+    m.colRightWidth = scaledUsableWidth / 2
     m.colLeft = m.top.findNode("col-left")
     m.colRight = m.top.findNode("col-right")
     m.screenTitle = m.top.findNode("screen-title")
@@ -12,13 +15,13 @@ sub init()
         "col-left-width-holder": [
             0,
             0,
-            m.colLeftWidth,
+            colLeftWidth,
             0
         ],
         "col-right-width-holder": [
             0,
             0,
-            m.colRightWidth,
+            colRightWidth,
             0
         ],
         "title-holder-width-holder": [
@@ -202,11 +205,11 @@ sub renderLogo()
         component = createObject("roSGNode", "Poster")
         component.id = "image_logo"
         component.loadDisplayMode = "limitSize"
-        component.loadHeight = 540
+        component.loadHeight = scalePixelDimension(540)
         if m.components.image_logo.settings.style.width <> invalid and m.components.image_logo.settings.style.width.value then
-            component.loadWidth = m.components.image_logo.settings.style.width.value
+            component.loadWidth = scalePixelDimension(m.components.image_logo.settings.style.width.value)
         else
-            component.loadWidth = 200
+            component.loadWidth = scalePixelDimension(200)
         end if
         component.loadingBitmapUri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
         component.uri = m.components.image_logo.settings.src
