@@ -20,11 +20,12 @@ function createFont(fontSettings as Object) as Object
         font.uri = "font:SystemFontFile"
     end if
 
+    fontSize = 14
     if fontSettings <> invalid and fontSettings.fontSize <> invalid then
-        font.size = fontSettings.fontSize
-    else
-        font.size = 14
+        fontSize = fontSettings.fontSize
     end if
+
+    font.size = scalePixelDimension(fontSize)
 
     return font
 end function

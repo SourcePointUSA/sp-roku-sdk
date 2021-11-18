@@ -207,12 +207,12 @@ sub renderLogo()
         component = createObject("roSGNode", "Poster")
         component.id = "image_logo"
         component.loadDisplayMode = "limitSize"
-        component.loadHeight = 540
+        component.loadHeight = scalePixelDimension(540)
 
         if m.components.image_logo.settings.style.width <> invalid and m.components.image_logo.settings.style.width.value then
-            component.loadWidth = m.components.image_logo.settings.style.width.value
+            component.loadWidth = scalePixelDimension(m.components.image_logo.settings.style.width.value)
         else
-            component.loadWidth = 200
+            component.loadWidth = scalePixelDimension(200)
         end if 
 
         component.loadingBitmapUri = "pkg:/images/sourcepoint-sdk/busyspinner_hd.png"
