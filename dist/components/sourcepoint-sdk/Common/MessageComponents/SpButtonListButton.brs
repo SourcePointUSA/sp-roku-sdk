@@ -139,7 +139,9 @@ sub addOnOff(content as object, settings as object)
         style: {}
     }
     settings.append(m.button_label.settings)
-    settings.style.font = settings.style.onOffFont
+    if settings.style.onOffFont <> invalid then
+        settings.style.font = settings.style.onOffFont
+    end if
     m.onOffNode.settings = settings
     if content.on = true then
         m.onOffNode.text = settings.onText

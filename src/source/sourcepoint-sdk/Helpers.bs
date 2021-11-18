@@ -20,11 +20,12 @@ function createFont(fontSettings as Object) as Object
         font.uri = "font:SystemFontFile"
     end if
 
+    fontSize = 14
     if fontSettings <> invalid and fontSettings.fontSize <> invalid then
-        font.size = fontSettings.fontSize
-    else
-        font.size = 14
+        fontSize = fontSettings.fontSize
     end if
+
+    font.size = scalePixelDimension(fontSize)
 
     return font
 end function
@@ -109,12 +110,18 @@ sub scalePixelDimensions(node as object, scaleMap as Object)
 end sub
 
 function scalePixelDimension(value as Float, resolutionInfo = invalid as Object) as Float
+    if type(value) <> "Float" then
+        return value
+    endif
+
     if resolutionInfo = invalid then
         resolutionInfo = m.top.getScene().currentDesignResolution
     end if
 
     if resolutionInfo.resolution = "FHD"
         return value * 1.5
+    else if resolutionInfo.resolution = "SD"
+        return value / 16 * 9
     end if
 
     return value
