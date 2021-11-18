@@ -189,7 +189,7 @@ sub renderRightCol()
             end if
 
             if categoryTypes[cType].defComponent <> invalid then
-                section.settings = categoryTypes[cType].defComponent.settings
+                section.settingsDesc = categoryTypes[cType].defComponent.settings
             end if
 
             sections.push(section)
