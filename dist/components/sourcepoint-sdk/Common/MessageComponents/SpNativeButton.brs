@@ -12,7 +12,7 @@ sub init()
     m.top.observeField("settings", "render")
     m.top.observeField("width", "setWidths")
     m.top.observeField("focusedChild", "toggleBg")
-    m.top.height = 50
+    m.top.height = scalePixelDimension(50)
     m.focusBackgroundColor = "0xFFFFFFFF"
     m.focusedTextColor = "0x000000FF"
     m.textColor = "0x000000FF"

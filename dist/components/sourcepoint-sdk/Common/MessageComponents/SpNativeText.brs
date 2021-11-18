@@ -27,11 +27,11 @@ sub render(event as object)
             else
                 textComponent.fontUri = "font:SystemFontFile"
             end if
+            fontSize = 14
             if settings.style.font.fontSize <> invalid then
-                textComponent.fontSize = settings.style.font.fontSize
-            else
-                textComponent.fontSize = 14
+                fontSize = settings.style.font.fontSize
             end if
+            textComponent.fontSize = scalePixelDimension(fontSize)
         end if
     end if
     textComponent.color = m.textColor

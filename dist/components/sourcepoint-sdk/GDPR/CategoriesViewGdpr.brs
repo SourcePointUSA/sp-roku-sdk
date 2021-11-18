@@ -180,7 +180,7 @@ sub renderRightCol()
                 section.settings = categoryTypes[cType].headerComponent.settings
             end if
             if categoryTypes[cType].defComponent <> invalid then
-                section.settings = categoryTypes[cType].defComponent.settings
+                section.settingsDesc = categoryTypes[cType].defComponent.settings
             end if
             sections.push(section)
         end if
