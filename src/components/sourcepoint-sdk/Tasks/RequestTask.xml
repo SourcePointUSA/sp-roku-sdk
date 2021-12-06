@@ -3,6 +3,8 @@
 <component name = "RequestTask" extends = "Task" >
 
   <interface>
+    <field id="resetOnError" type="boolean" value="true" />
+
     <!-- updated for request -->
     <field id="url" type="string" />
     <field id="accountId" type="integer" />

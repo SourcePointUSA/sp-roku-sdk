@@ -43,12 +43,12 @@ function addConsentToPmvData(privacyManagerViewData as Object) as Object
     for each categoryId in privacyManagerViewData.categories
         ' for existing users, turn all on, we will turn off rejected below
         ' for new users, look at defaultOptedIn flag
-        privacyManagerViewData.categories[categoryId].enabled = m.newUser ? privacyManagerViewData.categories[categoryId].defaultOptedIn : true
+        privacyManagerViewData.categories[categoryId].enabled = m.newUser = true ? privacyManagerViewData.categories[categoryId].defaultOptedIn : true
     end for
     
     for each vendorId in privacyManagerViewData.vendors
         ' same for vendors
-        privacyManagerViewData.vendors[vendorId].enabled = m.newUser ? privacyManagerViewData.vendors[vendorId].defaultOptedIn : true
+        privacyManagerViewData.vendors[vendorId].enabled = m.newUser = true ? privacyManagerViewData.vendors[vendorId].defaultOptedIn : true
     end for
 
     for each categoryId in m.rejectedCategories
