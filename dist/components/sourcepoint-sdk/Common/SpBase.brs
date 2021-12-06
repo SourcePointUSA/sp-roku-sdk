@@ -147,6 +147,7 @@ sub observeNav(event as object)
         end if
         consentTask.control = "RUN"
         consentTask.observeField("userConsent", "setConsent")
+        consentTask.observeField("error", "onError")
     end if
 end sub
 
@@ -263,6 +264,13 @@ sub hideRightColLoader()
         m.loader.control = "stop"
         m.loader.visible = false
     end if
+end sub
+
+sub onError(event as object)
+    error = event.getData()
+    spScene = m.top.getParent()
+    spScene.error = error
+    spScene.done = true
 end sub
 
 ' Sets focus if none has been set yet
