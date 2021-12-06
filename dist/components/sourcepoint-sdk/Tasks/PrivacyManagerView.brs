@@ -1,6 +1,7 @@
 'import "pkg:/source/sourcepoint-sdk/Helpers.bs"
 
 sub init()
+    m.top.resetOnError = false
     m.top.functionName = "privacyManagerView"
     m.top.observeField("userConsentNode", "addUcnObserver")
 end sub

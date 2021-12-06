@@ -55,8 +55,10 @@ end function
 function makeRequest(url as string, method as string, body = {} as object) as object
     response = _makeRequest(url, method, body)
     if response = invalid then
-        ' if we errored, reset localstate
-        setLocalState(invalid)
+        if m.top.resetOnError = true then
+            ' if we errored, reset localstate
+            setLocalState(invalid)
+        end if
     else if response.localState <> invalid then
         setLocalState(response.localState)
     end if

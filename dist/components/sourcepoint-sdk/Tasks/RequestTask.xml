@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <component name="RequestTask" extends="Task">
     <interface>
+        <field id="resetOnError" type="boolean" value="true" />
         <field id="url" type="string" />
         <field id="accountId" type="integer" />
         <field id="authId" type="string" />

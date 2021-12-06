@@ -139,8 +139,13 @@ function __SourcepointSdk_builder()
         return m.formatUserConsent(m.userConsent)
     end function
     instance.openPrivacyManager = sub(legislation as string, messageId as integer)
+        ' make sure we're lowercase
+        legislation = LCase(legislation)
         if m.userConsent = invalid then
-            throw "Run the user campaign by calling getUserConsent() before calling openPrivacyManager()"
+            throw "Run the campaign(s) by calling getUserConsent() before calling openPrivacyManager()"
+        end if
+        if m.userConsent[legislation] = invalid then
+            throw "Run the campaign of type '" + legislation + "' before opening the PM"
         end if
         ' create screen before we make our task
         m.createScreen()
