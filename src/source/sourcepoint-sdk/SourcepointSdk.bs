@@ -153,7 +153,7 @@ class SourcepointSdk
         return m.formatUserConsent(m.userConsent)
     end function
 
-    public sub openPrivacyManager(legislation as string, messageId as integer)
+    public sub openPrivacyManager(legislation as string, messageId as integer) as Dynamic
         ' make sure we're lowercase
         legislation = LCase(legislation)
         
@@ -195,6 +195,8 @@ class SourcepointSdk
         end while
 
         getMessageTask.unobserveFieldScoped("state")
+
+        return m.formatUserConsent(m.userConsent)
     end sub
 
     private function makeRequestUUID() as string
