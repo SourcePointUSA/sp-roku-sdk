@@ -88,6 +88,8 @@ The above accepts the following as an argument:
 | `legislation`      | String    | "ccpa" or "gdpr"                       |
 | `privacyManagerId` | Integer   | The ID of the privacy manager to open. |
 
+The above returns the same consent object that `m.spSdk.getUserConsent()` does, updated with the user's latest choices.
+
 
 As an alternative to hardcoding a `privacyManagerId`, you can setup a targeted scenario and call `m.spSdk.runCampaignLogic(legislationsEnabled)` to show your privacy manager.
 
