@@ -138,7 +138,7 @@ function __SourcepointSdk_builder()
         m.showMessages(getMessageTask.campaigns)
         return m.formatUserConsent(m.userConsent)
     end function
-    instance.openPrivacyManager = sub(legislation as string, messageId as integer)
+    instance.openPrivacyManager = sub(legislation as string, messageId as integer) as dynamic
         ' make sure we're lowercase
         legislation = LCase(legislation)
         if m.userConsent = invalid then
@@ -174,6 +174,7 @@ function __SourcepointSdk_builder()
             end if
         end while
         getMessageTask.unobserveFieldScoped("state")
+        return m.formatUserConsent(m.userConsent)
     end sub
     instance.makeRequestUUID = function() as string
         di = CreateObject("roDeviceInfo")
