@@ -1,0 +1,18 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "CategoriesButtonTaskGDPR" extends = "Task" >
+
+  <interface>
+    <!-- updated for request -->
+    <field id="privacyManagerViewData" type="assocarray" />
+    <field id="categoryTypes" type="assocarray" />
+    <field id="buttonCategorySettings" type="assocarray" />
+
+    <!-- updated by response -->
+    <field id="buttons" type="assocarray" />
+    <field id="error" type="string" />
+  </interface>
+
+  <script uri="./CategoriesButtonTaskGDPR.bs" />
+
+</component>
