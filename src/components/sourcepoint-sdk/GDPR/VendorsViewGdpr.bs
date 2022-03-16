@@ -128,9 +128,7 @@ end sub
 sub renderView(event as Object)
     hasPmvData = getPrivacyManagerViewData(1)
 
-    if hasPmvData = false then
-        renderRightColLoader()
-    end if
+    renderRightColLoader()
 
     view = event.getData()
     mapComponents(view)
