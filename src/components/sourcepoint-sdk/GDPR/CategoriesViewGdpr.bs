@@ -54,8 +54,9 @@ sub updateCategoryDesc(listItem as Object)
             ' legInt categories are pulled from same "categories" list
             cType = listItem.categoryType = "legInt" ? "categories" : listItem.categoryType
         end if
-        if m.top.privacyManagerViewData[cType] <> invalid and m.top.privacyManagerViewData[cType][listItem.id] <> invalid then
-            text = m.top.privacyManagerViewData[cType][listItem.id].friendlyDescription
+        categories = m.top.privacyManagerViewData[cType]
+        if categories <> invalid and categories[listItem.id] <> invalid then
+            text = categories[listItem.id].friendlyDescription
         end if
     end if
 

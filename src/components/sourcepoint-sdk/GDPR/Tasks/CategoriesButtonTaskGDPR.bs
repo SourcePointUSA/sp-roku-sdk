@@ -12,17 +12,18 @@ sub createButtonSections()
         categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
 
         if m.top.privacyManagerViewData.legIntCategories <> invalid then
-            for each id in m.top.privacyManagerViewData.legIntCategories
+            categories = m.top.privacyManagerViewData.legIntCategories
+            for each id in categories
                 buttonSettings = { 
                     categoryType: "legInt",
-                    on: m.top.privacyManagerViewData.legIntCategories[id].enabled,
+                    on: categories[id].enabled,
                     settings: {},
-                    showCustom: m.top.privacyManagerViewData.legIntCategories[id].type = "CUSTOM"
+                    showCustom: categories[id].type = "CUSTOM"
                 } 
 
                 buttonSettings.settings.append(buttonCategorySettings)
                 buttonSettings.id = id
-                buttonSettings.settings.text = m.top.privacyManagerViewData.legIntCategories[id].name
+                buttonSettings.settings.text = categories[id].name
         
                 buttonsLi.push(buttonSettings)
             end for
@@ -34,19 +35,20 @@ sub createButtonSections()
             buttons = []
 
             if m.top.privacyManagerViewData[cType] <> invalid then
-                for each id in m.top.privacyManagerViewData[cType]
-                    listItem = m.top.privacyManagerViewData[cType][id]
+                categories = m.top.privacyManagerViewData[cType]
+                for each id in categories
+                    listItem = categories[id]
                     if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
                         buttonSettings = {
                             categoryType: cType, 
-                            on: m.top.privacyManagerViewData[cType][id].enabled,
+                            on: categories[id].enabled,
                             settings: {},
-                            showCustom: m.top.privacyManagerViewData[cType][id].type = "CUSTOM"
+                            showCustom: categories[id].type = "CUSTOM"
                         }
 
                         buttonSettings.settings.append(buttonCategorySettings)
                         buttonSettings.id = id
-                        buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
+                        buttonSettings.settings.text = categories[id].name
                 
                         buttons.push(buttonSettings)
                     end if
