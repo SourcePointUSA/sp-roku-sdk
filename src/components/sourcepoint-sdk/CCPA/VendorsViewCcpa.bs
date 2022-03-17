@@ -22,14 +22,15 @@ sub renderRightCol()
     end if
 
     buttons = []
-    for each vendorId in m.top.privacyManagerViewData.vendors
+    vendors = m.top.privacyManagerViewData.vendors
+    for each vendorId in vendors
         buttonSettings = { 
             ' on: m.top.privacyManagerViewData.vendors[vendorId].enabled
             settings: {} 
         } 
         buttonSettings.settings.append(m.components.button_vendor.settings)
         buttonSettings.id = vendorId
-        buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
+        buttonSettings.settings.text = vendors[vendorId].name
 
         buttons.push(buttonSettings)
     end for

@@ -82,14 +82,15 @@ sub renderRightCol()
 
     buttons = []
     if m.top.privacyManagerViewData <> invalid and m.top.privacyManagerViewData.categories <> invalid and m.components.button_category <> invalid then
-        for each categoryId in m.top.privacyManagerViewData.categories
+        categories = m.top.privacyManagerViewData.categories
+        for each categoryId in categories
             buttonSettings = { 
                 ' on: m.top.privacyManagerViewData.categories[categoryId].enabled
                 settings: {} 
             } 
             buttonSettings.settings.append(m.components.button_category.settings)
             buttonSettings.id = categoryId
-            buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
+            buttonSettings.settings.text = categories[categoryId].name
 
             buttons.push(buttonSettings)
         end for
