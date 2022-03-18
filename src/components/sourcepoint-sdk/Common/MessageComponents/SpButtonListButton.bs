@@ -125,6 +125,7 @@ end sub
 
 sub addCustomText(content as Object, settings as Object)
     m.customText = createObject("roSGNode", "SimpleLabel")
+    m.customText.id = "custom_text"
     m.customText.text = settings.customText
     m.customText.fontUri = "font:SystemFontFile"
     
