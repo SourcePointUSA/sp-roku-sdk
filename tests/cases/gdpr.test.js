@@ -211,7 +211,8 @@ describe(`GDPR view validation`, () => {
             'image_logo', 
             'button_nav_back',
             'accept_all',
-            'save_and_exit'
+            'save_and_exit',
+            'custom_text'
         ])
     })
 

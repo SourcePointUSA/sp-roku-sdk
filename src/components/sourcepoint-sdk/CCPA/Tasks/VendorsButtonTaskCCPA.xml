@@ -1,0 +1,17 @@
+<?xml version = "1.0" encoding = "utf-8" ?>
+
+<component name = "VendorsButtonTaskCCPA" extends = "Task" >
+
+  <interface>
+    <!-- updated for request -->
+    <field id="privacyManagerViewData" type="assocarray" />
+    <field id="buttonVendorSettings" type="assocarray" />
+
+    <!-- updated by response -->
+    <field id="buttons" type="array" />
+    <field id="error" type="string" />
+  </interface>
+
+  <script uri="./VendorsButtonTaskCCPA.bs" />
+
+</component>

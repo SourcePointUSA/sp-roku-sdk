@@ -66,36 +66,36 @@ sub renderCategoryDescription()
 end sub
 
 sub renderRightCol()
+    if m.buttonTask = invalid then
+        m.buttonTask = createObject("roSGNode", "CategoriesButtonTaskCCPA")
+        m.buttonTask.privacyManagerViewData = m.top.privacyManagerViewData
+        m.buttonTask.buttonCategorySettings = m.components.button_category.settings
+        m.buttonTask.observeField("buttons", "renderButtonLists")
+        m.buttonTask.observeField("error", "onError")
+        m.buttonTask.control = "RUN"
+    else
+        renderButtonLists()
+    end if
+end sub
+
+sub renderButtonLists()
+    buttons = m.buttonTask.buttons
+
     hideRightColLoader()
 
-    if m.components.text_categories_header <> invalid then
-        categoriesHeader = createObject("roSGNode", "SpNativeText")
-        categoriesHeader.settings = m.components.text_categories_header.settings
-        m.colRight.appendChild(categoriesHeader)
+    if m.categoriesHeader = invalid and m.components.text_categories_header <> invalid then
+        m.categoriesHeader = createObject("roSGNode", "SpNativeText")
+        m.categoriesHeader.settings = m.components.text_categories_header.settings
+        m.colRight.appendChild(m.categoriesHeader)
     end if
 
-    if m.components.text_purposes_definition <> invalid then
-        purposesDefinition = createObject("roSGNode", "SpNativeText")
-        purposesDefinition.settings = m.components.text_purposes_definition.settings
-        m.colRight.appendChild(purposesDefinition)
+    if m.purposesDefinition = invalid and m.components.text_purposes_definition <> invalid then
+        m.purposesDefinition = createObject("roSGNode", "SpNativeText")
+        m.purposesDefinition.settings = m.components.text_purposes_definition.settings
+        m.colRight.appendChild(m.purposesDefinition)
     end if
 
-    buttons = []
-    if m.top.privacyManagerViewData <> invalid and m.top.privacyManagerViewData.categories <> invalid and m.components.button_category <> invalid then
-        for each categoryId in m.top.privacyManagerViewData.categories
-            buttonSettings = { 
-                ' on: m.top.privacyManagerViewData.categories[categoryId].enabled
-                settings: {} 
-            } 
-            buttonSettings.settings.append(m.components.button_category.settings)
-            buttonSettings.id = categoryId
-            buttonSettings.settings.text = m.top.privacyManagerViewData.categories[categoryId].name
-
-            buttons.push(buttonSettings)
-        end for
-    end if
-
-    if m.categoryList = invalid and buttons.count() > 0 then
+    if m.categoryList = invalid and buttons <> invalid and buttons.count() > 0 then
         m.categoryList = createObject("roSGNode", "SpButtonList")
         m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
@@ -115,9 +115,7 @@ end sub
 sub renderView(event as Object)
     hasPmvData = getPrivacyManagerViewData(2)
 
-    if hasPmvData = false then
-        renderRightColLoader()
-    end if
+    renderRightColLoader()
 
     view = event.getData()
     mapComponents(view)
