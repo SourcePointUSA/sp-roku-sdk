@@ -14,7 +14,8 @@ sub createButtonSections()
             for each vendorId in vendors
                 buttonSettings = { 
                     on: vendors[vendorId].enabled
-                    settings: {} 
+                    settings: {},
+                    showCustom: vendors[vendorId].vendorType = "CUSTOM"
                 } 
                 buttonSettings.settings.append(buttonSettingsSettings)
                 buttonSettings.id = vendorId

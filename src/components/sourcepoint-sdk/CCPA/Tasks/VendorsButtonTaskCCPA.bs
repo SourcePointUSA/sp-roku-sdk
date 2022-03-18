@@ -11,7 +11,8 @@ sub createButtonSections()
         for each vendorId in vendors
             buttonSettings = { 
                 ' on: m.top.privacyManagerViewData.vendors[vendorId].enabled
-                settings: {} 
+                settings: {},
+                showCustom: vendors[vendorId].vendorType = "CUSTOM"
             } 
             buttonSettings.settings.append(buttonVendorSettings)
             buttonSettings.id = vendorId
