@@ -9,8 +9,12 @@ end sub
 sub render(event as object)
     componentName = m.top.componentName
     settings = event.getData()
-    textComponent = createObject("roSGNode", componentName)
-    m.top.textComponent = textComponent
+    if m.top.textComponent = invalid then
+        textComponent = createObject("roSGNode", componentName)
+        m.top.textComponent = textComponent
+    else
+        textComponent = m.top.textComponent
+    end if
     if settings.text <> invalid then
         m.top.text = settings.text
     end if

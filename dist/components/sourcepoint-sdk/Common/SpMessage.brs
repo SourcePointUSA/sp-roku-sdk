@@ -4,6 +4,12 @@ sub init()
     m.top.observeField("changeView", "changeView")
     m.top.observeField("message", "showMessage")
     m.viewHistory = []
+    m.cachedViews = {}
+    m.viewsToCache = {
+        "HomeView": true,
+        "CategoriesView": true,
+        "VendorsView": true
+    }
 end sub
 
 sub changeView(event as object)
@@ -84,9 +90,18 @@ sub showView(viewName as string, viewDataExtra = invalid as object)
         m.top.removeChild(m.currentView)
         m.currentView = invalid
     end if
-    viewData = getViewData(viewName)
-    if viewData <> invalid then
-        viewComponent = createViewComponent(viewMap[viewName] + m.top.messageCategory, viewMap[viewName], viewData, viewDataExtra)
+    if m.cachedViews[viewName] <> invalid then
+        viewComponent = m.cachedViews[viewName]
+    else
+        viewData = getViewData(viewName)
+        if viewData <> invalid then
+            viewComponent = createViewComponent(viewMap[viewName] + m.top.messageCategory, viewMap[viewName], viewData, viewDataExtra)
+            if m.viewsToCache[viewName] = true then
+                m.cachedViews[viewName] = viewComponent
+            end if
+        end if
+    end if
+    if viewComponent <> invalid then
         m.currentView = viewComponent
         m.top.appendChild(viewComponent)
         viewComponent.setFocus(true)

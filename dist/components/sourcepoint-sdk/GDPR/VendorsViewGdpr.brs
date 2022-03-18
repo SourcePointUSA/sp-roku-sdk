@@ -60,24 +60,26 @@ function onKeyEvent(key as string, press as boolean) as boolean
 end function
 
 sub renderRightCol()
-    hideRightColLoader()
     if m.vendorListTarget = invalid then
         m.vendorListTarget = createObject("roSGNode", "Group")
         m.colRight.appendChild(m.vendorListTarget)
     end if
-    buttons = []
-    if m.top.privacyManagerViewData.vendors <> invalid then
-        for each vendorId in m.top.privacyManagerViewData.vendors
-            buttonSettings = {
-                on: m.top.privacyManagerViewData.vendors[vendorId].enabled,
-                settings: {}
-            }
-            buttonSettings.settings.append(m.components.button_vendor.settings)
-            buttonSettings.id = vendorId
-            buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
-            buttons.push(buttonSettings)
-        end for
+    if m.buttonTask = invalid then
+        m.buttonTask = createObject("roSGNode", "VendorsButtonTaskGDPR")
+        m.buttonTask.privacyManagerViewData = m.top.privacyManagerViewData
+        m.buttonTask.buttonSettings = m.components.button_vendor.settings
+        m.buttonTask.observeField("buttons", "renderButtonLists")
+        m.buttonTask.observeField("error", "onError")
+        m.buttonTask.control = "RUN"
+    else
+        renderButtonLists()
     end if
+end sub
+
+sub renderButtonLists()
+    hideRightColLoader()
+    buttons = m.buttonTask.buttons.buttons
+    buttonsLi = m.buttonTask.buttons.buttonsLi
     if m.vendorList = invalid then
         m.vendorList = createObject("roSGNode", "SpButtonList")
         m.vendorList.id = "vendor_list"
@@ -88,18 +90,7 @@ sub renderRightCol()
         m.vendorList.observeField("itemSelected", "observeVendorList")
     end if
     m.vendorList.buttonComponents = buttons
-    if m.top.privacyManagerViewData.legIntVendors <> invalid and m.top.privacyManagerViewData.legIntVendors.count() > 0 then
-        buttonsLi = []
-        for each vendorId in m.top.privacyManagerViewData.legIntVendors
-            buttonSettings = {
-                on: m.top.privacyManagerViewData.legIntVendors[vendorId].enabled,
-                settings: {}
-            }
-            buttonSettings.settings.append(m.components.button_vendor.settings)
-            buttonSettings.id = vendorId
-            buttonSettings.settings.text = m.top.privacyManagerViewData.legIntVendors[vendorId].name
-            buttonsLi.push(buttonSettings)
-        end for
+    if buttonsLi <> invalid and buttonsLi.count() > 0 then
         if m.vendorListLi = invalid then
             m.vendorListLi = createObject("roSGNode", "SpButtonList")
             m.vendorListLi.id = "vendor_list_li"
@@ -128,9 +119,7 @@ end sub
 
 sub renderView(event as object)
     hasPmvData = getPrivacyManagerViewData(1)
-    if hasPmvData = false then
-        renderRightColLoader()
-    end if
+    renderRightColLoader()
     view = event.getData()
     mapComponents(view)
     renderLogo()

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<component name="CategoriesButtonTaskCCPA" extends="Task">
+    <interface>
+        <field id="privacyManagerViewData" type="assocarray" />
+        <field id="buttonCategorySettings" type="assocarray" />
+        <field id="buttons" type="array" />
+        <field id="error" type="string" />
+    </interface>
+    <script uri="./CategoriesButtonTaskCCPA.brs" type="text/brightscript" />
+    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
+</component>

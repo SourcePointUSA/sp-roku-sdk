@@ -30,7 +30,11 @@ sub incrementCampaign()
     else
         activeCampaign = activeCampaign + 1
     end if
-    m.top.activeCampaign = activeCampaign
+    if m.top.campaigns[activeCampaign] <> invalid then
+        m.top.activeCampaign = activeCampaign
+    else ' signal that we're done
+        m.top.userConsent = m.userConsent
+    end if
 end sub
 
 sub showMessage()
@@ -39,16 +43,19 @@ sub showMessage()
     campaign = campaigns[m.top.activeCampaign]
     if campaign <> invalid then
         try
-            m.currentMessage.observeField("done", "closeMessage")
             m.currentMessage.userConsent = campaign.userConsent
             m.currentMessage.message = campaign
             m.top.appendChild(m.currentMessage)
             m.currentMessage.setFocus(true)
+            if m.currentMessage.error <> invalid and m.currentMessage.error.len() > 0 then
+                ' its possible we've already errored
+                throw m.currentMessage.error
+            else ' else listen to done
+                m.currentMessage.observeField("done", "closeMessage")
+            end if
         catch e
             addError(e.message)
             closeMessage()
         end try
-    else ' signal that we're done, return consent
-        m.top.userConsent = m.userConsent
     end if
 end sub
