@@ -4,7 +4,7 @@
   },
   "name": "sp-roku-sdk",
   "description": "SP SDK for ROKU.",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "main": "index.js",
   "scripts": {
     "compile": "npm run compile-sdk && npm run compile-test-channel",

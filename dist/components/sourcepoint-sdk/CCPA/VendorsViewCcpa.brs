@@ -12,24 +12,27 @@ sub observeVendorList(event as object)
 end sub
 
 sub renderRightCol()
-    hideRightColLoader()
-    if m.components.text_vendor_header <> invalid then
-        vendorsHeader = createObject("roSGNode", "SpNativeText")
-        vendorsHeader.settings = m.components.text_vendor_header.settings
-        m.colRight.appendChild(vendorsHeader)
+    if m.buttonTask = invalid then
+        m.buttonTask = createObject("roSGNode", "VendorsButtonTaskCCPA")
+        m.buttonTask.privacyManagerViewData = m.top.privacyManagerViewData
+        m.buttonTask.buttonVendorSettings = m.components.button_vendor.settings
+        m.buttonTask.observeField("buttons", "renderButtonLists")
+        m.buttonTask.observeField("error", "onError")
+        m.buttonTask.control = "RUN"
+    else
+        renderButtonLists()
     end if
-    buttons = []
-    for each vendorId in m.top.privacyManagerViewData.vendors
-        buttonSettings = {
-            ' on: m.top.privacyManagerViewData.vendors[vendorId].enabled
-            settings: {}
-        }
-        buttonSettings.settings.append(m.components.button_vendor.settings)
-        buttonSettings.id = vendorId
-        buttonSettings.settings.text = m.top.privacyManagerViewData.vendors[vendorId].name
-        buttons.push(buttonSettings)
-    end for
-    if buttons.count() > 0 then
+end sub
+
+sub renderButtonLists()
+    buttons = m.buttonTask.buttons
+    hideRightColLoader()
+    if m.vendorsHeader = invalid and m.components.text_vendor_header <> invalid then
+        m.vendorsHeader = createObject("roSGNode", "SpNativeText")
+        m.vendorsHeader.settings = m.components.text_vendor_header.settings
+        m.colRight.appendChild(m.vendorsHeader)
+    end if
+    if buttons <> invalid and buttons.count() > 0 then
         if m.vendorList = invalid then
             m.vendorList = createObject("roSGNode", "SpButtonList")
             m.vendorList.id = "vendor_list"
@@ -44,9 +47,7 @@ end sub
 
 sub renderView(event as object)
     hasPmvData = getPrivacyManagerViewData(2)
-    if hasPmvData = false then
-        renderRightColLoader()
-    end if
+    renderRightColLoader()
     view = event.getData()
     mapComponents(view)
     renderLogo()

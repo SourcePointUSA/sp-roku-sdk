@@ -55,8 +55,9 @@ sub updateCategoryDesc(listItem as object)
                     end if
                 end function)(listItem.categoryType = "legInt", listItem)
         end if
-        if m.top.privacyManagerViewData[cType] <> invalid and m.top.privacyManagerViewData[cType][listItem.id] <> invalid then
-            text = m.top.privacyManagerViewData[cType][listItem.id].friendlyDescription
+        categories = m.top.privacyManagerViewData[cType]
+        if categories <> invalid and categories[listItem.id] <> invalid then
+            text = categories[listItem.id].friendlyDescription
         end if
     end if
     m.categoryDescription.text = text
@@ -113,7 +114,6 @@ sub renderCategoryDescription()
 end sub
 
 sub renderRightCol()
-    hideRightColLoader()
     categoryTypes = {
         "categories": {
             headerComponent: m.components.text_purposes_header,
@@ -132,63 +132,28 @@ sub renderRightCol()
     if m.components.button_category <> invalid and m.components.button_category.settings <> invalid then
         buttonCategorySettings.append(m.components.button_category.settings)
     end if
-    buttonsLi = []
-    if m.top.privacyManagerViewData.legIntCategories <> invalid then
-        for each id in m.top.privacyManagerViewData.legIntCategories
-            buttonSettings = {
-                categoryType: "legInt",
-                on: m.top.privacyManagerViewData.legIntCategories[id].enabled,
-                settings: {},
-                showCustom: m.top.privacyManagerViewData.legIntCategories[id].type = "CUSTOM"
-            }
-            buttonSettings.settings.append(buttonCategorySettings)
-            buttonSettings.id = id
-            buttonSettings.settings.text = m.top.privacyManagerViewData.legIntCategories[id].name
-            buttonsLi.push(buttonSettings)
-        end for
+    if m.buttonTask = invalid then
+        m.buttonTask = createObject("roSGNode", "CategoriesButtonTaskGDPR")
+        m.buttonTask.privacyManagerViewData = m.top.privacyManagerViewData
+        m.buttonTask.categoryTypes = categoryTypes
+        m.buttonTask.buttonCategorySettings = buttonCategorySettings
+        m.buttonTask.observeField("buttons", "renderButtonLists")
+        m.buttonTask.observeField("error", "onError")
+        m.buttonTask.control = "RUN"
+    else
+        renderButtonLists()
     end if
-    categoryTypeOrder = [
-        "categories",
-        "specialPurposes",
-        "specialFeatures"
-    ]
-    sections = []
-    for each cType in categoryTypeOrder
-        buttons = []
-        if m.top.privacyManagerViewData[cType] <> invalid then
-            for each id in m.top.privacyManagerViewData[cType]
-                listItem = m.top.privacyManagerViewData[cType][id]
-                if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
-                    buttonSettings = {
-                        categoryType: cType,
-                        on: m.top.privacyManagerViewData[cType][id].enabled,
-                        settings: {},
-                        showCustom: m.top.privacyManagerViewData[cType][id].type = "CUSTOM"
-                    }
-                    buttonSettings.settings.append(buttonCategorySettings)
-                    buttonSettings.id = id
-                    buttonSettings.settings.text = m.top.privacyManagerViewData[cType][id].name
-                    buttons.push(buttonSettings)
-                end if
-            end for
-        end if
-        if buttons.count() > 0 then
-            section = {
-                children: buttons
-            }
-            if categoryTypes[cType].headerComponent <> invalid then
-                section.settings = categoryTypes[cType].headerComponent.settings
-            end if
-            if categoryTypes[cType].defComponent <> invalid then
-                section.settingsDesc = categoryTypes[cType].defComponent.settings
-            end if
-            sections.push(section)
-        end if
-    end for
+end sub
+
+sub renderButtonLists()
+    hideRightColLoader()
+    buttons = m.buttonTask.buttons
+    buttonsLi = buttons.buttonsLi
+    sections = buttons.sections
     m.categoryListTarget = createObject("roSGNode", "Group")
     m.colRight.appendChild(m.categoryListTarget)
     ' Create category list
-    if sections.count() > 0 then
+    if sections <> invalid and sections.count() > 0 then
         if m.categoryList = invalid then
             m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
             m.categoryList.id = "category_list"
@@ -206,7 +171,7 @@ sub renderRightCol()
     end if
     ' Create LI category list if needed
     ' TODO what if there are only LI categories
-    if buttonsLi.count() > 0 then
+    if buttonsLi <> invalid and buttonsLi.count() > 0 then
         if m.categoryListLi = invalid then
             m.categoryListLi = createObject("roSGNode", "SpHeaderButtonList")
             m.categoryListLi.id = "category_list_li"
@@ -239,9 +204,7 @@ end sub
 
 sub renderView(event as object)
     hasPmvData = getPrivacyManagerViewData(1)
-    if hasPmvData = false then
-        renderRightColLoader()
-    end if
+    renderRightColLoader()
     view = event.getData()
     mapComponents(view)
     renderLogo()

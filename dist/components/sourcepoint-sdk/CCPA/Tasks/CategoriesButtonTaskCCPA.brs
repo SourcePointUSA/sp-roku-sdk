@@ -1,0 +1,26 @@
+sub init()
+    m.top.functionName = "createButtonSections"
+end sub
+
+sub createButtonSections()
+    buttons = []
+    buttonCategorySettings = m.top.buttonCategorySettings
+    try
+        if m.top.privacyManagerViewData <> invalid and m.top.privacyManagerViewData.categories <> invalid and buttonCategorySettings <> invalid then
+            categories = m.top.privacyManagerViewData.categories
+            for each categoryId in categories
+                buttonSettings = {
+                    ' on: m.top.privacyManagerViewData.categories[categoryId].enabled
+                    settings: {}
+                }
+                buttonSettings.settings.append(buttonCategorySettings)
+                buttonSettings.id = categoryId
+                buttonSettings.settings.text = categories[categoryId].name
+                buttons.push(buttonSettings)
+            end for
+        end if
+    catch e
+        m.top.error = e.message
+    end try
+    m.top.buttons = buttons
+end sub

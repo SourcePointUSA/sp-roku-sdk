@@ -193,9 +193,9 @@ function __SourcepointSdk_builder()
             m.closeScreen()
             return
         end if
-        m.scene.campaigns = campaigns
         m.screen.show()
         m.scene.observeFieldScoped("userConsent", m.port)
+        m.scene.campaigns = campaigns
         while (true)
             msg = wait(0, m.port)
             msgType = type(msg)

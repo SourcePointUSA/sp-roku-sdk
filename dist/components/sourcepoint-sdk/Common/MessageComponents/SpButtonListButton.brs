@@ -20,6 +20,9 @@ end sub
 sub render(event as object)
     content = event.getData()
     settings = content.settings
+    ' set this before continuing, other labels will pull font settings from here
+    m.top.id = content.id
+    m.button_label.settings = settings
     if m.rendered = true then
         renderUpdate(content)
         return
@@ -37,9 +40,6 @@ sub render(event as object)
             m.unFocusBackgroundColor = colorConvert(settings.style.onUnfocusBackgroundColor)
         end if
     end if
-    m.top.id = content.id
-    ' set this before continuing, other labels will pull font settings from here
-    m.button_label.settings = settings
     addBackground(content)
     if content.carat <> "" and m.caratNode = invalid then
         addCarat(content)
@@ -113,6 +113,7 @@ end sub
 
 sub addCustomText(content as object, settings as object)
     m.customText = createObject("roSGNode", "SimpleLabel")
+    m.customText.id = "custom_text"
     m.customText.text = settings.customText
     m.customText.fontUri = "font:SystemFontFile"
     if m.button_label.textComponent <> invalid and m.button_label.textComponent.font <> invalid then
