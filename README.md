@@ -13,7 +13,7 @@ The SDK must be created in your main thread, as it will create its own Screen ob
 
 After creating your application's screen, create the SourcepointSdk:
 ```
-m.spSdk = new SourcepointSdk(accountId, propertyHref, legislationConfigs, optionalConfigs, showMessage)
+m.spSdk = SourcepointSdk(accountId, propertyHref, legislationConfigs, optionalConfigs, showMessage)
 ```
 SourcepointSdk takes the following arguments:
 
