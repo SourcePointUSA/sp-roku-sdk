@@ -14,7 +14,8 @@ sub getMessage()
         "includeData": {
             "localState": { "type": "string" },
             "customVendorsResponse": { "type": "string" },
-            "TCData": { "type": "RecordString" }
+            "TCData": { "type": "RecordString" },
+            "translateMessage": true
         },
         "localState": m.top.localState,
         "propertyHref": m.top.propertyHref,
