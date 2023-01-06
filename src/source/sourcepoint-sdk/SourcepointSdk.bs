@@ -172,7 +172,6 @@ class SourcepointSdk
         getMessageTask = createObject("roSGNode", "GetMessage")
         getMessageTask.legislation = legislation
         getMessageTask.messageId = messageId
-        getMessageTask.consentLanguage = m.consentLanguage
         getMessageTask.observeFieldScoped("state", port)
 
         getMessageTask.control = "RUN"
