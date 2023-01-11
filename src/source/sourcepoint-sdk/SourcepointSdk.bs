@@ -107,7 +107,7 @@ class SourcepointSdk
 
     public function getUserConsent() as Dynamic
         if m.userConsent <> invalid then
-            return m.userConsent
+            return m.formatUserConsent(m.userConsent)
         endif
 
         ' create screen before we make our task
