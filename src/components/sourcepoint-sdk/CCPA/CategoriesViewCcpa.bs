@@ -74,7 +74,8 @@ sub renderRightCol()
         m.buttonTask.observeField("error", "onError")
         m.buttonTask.control = "RUN"
     else
-        renderButtonLists()
+        m.buttonTask.privacyManagerViewData = m.top.privacyManagerViewData
+        m.buttonTask.control = "RUN"
     end if
 end sub
 
