@@ -8,10 +8,12 @@ sub getMessage()
         "env": m.global.config.env,
         "messageId": m.top.messageId,
         "propertyId": m.global.config.propertyId,
+        "consentLanguage": m.global.config.consentLanguage,
         "includeData": FormatJson({
             "categories": {
                 "type": "RecordString"
-            }
+            },
+            "translateMessage": true
         })
     }
     response = makeRequest(addQueryParams(url, queryParams), "GET")
