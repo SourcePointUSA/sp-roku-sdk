@@ -20,7 +20,8 @@ sub getMessage()
             },
             "TCData": {
                 "type": "RecordString"
-            }
+            },
+            "translateMessage": true
         },
         "localState": m.top.localState,
         "propertyHref": m.top.propertyHref,

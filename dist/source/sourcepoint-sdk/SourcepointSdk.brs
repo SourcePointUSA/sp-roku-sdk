@@ -93,7 +93,7 @@ function __SourcepointSdk_builder()
     end function
     instance.getUserConsent = function() as dynamic
         if m.userConsent <> invalid then
-            return m.userConsent
+            return m.formatUserConsent(m.userConsent)
         endif
         ' create screen before we make our task
         m.createScreen()
