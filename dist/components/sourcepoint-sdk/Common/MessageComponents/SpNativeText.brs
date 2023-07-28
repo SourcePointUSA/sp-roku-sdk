@@ -16,7 +16,7 @@ sub render(event as object)
         textComponent = m.top.textComponent
     end if
     if settings.text <> invalid then
-        m.top.text = settings.text
+        m.top.text = stripHtmlTags(settings.text)
     end if
     if settings.style <> invalid and settings.style.font <> invalid then
         if settings.style.font.color <> invalid then
