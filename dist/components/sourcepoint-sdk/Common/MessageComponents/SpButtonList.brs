@@ -45,10 +45,10 @@ sub render(event as object)
             sectionNode = createObject("roSGNode", "ContentNode")
             sectionNode.contentType = "SECTION"
             if section.settings <> invalid then
-                sectionNode.title = section.settings.text
+                sectionNode.title = stripHtmlTags(section.settings.text)
             end if
             if section.settingsDesc <> invalid and section.settingsDesc.text <> invalid then
-                sectionNode.description = section.settingsDesc.text
+                sectionNode.description = stripHtmlTags(section.settingsDesc.text)
             end if
             sectionButtons = section.children
             hasSections = true
