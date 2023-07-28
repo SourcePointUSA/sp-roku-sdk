@@ -19,7 +19,7 @@ sub render(event as Object)
     end if
     
     if settings.text <> invalid then
-        m.top.text = settings.text
+        m.top.text = stripHtmlTags(settings.text)
     end if 
 
     if settings.style <> invalid and settings.style.font <> invalid then
