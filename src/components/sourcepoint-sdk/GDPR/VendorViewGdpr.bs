@@ -18,8 +18,8 @@ sub observeNav(event as Object)
     changeView("_go_back_")
 end sub
 
-sub renderPrivacyPolicyUrl()
-    if m.vendorData.policyUrl = invalid then
+sub renderPrivacyPolicyUrl(url, title, element_id)
+    if url = invalid then
         return
     end if
     
@@ -31,12 +31,12 @@ sub renderPrivacyPolicyUrl()
     end if
 
     ppHeader = createObject("roSGNode", "SimpleLabel")
-    ppHeader.text = "Privacy Policy Url:"
+    ppHeader.text = title
     ppHeader.color = textColor
 
     ppUrl = createObject("roSGNode", "Label")
-    ppUrl.id = "privacy_policy_url"
-    ppUrl.text = m.vendorData.policyUrl
+    ppUrl.id = element_id
+    ppUrl.text = url
     ppUrl.wrap = true
     ppUrl.color = textColor
     ppUrl.width = m.colLeftWidth * .8
@@ -94,6 +94,8 @@ end sub
 sub renderView(event as Object)
     m.vendorData = event.getData()
 
+    print m.vendorData
+
     if m.vendorData.disclosureOnly = true then
         m.navButtons = []
     end if
@@ -102,7 +104,8 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderHeader()
-    renderPrivacyPolicyUrl()
+    renderPrivacyPolicyUrl(m.vendorData.policyUrl, "Privacy Policy Url:", "privacy_policy_url")
+    renderPrivacyPolicyUrl(m.vendorData.legIntUrl, "Legitimate Interest Disclosure:", "legint_url")
     renderNav(m.navButtons)
 
     renderRightCol()
