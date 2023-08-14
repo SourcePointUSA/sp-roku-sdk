@@ -117,14 +117,18 @@ sub renderRightCol()
         "categories": {
             headerComponent: m.components.text_purposes_header,
             defComponent: m.components.text_purposes_def
-        }, 
+        },
+        "features": {
+            headerComponent: m.components.text_features_header,
+            defComponent: m.components.text_features_def
+        },
         "specialPurposes": {
             headerComponent: m.components.text_special_purposes_header,
             defComponent: m.components.text_special_purposes_def
         }, 
         "specialFeatures": {
-            headerComponent: m.components.text_features_header,
-            defComponent: m.components.text_features_def
+            headerComponent: m.components.text_special_features_header,
+            defComponent: m.components.text_special_features_def
         }
     }
 

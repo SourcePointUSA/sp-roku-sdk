@@ -9,7 +9,7 @@ sub createButtonSections()
     try
         buttonCategorySettings = m.top.buttonCategorySettings
         categoryTypes = m.top.categoryTypes
-        categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+        categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
 
         if m.top.privacyManagerViewData.legIntCategories <> invalid then
             categories = m.top.privacyManagerViewData.legIntCategories
@@ -29,7 +29,7 @@ sub createButtonSections()
             end for
         end if
         
-        categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+        categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
         sections = []
         for each cType in categoryTypeOrder
             buttons = []

@@ -54,6 +54,8 @@ sub init()
         "RejectAllButton": "reject_all",
         "SaveAndExitButton": "save_and_exit",
         "SaveButton": "save_and_exit",
+        "SpecialFeaturesHeader": "text_special_features_header",
+        "SpecialFeaturesDefinition": "text_special_features_def",
         "SpecialPurposesHeader": "text_special_purposes_header",
         "SpecialPurposesDefinition": "text_special_purposes_def",
         "VendorButton": "button_vendor",
