@@ -2,6 +2,8 @@ sub init()
     m.top.observeField("viewDataExtra", "renderView")
 
     m.navButtons = ["button_on", "button_off"]
+    m.rightColTabs = []
+    m.currentRightColTab = 0
 end sub
 
 sub observeNav(event as Object)
@@ -18,7 +20,44 @@ sub observeNav(event as Object)
     changeView("_go_back_")
 end sub
 
-sub renderPrivacyPolicyUrl(url, title, element_id)
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if m.rightColFocus <> invalid and m.rightColFocus.isInFocusChain() then
+        if key = "right" and (m.currentRightColTab + 1) < m.rightColTabs.count() then
+            if press = true then
+                m.currentRightColTab = m.currentRightColTab + 1
+                for i=0 to m.rightColTabs.count()-1 step 1
+                    if i = m.currentRightColTab then 
+                        m.rightColTabs[i].visible = true
+                        m.rightColFocus = m.rightColTabs[i] 
+                        m.rightColFocus.setFocus(true)
+                    else 
+                        m.rightColTabs[i].visible = false
+                    end if
+                end for
+            end if
+            return true
+        end if
+        if key = "left" and m.currentRightColTab > 0 then
+            if press = true then
+                m.currentRightColTab = m.currentRightColTab - 1
+                for i=0 to m.rightColTabs.count()-1 step 1
+                    if i = m.currentRightColTab then 
+                        m.rightColTabs[i].visible = true
+                        m.rightColFocus = m.rightColTabs[i] 
+                        m.rightColFocus.setFocus(true)
+                    else 
+                        m.rightColTabs[i].visible = false
+                    end if
+                end for
+            end if
+            return true
+        end if
+    end if
+
+    return _onKeyEvent(key, press)
+end function
+
+sub renderPrivacyPolicyUrl(url, title as String, element_id as String)
     if url = invalid then
         return
     end if
@@ -56,6 +95,11 @@ sub renderRightCol()
     end for
     setFocus(m.nav)
 
+    renderTabs()
+
+    m.tabTarget = createObject("roSGNode", "Group")
+    m.colRight.appendChild(m.tabTarget)
+
     categories = []
     if m.vendorData.isLi = true then
         categories = m.vendorData.legIntCategories
@@ -85,10 +129,33 @@ sub renderRightCol()
         m.categoryList.buttonComponents = buttons
 
         if buttons.count() > 0 then
-            m.colRight.appendChild(m.categoryList)
+            m.tabTarget.appendChild(m.categoryList)
             m.rightColFocus = m.categoryList
+            m.rightColTabs.push(m.categoryList)
         end if
     end if
+
+    if m.vendorData.iabDataCategories <> invalid then
+        collectedData = createObject("roSGNode", "SpNativeText")
+        collectedData.visible = false
+        collectedData.componentName = "ScrollableText"
+        collectedDataText = ""
+        for each category in m.vendorData.iabDataCategories
+            collectedDataText = collectedDataText + category.name + chr(10) + chr(10) + category.description + chr(10) + chr(10)
+        end for
+        ' TODO - add text to actual settings
+        collectedData.settings = {
+            text: collectedDataText
+        }
+        collectedData.textComponent.width = m.colRightWidth
+        collectedData.textComponent.height = scalePixelDimension(530)
+        m.tabTarget.appendChild(collectedData)
+        m.rightColTabs.push(collectedData)
+    end if
+end sub
+
+sub renderTabs()
+    
 end sub
 
 sub renderView(event as Object)
