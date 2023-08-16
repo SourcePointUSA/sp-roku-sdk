@@ -39,16 +39,16 @@ sub renderRightCol(event as Object)
         renderNav([])
     else
         renderNav(m.navButtons)
+
+        enabled = m.categoryData.enabled
+
+        for i = 0 to m.navButtons.count() step 1 
+            if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
+                m.nav.focusButton = i
+                exit for
+            end if
+        end for
     end if
-
-    enabled = m.categoryData.enabled
-
-    for i = 0 to m.navButtons.count() step 1 
-        if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
-            m.nav.focusButton = i
-            exit for
-        end if
-    end for
 
     setFocus(m.nav)
     m.screenTitle.text = m.categoryData.name
