@@ -136,6 +136,8 @@ sub addCustomText(content as Object, settings as Object)
     rightOffset = content.width - m.buttonPadding
     if m.onOffNode <> invalid then
         rightOffset = m.onOffNode.boundingRect().x - m.buttonTextSpacing
+    else if m.caratNode <> invalid then
+        rightOffset = m.caratNode.boundingRect().x - m.buttonTextSpacing
     end if 
     m.customText.horizOrigin = "right"
     m.customText.vertOrigin = "center"
