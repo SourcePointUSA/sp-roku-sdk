@@ -17,6 +17,10 @@ sub observeNav(event as Object)
         "legInt": {
             accept: "acceptLiCategory",
             reject: "rejectLiCategory"
+        },
+        "specialFeatures": {
+            accept: "acceptSpecialFeature",
+            reject: "rejectSpecialFeature"
         }
     }
 
@@ -35,7 +39,7 @@ sub renderRightCol(event as Object)
     m.categoryData = event.getData()
 
     ' no buttons if it's not toggleable
-    if m.categoryData.disclosureOnly = true or (m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt") then
+    if m.categoryData.disclosureOnly = true or (m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt" and m.categoryData.categoryType <> "specialFeatures") then
         renderNav([])
     else
         renderNav(m.navButtons)
