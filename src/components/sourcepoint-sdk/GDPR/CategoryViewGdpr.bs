@@ -86,7 +86,13 @@ sub renderRightCol(event as Object)
     else if m.categoryData.categoryType = "legInt" then
         vendors = m.categoryData.legIntVendors
     else
-        vendors = m.categoryData.vendors
+        if m.categoryData.disclosureOnly = true then
+            vendors = m.categoryData.disclosureOnlyVendors
+        else if m.categoryData.vendors <> invalid then
+            vendors = m.categoryData.vendors
+        else 
+            vendors = []
+        end if
     end if
 
     ' render vendor header with count
