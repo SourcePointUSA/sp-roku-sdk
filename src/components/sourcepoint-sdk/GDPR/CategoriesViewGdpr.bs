@@ -29,19 +29,19 @@ sub clearCategoryDesc(event as Object)
     end if
 end sub
 
-sub observeCategoryList(event as Object)
+sub observeCategoryList()
     showCategory(m.categoryList.focusedContentNode)
 end sub
 
-sub observeCategoryListFocus(event as Object)
+sub observeCategoryListFocus()
     updateCategoryDesc(m.categoryList.focusedContentNode)
 end sub
 
-sub observeCategoryListLi(event as Object)
+sub observeCategoryListLi()
     showCategory(m.categoryListLi.focusedContentNode)
 end sub
 
-sub observeCategoryListLiFocus(event as Object)
+sub observeCategoryListLiFocus()
     updateCategoryDesc(m.categoryListLi.focusedContentNode)
 end sub
 
@@ -218,7 +218,7 @@ sub renderSlider()
 end sub
 
 sub renderView(event as Object)
-    hasPmvData = getPrivacyManagerViewData(1)
+    getPrivacyManagerViewData(1)
 
     renderRightColLoader()
 
