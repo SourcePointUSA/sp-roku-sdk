@@ -104,7 +104,12 @@ sub renderRightCol()
     if m.vendorData.isLi = true then
         categories = m.vendorData.legIntCategories
     else
-        categories = m.vendorData.consentCategories
+        if m.vendorData.consentCategories <> invalid then 
+            categories.append(m.vendorData.consentCategories)
+        end if
+        if m.vendorData.disclosureOnlyCategories <> invalid then
+            categories.append(m.vendorData.disclosureOnlyCategories)
+        end if
     end if
 
     if categories <> invalid and categories.count() > 0 then
@@ -158,10 +163,32 @@ sub renderTabs()
     
 end sub
 
+function isDisclosureOnly() as boolean
+    if m.vendorData = invalid then
+        ' no vendor data
+        return false
+    else if m.vendorData.disclosureOnlyCategories = invalid or m.vendorData.disclosureOnlyCategories.count() = 0 then
+        ' no disclosure only categories
+        return false
+    else 
+        ' has disclosure only categories, make sure it has no toggleable types
+        ret = true
+        keys = ["consentCategories", "legIntCategories", "iabSpecialFeatures"]
+        for each key in keys 
+            if m.vendorData[key] = invalid or m.vendorData[key].count() > 0 then
+                ret = false
+                exit for
+            end if
+        end for
+
+        return ret
+    end if
+end function
+
 sub renderView(event as Object)
     m.vendorData = event.getData()
 
-    if m.vendorData.disclosureOnly = true then
+    if isDisclosureOnly() then
         m.navButtons = []
     end if
     
