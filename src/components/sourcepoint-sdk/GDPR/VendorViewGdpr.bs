@@ -1,3 +1,5 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
 sub init()
     m.top.observeField("viewDataExtra", "renderView")
 
@@ -62,6 +64,7 @@ sub renderPrivacyPolicyUrl(url, title as String, element_id as String)
         return
     end if
     
+    font = createFont({fontSize: 12})
     screenTitle = m.screenTitle
 
     textColor = "0x000000FF"
@@ -79,6 +82,7 @@ sub renderPrivacyPolicyUrl(url, title as String, element_id as String)
     ppUrl.wrap = true
     ppUrl.color = textColor
     ppUrl.width = m.colLeftWidth * .8
+    ppUrl.font = font
 
     m.colLeft.appendChild(ppHeader)
     m.colLeft.appendChild(ppUrl)
