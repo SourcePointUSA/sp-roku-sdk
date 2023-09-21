@@ -101,8 +101,8 @@ sub renderRightCol()
 
     renderTabs()
 
-    m.tabTarget = createObject("roSGNode", "Group")
-    m.colRight.appendChild(m.tabTarget)
+    m.tabContentTarget = createObject("roSGNode", "Group")
+    m.colRight.appendChild(m.tabContentTarget)
 
     categories = []
     if m.vendorData.isLi = true then
@@ -138,7 +138,7 @@ sub renderRightCol()
         m.categoryList.buttonComponents = buttons
 
         if buttons.count() > 0 then
-            m.tabTarget.appendChild(m.categoryList)
+            m.tabContentTarget.appendChild(m.categoryList)
             m.rightColFocus = m.categoryList
             m.rightColTabs.push(m.categoryList)
         end if
@@ -149,6 +149,11 @@ sub renderRightCol()
         collectedData.visible = false
         collectedData.componentName = "ScrollableText"
         collectedDataText = ""
+
+        if m.components.text_data_categories_list_header <> invalid and m.components.text_data_categories_list_header.settings <> invalid then
+            collectedDataText = m.components.text_data_categories_list_header.settings.text + chr(10) + chr(10)
+        endif
+
         for each category in m.vendorData.iabDataCategories
             collectedDataText = collectedDataText + category.name + chr(10) + chr(10) + category.description + chr(10) + chr(10)
         end for
@@ -158,13 +163,27 @@ sub renderRightCol()
         }
         collectedData.textComponent.width = m.colRightWidth
         collectedData.textComponent.height = scalePixelDimension(530)
-        m.tabTarget.appendChild(collectedData)
+        m.tabContentTarget.appendChild(collectedData)
         m.rightColTabs.push(collectedData)
     end if
 end sub
 
 sub renderTabs()
-    
+    m.tabTarget = createObject("roSGNode", "LayoutGroup")
+    m.tabTarget.layoutDirection = "horiz"
+    m.tabTarget.itemSpacings = [scalePixelDimension(10)]
+    m.colRight.appendChild(m.tabTarget)
+
+    if m.components.text_purposes_header_text <> invalid then
+        purposesHeader = createObject("roSGNode", "SpNativeText")
+        purposesHeader.settings = m.components.text_purposes_header_text.settings
+        m.tabTarget.appendChild(purposesHeader)
+    endif
+    if m.components.text_data_categories_header <> invalid then
+        purposesHeader = createObject("roSGNode", "SpNativeText")
+        purposesHeader.settings = m.components.text_data_categories_header.settings
+        m.tabTarget.appendChild(purposesHeader)
+    endif
 end sub
 
 function isDisclosureOnly() as boolean
