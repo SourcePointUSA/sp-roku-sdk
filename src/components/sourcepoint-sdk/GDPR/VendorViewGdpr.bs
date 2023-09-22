@@ -109,44 +109,108 @@ sub renderRightCol()
     m.tabContentTarget = createObject("roSGNode", "Group")
     m.colRight.appendChild(m.tabContentTarget)
 
-    categories = []
+    categoryData = {}
     if m.vendorData.isLi = true then
-        categories = m.vendorData.legIntCategories
+        categoryData.categories = m.vendorData.legIntCategories
     else
+        categoryData = {
+            "categories": [],
+            "features": m.vendorData.iabFeatures,
+            "specialFeatures": m.vendorData.iabSpecialFeatures,
+            "specialPurposes": m.vendorData.iabSpecialPurposesObjs
+        }
+
         if m.vendorData.consentCategories <> invalid then 
-            categories.append(m.vendorData.consentCategories)
+            categoryData.categories.append(m.vendorData.consentCategories)
         end if
         if m.vendorData.disclosureOnlyCategories <> invalid then
-            categories.append(m.vendorData.disclosureOnlyCategories)
+            categoryData.categories.append(m.vendorData.disclosureOnlyCategories)
         end if
     end if
 
-    if categories <> invalid and categories.count() > 0 then
-        m.categoryList = createObject("roSGNode", "SpButtonList")
+    categoryTypes = {
+        "categories": {
+            headerComponent: m.components.text_purposes_header_vendor,
+            defComponent: m.components.text_purposes_def
+        },
+        "features": {
+            headerComponent: m.components.text_features_header_vendor,
+            defComponent: m.components.text_features_def
+        },
+        "specialPurposes": {
+            headerComponent: m.components.text_special_purposes_header_vendor,
+            defComponent: m.components.text_special_purposes_def
+        }, 
+        "specialFeatures": {
+            headerComponent: m.components.text_special_features_header_vendor,
+            defComponent: m.components.text_special_features_def
+        }
+    }
+
+    buttonCategorySettings = {}
+
+    if m.components.button_vendor <> invalid and m.components.button_vendor.settings <> invalid then
+        buttonCategorySettings.append(m.components.button_vendor.settings)
+    end if
+
+    categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
+    sections = []
+    for each cType in categoryTypeOrder
+        buttons = []
+
+        if categoryData[cType] <> invalid then
+            categories = categoryData[cType]
+            for each cat in categories
+                buttonSettings = {
+                    carat: "",  ' TODO - put retention here?
+                    categoryType: cType, 
+                    ' on: listItem.enabled,
+                    settings: {},
+                    ' showCustom: listItem.type = "CUSTOM"
+                }
+
+                buttonSettings.settings.append(buttonCategorySettings)
+                ' buttonSettings.id = id
+                
+
+                if type(cat) = "roString" then
+                    buttonSettings.settings.text = cat
+                else 
+                    buttonSettings.settings.text = cat.name
+                endif
+        
+                buttons.push(buttonSettings)
+            end for
+        end if
+    
+        if buttons.count() > 0 then
+            section = {
+                children: buttons
+            }
+
+            if categoryTypes[cType].headerComponent <> invalid then
+                section.settings = categoryTypes[cType].headerComponent.settings
+            end if
+
+            if categoryTypes[cType].defComponent <> invalid then
+                section.settingsDesc = categoryTypes[cType].defComponent.settings
+            end if
+
+            sections.push(section)
+        end if
+    end for
+
+    if sections <> invalid and sections.count() > 0 then
+        m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
         m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
-        buttons = []
-        for each purpose in categories
-            if purpose <> invalid then
-                buttonSettings = { 
-                    carat: "",
-                    settings: {} 
-                } 
-                if m.components.button_vendor <> invalid then
-                    buttonSettings.settings.append(m.components.button_vendor.settings)
-                end if
-                buttonSettings.settings.text = purpose.name
+        m.categoryList.sectionSettings = sections[0].settings
+        m.categoryList.sectionDescSettings = sections[0].settingsDesc
+        m.categoryList.buttonComponents = sections
 
-                buttons.push(buttonSettings)
-            end if
-        end for
-        m.categoryList.buttonComponents = buttons
-
-        if buttons.count() > 0 then
-            m.tabContentTarget.appendChild(m.categoryList)
-            m.rightColFocus = m.categoryList
-            m.rightColTabs.push(m.categoryList)
-        end if
+        m.tabContentTarget.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+        m.rightColTabs.push(m.categoryList)
     end if
 
     if m.vendorData.iabDataCategories <> invalid then
