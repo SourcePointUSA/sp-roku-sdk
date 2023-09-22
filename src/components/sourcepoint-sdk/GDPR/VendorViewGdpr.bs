@@ -5,6 +5,7 @@ sub init()
 
     m.navButtons = ["button_on", "button_off"]
     m.rightColTabs = []
+    m.rightColTabUnderlines = []
     m.currentRightColTab = 0
 end sub
 
@@ -30,10 +31,12 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 for i=0 to m.rightColTabs.count()-1 step 1
                     if i = m.currentRightColTab then 
                         m.rightColTabs[i].visible = true
+                        m.rightColTabUnderlines[i].visible = true
                         m.rightColFocus = m.rightColTabs[i] 
                         m.rightColFocus.setFocus(true)
                     else 
                         m.rightColTabs[i].visible = false
+                        m.rightColTabUnderlines[i].visible = false
                     end if
                 end for
             end if
@@ -45,10 +48,12 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 for i=0 to m.rightColTabs.count()-1 step 1
                     if i = m.currentRightColTab then 
                         m.rightColTabs[i].visible = true
+                        m.rightColTabUnderlines[i].visible = true
                         m.rightColFocus = m.rightColTabs[i] 
                         m.rightColFocus.setFocus(true)
                     else 
                         m.rightColTabs[i].visible = false
+                        m.rightColTabUnderlines[i].visible = false
                     end if
                 end for
             end if
@@ -174,15 +179,44 @@ sub renderTabs()
     m.tabTarget.itemSpacings = [scalePixelDimension(10)]
     m.colRight.appendChild(m.tabTarget)
 
+    tabColor = "#800080"
+
+    if m.top.view <> invalid and m.top.view.settings <> invalid and m.top.view.settings.style <> invalid and m.top.view.settings.style.tabUnderlineColor <> invalid then
+        tabColor = m.top.view.settings.style.tabUnderlineColor
+    endif
+
+    tabColor = colorConvert(tabColor)
+    tabHeight = 4
+    tabPadding = 10
+
     if m.components.text_purposes_header_text <> invalid then
         purposesHeader = createObject("roSGNode", "SpNativeText")
         purposesHeader.settings = m.components.text_purposes_header_text.settings
+
+        purposesUnderline = createObject("roSGNode", "Rectangle")
+        purposesUnderline.color = tabColor
+        purposesUnderline.height = tabHeight
+        purposesUnderline.width = purposesHeader.boundingRect().width
+        purposesUnderline.translation = [0, purposesHeader.boundingRect().height + tabPadding]
+        purposesHeader.appendChild(purposesUnderline)
+        m.rightColTabUnderlines.push(purposesUnderline)
+
         m.tabTarget.appendChild(purposesHeader)
     endif
     if m.components.text_data_categories_header <> invalid then
-        purposesHeader = createObject("roSGNode", "SpNativeText")
-        purposesHeader.settings = m.components.text_data_categories_header.settings
-        m.tabTarget.appendChild(purposesHeader)
+        categoriesHeader = createObject("roSGNode", "SpNativeText")
+        categoriesHeader.settings = m.components.text_data_categories_header.settings
+
+        categoriesUnderline = createObject("roSGNode", "Rectangle")
+        categoriesUnderline.color = tabColor
+        categoriesUnderline.height = tabHeight
+        categoriesUnderline.width = categoriesHeader.boundingRect().width
+        categoriesUnderline.translation = [0, categoriesHeader.boundingRect().height + tabPadding]
+        categoriesHeader.appendChild(categoriesUnderline)
+        categoriesUnderline.visible = false
+        m.rightColTabUnderlines.push(categoriesUnderline)
+
+        m.tabTarget.appendChild(categoriesHeader)
     endif
 end sub
 
