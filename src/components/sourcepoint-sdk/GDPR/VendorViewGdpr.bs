@@ -166,7 +166,6 @@ sub renderRightCol()
                     categoryType: cType, 
                     ' on: listItem.enabled,
                     settings: {},
-                    ' showCustom: listItem.type = "CUSTOM"
                 }
 
                 buttonSettings.settings.append(buttonCategorySettings)
@@ -177,6 +176,10 @@ sub renderRightCol()
                     buttonSettings.settings.text = cat
                 else 
                     buttonSettings.settings.text = cat.name
+                    buttonSettings.showCustom = cat.type = "CUSTOM"
+                    if cat.retention <> invalid and type(cat.retention) = "roString" then
+                        buttonSettings.carat = cat.retention
+                    endif
                 endif
         
                 buttons.push(buttonSettings)
@@ -192,6 +195,10 @@ sub renderRightCol()
                 section.settings = categoryTypes[cType].headerComponent.settings
             end if
 
+            if categoryTypes[cType].headerRightComponent <> invalid then
+                section.settingsHeaderRight = categoryTypes[cType].headerRightComponent.settings
+            end if
+
             if categoryTypes[cType].defComponent <> invalid then
                 section.settingsDesc = categoryTypes[cType].defComponent.settings
             end if
@@ -205,6 +212,7 @@ sub renderRightCol()
         m.categoryList.id = "category_list"
         m.categoryList.width = m.colRightWidth
         m.categoryList.sectionSettings = sections[0].settings
+        m.categoryList.sectionSettingsRight = sections[0].settingsHeaderRight
         m.categoryList.sectionDescSettings = sections[0].settingsDesc
         m.categoryList.buttonComponents = sections
 
