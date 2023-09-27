@@ -262,8 +262,8 @@ sub renderTabs()
     endif
 
     tabColor = colorConvert(tabColor)
-    tabHeight = 4
-    tabPadding = 10
+    tabHeight = scalePixelDimension(2)
+    tabPadding = scalePixelDimension(10)
 
     if m.components.text_purposes_header_text <> invalid then
         purposesHeader = createObject("roSGNode", "SpNativeText")
