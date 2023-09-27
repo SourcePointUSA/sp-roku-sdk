@@ -131,18 +131,22 @@ sub renderRightCol()
     categoryTypes = {
         "categories": {
             headerComponent: m.components.text_purposes_header_vendor,
+            headerRightComponent: m.components.text_retention,
             defComponent: m.components.text_purposes_def
         },
         "features": {
             headerComponent: m.components.text_features_header_vendor,
+            headerRightComponent: m.components.text_retention,
             defComponent: m.components.text_features_def
         },
         "specialPurposes": {
             headerComponent: m.components.text_special_purposes_header_vendor,
+            headerRightComponent: m.components.text_retention,
             defComponent: m.components.text_special_purposes_def
         }, 
         "specialFeatures": {
             headerComponent: m.components.text_special_features_header_vendor,
+            headerRightComponent: m.components.text_retention,
             defComponent: m.components.text_special_features_def
         }
     }
