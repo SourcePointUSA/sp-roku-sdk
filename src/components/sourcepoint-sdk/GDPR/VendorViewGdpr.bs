@@ -227,6 +227,7 @@ sub renderRightCol()
 
     if m.vendorData.iabDataCategories <> invalid then
         collectedData = createObject("roSGNode", "SpNativeText")
+        collectedData.id = "collected_data"
         collectedData.visible = false
         collectedData.componentName = "ScrollableText"
         collectedDataText = ""
@@ -251,6 +252,7 @@ end sub
 
 sub renderTabs()
     m.tabTarget = createObject("roSGNode", "LayoutGroup")
+    m.tabTarget.id = "vendor_tabs"
     m.tabTarget.layoutDirection = "horiz"
     m.tabTarget.itemSpacings = [scalePixelDimension(10)]
     m.colRight.appendChild(m.tabTarget)

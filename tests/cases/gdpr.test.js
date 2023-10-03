@@ -229,11 +229,15 @@ describe(`GDPR view validation`, () => {
 
         expect(elements.length).toBe(1)
 
-        await expectIds(library, ["privacy_policy_url", "category_list"])
+        await expectIds(library, ["privacy_policy_url", "category_list", "vendor_tabs"])
+
+        await library.sendKeys(["right", "right"])
+
+        await expectIds(library, ["collected_data"])
     })
 
     it(`should let us navigate back to home`, async () => {
-        await library.sendKeys(["left", "left", "select"])
+        await library.sendKeys(["left", "left", "left", "select"])
 
         let elements = await library.getElements({ 
             elementData: [{
