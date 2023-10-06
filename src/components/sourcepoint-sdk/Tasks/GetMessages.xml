@@ -5,6 +5,7 @@
   <interface>
     <!-- updated for request -->
     <field id="legislationsEnabled" type="assocarray" />
+    <field id="usnatFlags" type="assocarray" />
     <field id="propertyId" type="integer" />
 
     <!-- updated by response -->

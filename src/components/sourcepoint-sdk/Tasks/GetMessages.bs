@@ -14,6 +14,7 @@ sub getMessage()
         "includeData": {
             "localState": { "type": "string" },
             "customVendorsResponse": { "type": "string" },
+            "GPPData": m.top.usnatFlags,
             "TCData": { "type": "RecordString" },
             "translateMessage": true
         },
