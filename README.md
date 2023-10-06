@@ -30,7 +30,14 @@ SourcepointSdk takes the following arguments:
 | `consentLanguage`    | String              | Optional  | Ensure that the purposes or stack names listed in a consent message remain in the same language regardless of an end-user's browser language setting. [Click here](https://www.loc.gov/standards/iso639-2/php/code_list.php) for a list of ISO 639-1 language codes.<br><br> **Note:** Included in your `optionalConfigs` argument.  |
 | `showMessage`        | Boolean             | Optional  | Decides whether to get and show messages, and retrieve consent immediately. This parameter defaults to `true`.                                                                                                                                                                                                                       |
 
+#### Optionally set USNat GPP data for CCPA
+Within the `legislationConfigs` argument, within the `ccpa` object, you can add the key `includeGPPData` (default value `{}`) to return USNat GPP Section data in the user's consent. See below for optional keys in the `includeGPPData` object.
 
+| Argument                   | Default          | Possible values            |
+|----------------------------|------------------|----------------------------|
+|`MspaCoveredTransaction`    | `"no"`           | `"yes"`, `"no"`            |
+|`MspaOptOutOptionMode`      | `"na"`           | `"yes"`, `"no"`, `"na"`    |
+|`MspaServiceProviderMode`   | `"na"`           | `"yes"`, `"no"`, `"na"`    |
 
 ### Retrieve user consent
 ```
