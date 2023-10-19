@@ -3,13 +3,13 @@ sub init()
 end sub
 
 sub getMessage()
-    url = m.global.config.baseEndpoint + "/wrapper/v2/message/" + m.top.legislation
+    url = m.global.sourcepointConfig.baseEndpoint + "/wrapper/v2/message/" + m.top.legislation
 
     queryParams = {
-        "env": m.global.config.env,
+        "env": m.global.sourcepointConfig.env,
         "messageId": m.top.messageId,
-        "propertyId": m.global.config.propertyId,
-        "consentLanguage": m.global.config.consentLanguage,
+        "propertyId": m.global.sourcepointConfig.propertyId,
+        "consentLanguage": m.global.sourcepointConfig.consentLanguage,
         "includeData": FormatJson({"categories": {"type":"RecordString"}, "translateMessage": true})
     }
 

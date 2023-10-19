@@ -165,7 +165,7 @@ end function
 
 function getSaveAndExitVariables() as object
     return {
-        "lan": m.global.config.consentLanguage,
+        "lan": m.global.sourcepointConfig.consentLanguage,
         "privacyManagerId": m.top.messageId.toStr(),
         "categories": getConsentedCategories(),
         "specialFeatures": [], ' TODO - what is this?
