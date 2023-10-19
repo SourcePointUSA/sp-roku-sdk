@@ -53,8 +53,8 @@ function __SourcepointSdk_builder()
         m.screen.setMessagePort(m.port)
         m.scene = m.screen.CreateScene("SpScene")
         m.global = m.screen.getGlobalNode()
-        m.global.addField("config", "assocarray", true)
-        m.global.config = m.globalConfig
+        m.global.addField("sourcepointConfig", "assocarray", true)
+        m.global.sourcepointConfig = m.globalConfig
     end sub
     instance.closeScreen = sub()
         m.screen.close()
@@ -215,8 +215,8 @@ function __SourcepointSdk_builder()
         m.propertyId = propertyId
         m.globalConfig.propertyId = propertyId
         ' update global config if it has been created
-        if m.global.config <> invalid then
-            m.global.config = m.globalConfig
+        if m.global.sourcepointConfig <> invalid then
+            m.global.sourcepointConfig = m.globalConfig
         end if
     end sub
     return instance

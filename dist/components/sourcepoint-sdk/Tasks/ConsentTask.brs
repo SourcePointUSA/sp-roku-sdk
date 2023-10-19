@@ -4,7 +4,7 @@ sub init()
 end sub
 
 sub postConsent()
-    url = m.global.config.baseEndpoint + "/wrapper/v2/messages/choice/"
+    url = m.global.sourcepointConfig.baseEndpoint + "/wrapper/v2/messages/choice/"
     if m.top.messageCategory = 1 then
         url = url + "gdpr/"
     else if m.top.messageCategory = 2 then
@@ -22,11 +22,11 @@ sub postConsent()
         return
     end if
     url = addQueryParams(url, {
-        env: m.global.config.env
+        env: m.global.sourcepointConfig.env
     })
     body = {
-        "authId": m.global.config.authId,
-        "requestUUID": m.global.config.requestUUID,
+        "authId": m.global.sourcepointConfig.authId,
+        "requestUUID": m.global.sourcepointConfig.requestUUID,
         "localState": getLocalState(),
         "includeData": {
             "customVendorsResponse": {
