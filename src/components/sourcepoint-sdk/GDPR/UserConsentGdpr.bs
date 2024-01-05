@@ -96,34 +96,31 @@ function getConsentedCategories() as Object
         ' iterate through categories to find enabled cats
         if categories <> invalid then
             for each categoryId in categories
-                if categories[categoryId].enabled = true then
-                    consentedCat = {
-                        consent: true,
-                        "legInt": false,
-                        "iabId": categories[categoryId].iabId,
-                        "type": categories[categoryId]["type"],
-                        "_id": categories[categoryId]["_id"]
-                    }
+                consentedCat = {
+                    consent: categories[categoryId].enabled,
+                    "legInt": false,
+                    "iabId": categories[categoryId].iabId,
+                    "type": categories[categoryId]["type"],
+                    "_id": categories[categoryId]["_id"]
+                }
 
-                    ' if this category is also leg int enabled, say so
-                    if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
-                        consentedCat.legInt = true
-                    end if
-
-                    consentedCategories.push(consentedCat)
+                ' if this category is also leg int enabled, say so
+                if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
+                    consentedCat.legInt = true
                 end if
+
+                consentedCategories.push(consentedCat)
             end for
         end if
 
         ' iterate through leg int categories to find enabled cats
         if legIntCategories <> invalid then
             for each categoryId in legIntCategories
-                ' we already got all enabled categories
-                ' we only missed disabled categories where leg int is enabled, so grab those
-                if categories[categoryId] <> invalid and categories[categoryId].enabled = false and legIntCategories[categoryId].enabled = true then
+                if categories[categoryId] = invalid then
+                    ' this category is not in regular categories it is legInt only so we did not cover it above
                     consentedCat = {
                         consent: false,
-                        "legInt": true,
+                        "legInt": legIntCategories[categoryId].enabled,
                         "iabId": legIntCategories[categoryId].iabId,
                         "type": legIntCategories[categoryId]["type"],
                         "_id": legIntCategories[categoryId]["_id"]
@@ -148,33 +145,30 @@ function getConsentedVendors() as Object
         ' iterate through categories to find enabled cats
         if vendors <> invalid then
             for each vendorId in vendors
-                if vendors[vendorId].enabled = true then
-                    consentedVendor = {
-                        consent: true,
-                        "legInt": false,
-                        "iabId": vendors[vendorId].iabId,
-                        "vendorType": vendors[vendorId].vendorType,
-                        "_id": vendors[vendorId].vendorId
-                    }
+                consentedVendor = {
+                    consent: vendors[vendorId].enabled,
+                    "legInt": false,
+                    "iabId": vendors[vendorId].iabId,
+                    "vendorType": vendors[vendorId].vendorType,
+                    "_id": vendors[vendorId].vendorId
+                }
 
-                    if legIntVendors[vendorId] <> invalid and legIntVendors[vendorId].enabled = true then
-                        consentedVendor.legInt = true
-                    end if
-
-                    consentedVendors.push(consentedVendor)
+                if legIntVendors[vendorId] <> invalid and legIntVendors[vendorId].enabled = true then
+                    consentedVendor.legInt = true
                 end if
+
+                consentedVendors.push(consentedVendor)
             end for
         end if
 
         ' iterate through leg int categories to find enabled cats
         if legIntVendors <> invalid then 
             for each vendorId in legIntVendors
-                ' we already got all enabled categories
-                ' we only missed disabled categories where leg int is enabled, so grab those
-                if vendors[vendorId] <> invalid and vendors[vendorId].enabled = false and legIntVendors[vendorId].enabled = true then
+                if vendors[vendorId] = invalid then
+                    ' this vendor is not in regular vendors it is legInt only so we did not cover it above
                     consentedVendor = {
                         consent: false,
-                        "legInt": true,
+                        "legInt": legIntVendors[vendorId].enabled,
                         "iabId": legIntVendors[vendorId].iabId,
                         "vendorType": legIntVendors[vendorId].vendorType,
                         "_id": legIntVendors[vendorId].vendorId
