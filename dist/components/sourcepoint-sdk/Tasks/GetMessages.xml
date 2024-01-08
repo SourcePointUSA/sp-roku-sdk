@@ -8,5 +8,4 @@
         <field id="userConsent" type="assocarray" />
     </interface>
     <script uri="./GetMessages.brs" type="text/brightscript" />
-    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
 </component>
