@@ -10,9 +10,17 @@ sub observeNav(event as object)
     selectedButton = m.nav.getChild(event.getData())
     if selectedButton <> invalid then
         if selectedButton.id = "button_on" then
-            m.top.userConsentNode.acceptVendor = m.vendorData.vendorId
+            if m.vendorData.isLi = true then
+                m.top.userConsentNode.acceptLiVendor = m.vendorData.vendorId
+            else
+                m.top.userConsentNode.acceptVendor = m.vendorData.vendorId
+            end if
         else if selectedButton.id = "button_off" then
-            m.top.userConsentNode.rejectVendor = m.vendorData.vendorId
+            if m.vendorData.isLi = true then
+                m.top.userConsentNode.rejectLiVendor = m.vendorData.vendorId
+            else
+                m.top.userConsentNode.rejectVendor = m.vendorData.vendorId
+            end if
         end if
     end if
     changeView("_go_back_")
