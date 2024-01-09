@@ -217,6 +217,11 @@ class SourcepointSdk
         m.userConsent = invalid
         if legislationsEnabled <> invalid then
             m.legislationsEnabled = legislationsEnabled
+
+            if legislationsEnabled.ccpa <> invalid then
+                m.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+                m.globalConfig.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+            end if
         end if
 
         return m.getUserConsent()
