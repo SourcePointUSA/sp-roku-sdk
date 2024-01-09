@@ -132,6 +132,12 @@ Run Brighterscript compiler with auto channel reloading:
 ROKU_DEV_HOST=[roku device ip] ROKU_DEV_PASSWORD=[roku device password] npm run develop
 ```
 
+View debugging output
+
+```
+ROKU_DEV_HOST=[ device ip ] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[ device password ] npm run debug
+```
+
 # Testing the SDK
 
 Running tests:
