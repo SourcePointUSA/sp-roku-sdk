@@ -189,7 +189,7 @@ sub renderBackButton()
         m.back_button.id = "button_nav_back"
 
         m.back_button.observeField("buttonSelected", "observeBackButton")
-        m.back_button.minWidth = 50
+        m.back_button.minWidth = scalePixelDimension(50)
 
         m.top.appendChild(m.back_button)
     end if
