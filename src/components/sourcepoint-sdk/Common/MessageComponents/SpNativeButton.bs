@@ -123,6 +123,8 @@ end sub
 
 sub setWidths(event as Object)
     width = event.getData()
+    m.top.minWidth = width
+    m.top.maxWidth = width
     if m.top.backgroundRect <> invalid then
         m.top.backgroundRect.width = width
     end if

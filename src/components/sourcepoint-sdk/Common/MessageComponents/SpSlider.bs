@@ -112,6 +112,14 @@ sub render(event as Object)
         end if
     end if
 
+    m.top.buttonLeft.buttonLabel.horizAlign = "center"
+    m.top.buttonRight.buttonLabel.horizAlign = "center"
+
+    ' this is a hack, for these buttons some roku devices consistently truncate the last two characters with '...'
+    ' this provides a small buffer against that truncation
+    m.top.buttonLeft.width = m.top.buttonLeft.boundingRect().width + scalePixelDimension(6)
+    m.top.buttonRight.width = m.top.buttonRight.boundingRect().width + scalePixelDimension(6)
+
     boundingRect = m.top.boundingRect()
     m.background.width = boundingRect.width + m.padding - m.buttonGroup.itemSpacings[0]
     m.background.height = boundingRect.height + m.padding - m.buttonGroup.itemSpacings[0]
