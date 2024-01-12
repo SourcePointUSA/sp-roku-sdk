@@ -114,9 +114,6 @@ sub render(event as Object)
         end if
     end if
 
-    m.top.buttonLeft.buttonLabel.horizAlign = "center"
-    m.top.buttonRight.buttonLabel.horizAlign = "center"
-
     boundingRect = m.top.boundingRect()
     m.background.width = boundingRect.width + m.padding - m.buttonGroup.itemSpacings[0]
     m.background.height = boundingRect.height + m.padding - m.buttonGroup.itemSpacings[0]
