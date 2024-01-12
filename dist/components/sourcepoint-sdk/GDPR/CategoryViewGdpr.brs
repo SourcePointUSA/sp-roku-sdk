@@ -33,10 +33,9 @@ sub renderRightCol(event as object)
     m.categoryData = event.getData()
     ' no buttons if it's not toggleable
     if m.categoryData.disclosureOnly = true or (m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt") then
-        renderNav([])
-    else
-        renderNav(m.navButtons)
+        m.navButtons = []
     end if
+    renderNav(m.navButtons)
     enabled = m.categoryData.enabled
     for i = 0 to m.navButtons.count() step 1
         if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then

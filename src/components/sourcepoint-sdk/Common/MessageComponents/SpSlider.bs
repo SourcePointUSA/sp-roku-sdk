@@ -101,10 +101,12 @@ sub render(event as Object)
     if settings <> invalid then
         ' set button text
         if settings.leftText <> invalid then
-            m.top.buttonLeft.text = settings.leftText
+            ' this is a hack to prevent unnecessary truncation on some roku devices
+            m.top.buttonLeft.text = settings.leftText + "  "
         end if
         if settings.rightText <> invalid then
-            m.top.buttonRight.text = settings.rightText
+            ' this is a hack to prevent unnecessary truncation on some roku devices
+            m.top.buttonRight.text = settings.rightText + "  "
         end if
 
         if settings.backgroundColor <> invalid then
