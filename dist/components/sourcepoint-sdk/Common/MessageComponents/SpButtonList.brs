@@ -27,7 +27,7 @@ sub render(event as object)
     end if
     startFocus = false
     buttonHeight = scalePixelDimension(64)
-    width = 100
+    width = scalePixelDimension(100)
     if m.top.width <> invalid then
         width = m.top.width
     end if
