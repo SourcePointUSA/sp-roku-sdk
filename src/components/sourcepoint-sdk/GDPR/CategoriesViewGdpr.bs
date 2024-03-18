@@ -46,9 +46,9 @@ sub observeCategoryListLiFocus()
 end sub
 
 sub updateCategoryDesc(listItem as Object)
-    if listItem = invalid then
-        text = ""
-    else
+    text = ""
+
+    if listItem <> invalid then
         cType = "categories"
         if listItem.categoryType <> invalid then
             ' legInt categories are pulled from same "categories" list
@@ -69,13 +69,14 @@ sub showCategory(listItem as Object)
     viewData = {}
     if listItem.categoryType <> invalid then
         viewData["categoryType"] = listItem.categoryType
-        ' legInt categories are pulled from same "categories" list
-        cType = listItem.categoryType = "legInt" ? "categories" : listItem.categoryType
+        cType = listItem.categoryType = "legInt" ? "legIntCategories" : listItem.categoryType
     end if
 
-    viewData.append(m.top.privacyManagerViewData[cType][listItem.id])
+    if m.top.privacyManagerViewData[cType][listItem.id] <> invalid then
+        viewData.append(m.top.privacyManagerViewData[cType][listItem.id])
 
-    changeView("CategoryDetailsView", viewData)
+        changeView("CategoryDetailsView", viewData)
+    end if
 end sub
 
 function onKeyEvent(key as String, press as Boolean) as Boolean

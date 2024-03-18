@@ -118,7 +118,7 @@ end sub
 
 function getSaveAndExitVariables() as object
     return {
-        "lan": m.global.config.consentLanguage,
+        "lan": m.global.sourcepointConfig.consentLanguage,
         "privacyManagerId": m.top.messageId.toStr(),
         "rejectedCategories": m.rejectedCategories,
         "rejectedVendors": m.rejectedVendors

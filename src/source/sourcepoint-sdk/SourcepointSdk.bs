@@ -46,6 +46,11 @@ class SourcepointSdk
             "requestUUID": m.makeRequestUUID()
         }
 
+        if legislationsEnabled <> invalid and legislationsEnabled.ccpa <> invalid then
+            m.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+            m.globalConfig.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+        end if
+
         ' fetch messages and user consent, and messages
         if showMessages = true then
             m.getUserConsent()
@@ -60,8 +65,8 @@ class SourcepointSdk
          m.scene = m.screen.CreateScene("SpScene")
 
          m.global = m.screen.getGlobalNode()
-         m.global.addField("config", "assocarray", true)
-         m.global.config = m.globalConfig
+         m.global.addField("sourcepointConfig", "assocarray", true)
+         m.global.sourcepointConfig = m.globalConfig
     end sub
 
     private sub closeScreen()
@@ -86,6 +91,10 @@ class SourcepointSdk
         endif
         if userConsent.ccpa <> invalid then
             formattedConsent["IABUSPrivacy_String"] = userConsent.ccpa.uspstring
+
+            if userConsent.ccpa["GPPData"] <> invalid then
+                formattedConsent.append(userConsent.ccpa["GPPData"])
+            endif
 
             formattedConsent["ccpa"] = {
                 applies: m.applies.ccpa,
@@ -117,7 +126,7 @@ class SourcepointSdk
         getMessageTask.url = addQueryParams(m.constants.baseEndpoint + m.constants.pathGET, { "env": m.env, "consentLanguage": m.consentLanguage })
         getMessageTask.clientMMSOrigin = m.constants.baseEndpoint
 
-        taskKeys = ["accountId", "authId", "campaignEnv", "consentLanguage", "legislationsEnabled", "propertyHref", "pubData", "requestUUID"]
+        taskKeys = ["accountId", "authId", "campaignEnv", "consentLanguage", "usnatFlags", "legislationsEnabled", "propertyHref", "pubData", "requestUUID"]
 
         for each k in taskKeys
             getMessageTask[k] = m[k]
@@ -208,6 +217,11 @@ class SourcepointSdk
         m.userConsent = invalid
         if legislationsEnabled <> invalid then
             m.legislationsEnabled = legislationsEnabled
+
+            if legislationsEnabled.ccpa <> invalid then
+                m.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+                m.globalConfig.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+            end if
         end if
 
         return m.getUserConsent()
@@ -245,8 +259,8 @@ class SourcepointSdk
         m.globalConfig.propertyId = propertyId
         
         ' update global config if it has been created
-        if m.global.config <> invalid then
-            m.global.config = m.globalConfig
+        if m.global.sourcepointConfig <> invalid then
+            m.global.sourcepointConfig = m.globalConfig
         end if
     end sub
 end class

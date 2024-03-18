@@ -30,8 +30,29 @@ SourcepointSdk takes the following arguments:
 | `consentLanguage`    | String              | Optional  | Ensure that the purposes or stack names listed in a consent message remain in the same language regardless of an end-user's browser language setting. [Click here](https://www.loc.gov/standards/iso639-2/php/code_list.php) for a list of ISO 639-1 language codes.<br><br> **Note:** Included in your `optionalConfigs` argument.  |
 | `showMessage`        | Boolean             | Optional  | Decides whether to get and show messages, and retrieve consent immediately. This parameter defaults to `true`.                                                                                                                                                                                                                       |
 
+### Global Privacy Platform (GPP) Multi-State Privacy (MSPS) Support
 
+In order to return GPP Section data in the user's consent, add the `includeGPPData` key within the `legislationConfigs` argument of the `ccpa object`.
 
+If using the default value `{}` for the `includeGPPData` key, the following MSPA arguments will be set accordingly:
+
+- `MspaCoveredTransaction`: `"no"`
+- `MspaOptOutOptionMode`: `"na"`
+- `MspaServiceProviderMode`: `"na"`
+
+Example:
+
+```
+m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": {}}, "gdpr": {}}, {}, false)
+```
+
+Optionally, your organization can customize support for the MSPS by configuring the above attributes as part of the GPP config. [Click here](<https://github.com/SourcePointUSA/sp-roku-sdk/wiki/Global-Privacy-Platform-(GPP)-Multi%E2%80%90State-Privacy-(MSPS)>) for more information on each attribute, possible values, and examples for signatories and non-signatories of the MSPA.
+
+Example:
+
+```
+m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": {"MspaCoveredTransaction": "yes", "MspaOptOutOptionMode": "yes", "MspaServiceProviderMode": "no"}}, "gdpr": {}}, {}, false)
+```
 ### Retrieve user consent
 ```
 consent = m.spSdk.getUserConsent()
@@ -109,6 +130,12 @@ Run Brighterscript compiler with auto channel reloading:
 
 ```
 ROKU_DEV_HOST=[roku device ip] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[roku device password] npm run develop
+```
+
+View debugging output
+
+```
+ROKU_DEV_HOST=[ device ip ] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[ device password ] npm run debug
 ```
 
 # Testing the SDK

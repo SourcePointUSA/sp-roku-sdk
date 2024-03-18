@@ -17,15 +17,15 @@ sub privacyManagerView()
         return
     end if
     if m.top.messageCategory = 1 then
-        url = m.global.config.baseEndpoint + "/wrapper/v2/privacy-manager/privacy-manager-view/gdpr"
+        url = m.global.sourcepointConfig.baseEndpoint + "/wrapper/v2/privacy-manager/privacy-manager-view/gdpr"
         queryParams = {
             "consentLanguage": m.top.consentLanguage,
             "propertyId": m.top.propertyId,
-            "env": m.global.config.env,
+            "env": m.global.sourcepointConfig.env,
             "uuid": getUuid("gdpr")
         }
     else if m.top.messageCategory = 2 then
-        url = m.global.config.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
+        url = m.global.sourcepointConfig.baseEndpoint + "/ccpa/privacy-manager/privacy-manager-view"
         queryParams = {
             "consentLanguage": m.top.consentLanguage,
             "siteId": m.top.propertyId

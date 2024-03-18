@@ -23,9 +23,6 @@ end sub
 sub render(event as object)
     settings = event.getData()
     if settings <> invalid then
-        if settings.text <> invalid then
-            m.top.text = htmlEntityDecode(settings.text)
-        end if
         if settings.style <> invalid then
             if settings.style.onFocusTextColor <> invalid then
                 m.focusedTextColor = colorConvert(settings.style.onFocusTextColor)
@@ -48,6 +45,10 @@ sub render(event as object)
                 })
                 m.top.focusedTextFont = createFont(focusedTextSettings)
             end if
+        end if
+        if settings.text <> invalid then
+            ' this " " space seems to fix a roku rendering issue where it truncates text inappropriately
+            m.top.text = htmlEntityDecode(settings.text) + " "
         end if
     end if
     m.top.textColor = m.textColor
@@ -111,6 +112,8 @@ end sub
 
 sub setWidths(event as object)
     width = event.getData()
+    m.top.minWidth = width
+    m.top.maxWidth = width
     if m.top.backgroundRect <> invalid then
         m.top.backgroundRect.width = width
     end if
