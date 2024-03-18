@@ -23,7 +23,11 @@ sub showChannelSGScreen()
   scene.observeField("open_pm", m.port)
   scene.observeField("custom_config", m.port)
 
-  m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {}, "gdpr": {}}, {}, false)
+  ' legislation configs
+  ccpaConfig = {}
+  gdprConfig = {}
+
+  m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": ccpaConfig, "gdpr": gdprConfig}, {}, false)
 
   while(true)
     msg = wait(0, m.port)
@@ -37,11 +41,11 @@ sub showChannelSGScreen()
         ' m.spSdk.openPrivacyManager("ccpa", 15995)
         ' m.spSdk.openPrivacyManager("gdpr", 16020)
       else if field = "run_campaign_logic" then
-        runCampaign({"ccpa": {}, "gdpr": {}})
+        runCampaign({"ccpa": ccpaConfig, "gdpr": gdprConfig})
       else if field = "run_gdpr" then
-        runCampaign({"gdpr": {}})
+        runCampaign({"gdpr": gdprConfig})
       else if field = "run_ccpa" then
-        runCampaign({"ccpa": {}})
+        runCampaign({"ccpa": ccpaConfig})
       else if field = "custom_config" then
         data = msg.getData()
         m.spSdk = new SourcepointSdk(data.accountId.toInt(), data.propertyHref, {"ccpa": {}, "gdpr": {}}, {}, false)
