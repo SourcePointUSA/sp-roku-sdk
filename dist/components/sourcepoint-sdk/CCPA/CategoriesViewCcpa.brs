@@ -20,7 +20,7 @@ end function
 sub observeCategoryList(event as object)
     index = event.getData()
     if m.categoryList <> invalid and m.categoryList.content <> invalid then
-        item = m.categoryList.content.getChild(event.getData())
+        item = m.categoryList.content.getChild(index)
         category = getCategory(item.id)
         if category <> invalid then
             changeView("CategoryDetailsView", category)
@@ -28,7 +28,7 @@ sub observeCategoryList(event as object)
     end if
 end sub
 
-sub observeCategoryListFocus(event as object)
+sub observeCategoryListFocus()
     if m.categoryList <> invalid then
         updateCategoryDesc(m.categoryList.focusedContentNode)
     end if
@@ -100,7 +100,7 @@ sub renderButtonLists()
 end sub
 
 sub renderView(event as object)
-    hasPmvData = getPrivacyManagerViewData(2)
+    getPrivacyManagerViewData(2)
     renderRightColLoader()
     view = event.getData()
     mapComponents(view)

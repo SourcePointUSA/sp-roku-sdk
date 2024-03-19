@@ -9,7 +9,7 @@ sub createButtonSections()
     try
         buttonCategorySettings = m.top.buttonCategorySettings
         categoryTypes = m.top.categoryTypes
-        categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+        categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
 
         if m.top.privacyManagerViewData.legIntCategories <> invalid then
             categories = m.top.privacyManagerViewData.legIntCategories
@@ -29,7 +29,7 @@ sub createButtonSections()
             end for
         end if
         
-        categoryTypeOrder = ["categories", "specialPurposes", "specialFeatures"]
+        categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
         sections = []
         for each cType in categoryTypeOrder
             buttons = []
@@ -38,17 +38,17 @@ sub createButtonSections()
                 categories = m.top.privacyManagerViewData[cType]
                 for each id in categories
                     listItem = categories[id]
-                    if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
+                    if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.disclosureOnly = true) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
                         buttonSettings = {
                             categoryType: cType, 
-                            on: categories[id].enabled,
+                            on: listItem.enabled,
                             settings: {},
-                            showCustom: categories[id].type = "CUSTOM"
+                            showCustom: listItem.type = "CUSTOM"
                         }
 
                         buttonSettings.settings.append(buttonCategorySettings)
                         buttonSettings.id = id
-                        buttonSettings.settings.text = categories[id].name
+                        buttonSettings.settings.text = listItem.name
                 
                         buttons.push(buttonSettings)
                     end if

@@ -18,6 +18,10 @@ sub observeNav(event as object)
         "legInt": {
             accept: "acceptLiCategory",
             reject: "rejectLiCategory"
+        },
+        "specialFeatures": {
+            accept: "acceptSpecialFeature",
+            reject: "rejectSpecialFeature"
         }
     }
     categoryType = m.categoryData.categoryType
@@ -32,17 +36,18 @@ end sub
 sub renderRightCol(event as object)
     m.categoryData = event.getData()
     ' no buttons if it's not toggleable
-    if m.categoryData.disclosureOnly = true or (m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt") then
-        m.navButtons = []
+    if m.categoryData.disclosureOnly = true or (m.categoryData.categoryType <> "categories" and m.categoryData.categoryType <> "legInt" and m.categoryData.categoryType <> "specialFeatures") then
+        renderNav([])
+    else
+        renderNav(m.navButtons)
+        enabled = m.categoryData.enabled
+        for i = 0 to m.navButtons.count() step 1
+            if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
+                m.nav.focusButton = i
+                exit for
+            end if
+        end for
     end if
-    renderNav(m.navButtons)
-    enabled = m.categoryData.enabled
-    for i = 0 to m.navButtons.count() step 1
-        if (enabled = true and m.navButtons[i] = "button_on") or (enabled = false and m.navButtons[i] = "button_off") then
-            m.nav.focusButton = i
-            exit for
-        end if
-    end for
     setFocus(m.nav)
     m.screenTitle.text = m.categoryData.name
     if m.categoryData.description <> invalid then
@@ -74,7 +79,13 @@ sub renderRightCol(event as object)
     else if m.categoryData.categoryType = "legInt" then
         vendors = m.categoryData.legIntVendors
     else
-        vendors = m.categoryData.vendors
+        if m.categoryData.disclosureOnly = true then
+            vendors = m.categoryData.disclosureOnlyVendors
+        else if m.categoryData.vendors <> invalid then
+            vendors = m.categoryData.vendors
+        else
+            vendors = []
+        end if
     end if
     ' render vendor header with count
     if m.components.text_vendor_header <> invalid then

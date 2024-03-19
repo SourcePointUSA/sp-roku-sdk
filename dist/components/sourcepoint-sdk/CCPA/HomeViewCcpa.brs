@@ -62,7 +62,7 @@ sub observedConsentChanged()
     m.top.userConsentNode.observeField("consentChanged", "renderRightCol")
 end sub
 
-sub observeDns(event as object)
+sub observeDns()
     if m.top.userConsentNode.doNotSell = true then
         m.top.userConsentNode.doNotSell = false
     else

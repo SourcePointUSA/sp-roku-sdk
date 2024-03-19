@@ -47,7 +47,7 @@ sub renderButtonLists()
 end sub
 
 sub renderView(event as object)
-    hasPmvData = getPrivacyManagerViewData(2)
+    getPrivacyManagerViewData(2)
     renderRightColLoader()
     view = event.getData()
     mapComponents(view)

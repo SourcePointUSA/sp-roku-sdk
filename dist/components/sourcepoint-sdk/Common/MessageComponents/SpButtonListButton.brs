@@ -119,9 +119,11 @@ sub addCustomText(content as object, settings as object)
     if m.button_label.textComponent <> invalid and m.button_label.textComponent.font <> invalid then
         m.customText.fontSize = m.button_label.textComponent.font.size
     end if
-    rightOffset = 0
+    rightOffset = content.width - m.buttonPadding
     if m.onOffNode <> invalid then
         rightOffset = m.onOffNode.boundingRect().x - m.buttonTextSpacing
+    else if m.caratNode <> invalid then
+        rightOffset = m.caratNode.boundingRect().x - m.buttonTextSpacing
     end if
     m.customText.horizOrigin = "right"
     m.customText.vertOrigin = "center"

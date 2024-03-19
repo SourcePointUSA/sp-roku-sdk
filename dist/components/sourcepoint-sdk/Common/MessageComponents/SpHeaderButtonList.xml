@@ -7,6 +7,7 @@
         <field id="itemSelected" alias="button-list.itemSelected" />
         <field id="itemFocused" alias="button-list.itemFocused" />
         <field id="sectionSettings" alias="button-list.sectionSettings" />
+        <field id="sectionSettingsRight" type="assocarray" />
         <field id="width" alias="button-list.width" />
         <field id="sectionDescSettings" type="assocarray" />
     </interface>
@@ -14,7 +15,10 @@
     <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
     <children>
         <LayoutGroup horizAlignment="left" layoutDirection="vert" itemSpacings="[10]">
-            <SpNativeText id="header-title" componentName="SimpleLabel" />
+            <Group>
+                <SpNativeText id="header-title" componentName="SimpleLabel" />
+                <SpNativeText id="header-title-right" componentName="SimpleLabel" />
+            </Group>
             <SpNativeText id="header-description" />
             <SpButtonList id="button-list" />
         </LayoutGroup>

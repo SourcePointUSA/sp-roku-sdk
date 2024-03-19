@@ -32,7 +32,7 @@ sub postConsent()
         "localState": getLocalState(),
         "includeData": { 
             "customVendorsResponse": { "type": "RecordString"},
-            "GPPData": m.global.config.usnatFlags,
+            "GPPData": m.global.sourcepointConfig.usnatFlags,
             "TCData": { "type": "RecordString" }
         }
     }

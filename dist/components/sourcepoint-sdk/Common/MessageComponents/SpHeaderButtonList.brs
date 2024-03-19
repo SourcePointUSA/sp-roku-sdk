@@ -1,8 +1,10 @@
 sub init()
     m.top.observeField("focusedChild", "setFocus")
     m.top.observeField("sectionSettings", "renderSectionHeader")
+    m.top.observeField("sectionSettingsRight", "renderSectionHeaderRight")
     m.top.observeField("sectionDescSettings", "renderSectionDesc")
     m.headerTitleLabel = m.top.findNode("header-title")
+    m.headerTitleLabelRight = m.top.findNode("header-title-right")
     m.headerDescriptionLabel = m.top.findNode("header-description")
     m.buttonList = m.top.findNode("button-list")
     m.buttonList.observeField("focusedSectionNode", "updateHeader")
@@ -13,6 +15,16 @@ sub renderSectionHeader()
     settings.append(m.top.sectionSettings)
     settings.text = invalid
     m.headerTitleLabel.settings = settings
+end sub
+
+sub renderSectionHeaderRight()
+    settings = {}
+    settings.append(m.top.sectionSettingsRight)
+    m.headerTitleLabelRight.settings = settings
+    m.headerTitleLabelRight.translation = [
+        m.top.width - m.headerTitleLabelRight.boundingRect().width,
+        0
+    ]
 end sub
 
 sub renderSectionDesc()

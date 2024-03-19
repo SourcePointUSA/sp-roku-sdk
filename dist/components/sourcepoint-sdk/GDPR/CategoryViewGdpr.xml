@@ -4,6 +4,5 @@
         <field id="categoryId" type="string" />
     </interface>
     <script uri="./CategoryViewGdpr.brs" type="text/brightscript" />
-    <script type="text/brightscript" uri="pkg:/source/bslib.brs" />
     <children />
 </component>

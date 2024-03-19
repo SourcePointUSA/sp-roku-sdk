@@ -38,6 +38,7 @@ sub privacyManagerView()
     if response <> invalid then
         data = {
             categories: {},
+            features: {},
             legIntCategories: {},
             vendors: {},
             legIntVendors: {}
@@ -45,6 +46,11 @@ sub privacyManagerView()
         if response.categories <> invalid then
             for each category in response.categories
                 data.categories[category._id] = category
+            end for
+        end if
+        if response.features <> invalid then
+            for each feature in response.features
+                data.features[feature._id] = feature
             end for
         end if
         if response.legIntCategories <> invalid then

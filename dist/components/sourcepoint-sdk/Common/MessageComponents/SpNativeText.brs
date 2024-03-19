@@ -3,6 +3,7 @@
 sub init()
     m.top.observeField("settings", "render")
     m.top.observeField("text", "renderText")
+    m.top.observeField("focusedChild", "maybeSetFocus")
     m.textColor = "0x000000FF"
 end sub
 
@@ -51,5 +52,11 @@ sub renderText(event as object)
         m.top.textComponent.text = stripHtmlTags(text)
     else
         m.top.textComponent.text = ""
+    end if
+end sub
+
+sub maybeSetFocus()
+    if m.top.componentName = "ScrollableText" and m.top.hasFocus() then
+        m.top.textComponent.setFocus(true)
     end if
 end sub

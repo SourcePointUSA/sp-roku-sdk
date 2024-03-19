@@ -17,11 +17,11 @@ sub changeVendors(event as object)
     end if
 end sub
 
-sub observeVendorList(event as object)
+sub observeVendorList()
     showVendor(m.vendorList.focusedContentNode)
 end sub
 
-sub observeVendorListLi(event as object)
+sub observeVendorListLi()
     showVendor(m.vendorListLi.focusedContentNode, true)
 end sub
 
@@ -119,7 +119,7 @@ sub renderSlider()
 end sub
 
 sub renderView(event as object)
-    hasPmvData = getPrivacyManagerViewData(1)
+    getPrivacyManagerViewData(1)
     renderRightColLoader()
     view = event.getData()
     mapComponents(view)
