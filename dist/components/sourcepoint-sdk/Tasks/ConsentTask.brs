@@ -32,6 +32,7 @@ sub postConsent()
             "customVendorsResponse": {
                 "type": "RecordString"
             },
+            "GPPData": m.global.sourcepointConfig.usnatFlags,
             "TCData": {
                 "type": "RecordString"
             }

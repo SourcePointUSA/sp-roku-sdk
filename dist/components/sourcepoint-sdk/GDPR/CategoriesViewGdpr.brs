@@ -24,19 +24,19 @@ sub clearCategoryDesc(event as object)
     end if
 end sub
 
-sub observeCategoryList(event as object)
+sub observeCategoryList()
     showCategory(m.categoryList.focusedContentNode)
 end sub
 
-sub observeCategoryListFocus(event as object)
+sub observeCategoryListFocus()
     updateCategoryDesc(m.categoryList.focusedContentNode)
 end sub
 
-sub observeCategoryListLi(event as object)
+sub observeCategoryListLi()
     showCategory(m.categoryListLi.focusedContentNode)
 end sub
 
-sub observeCategoryListLiFocus(event as object)
+sub observeCategoryListLiFocus()
     updateCategoryDesc(m.categoryListLi.focusedContentNode)
 end sub
 
@@ -119,13 +119,17 @@ sub renderRightCol()
             headerComponent: m.components.text_purposes_header,
             defComponent: m.components.text_purposes_def
         },
+        "features": {
+            headerComponent: m.components.text_features_header,
+            defComponent: m.components.text_features_def
+        },
         "specialPurposes": {
             headerComponent: m.components.text_special_purposes_header,
             defComponent: m.components.text_special_purposes_def
         },
         "specialFeatures": {
-            headerComponent: m.components.text_features_header,
-            defComponent: m.components.text_features_def
+            headerComponent: m.components.text_special_features_header,
+            defComponent: m.components.text_special_features_def
         }
     }
     buttonCategorySettings = {}
@@ -204,7 +208,7 @@ sub renderSlider()
 end sub
 
 sub renderView(event as object)
-    hasPmvData = getPrivacyManagerViewData(1)
+    getPrivacyManagerViewData(1)
     renderRightColLoader()
     view = event.getData()
     mapComponents(view)

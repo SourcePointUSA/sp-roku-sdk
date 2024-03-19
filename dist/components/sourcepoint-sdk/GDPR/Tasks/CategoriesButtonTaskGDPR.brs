@@ -10,6 +10,7 @@ sub createButtonSections()
         categoryTypes = m.top.categoryTypes
         categoryTypeOrder = [
             "categories",
+            "features",
             "specialPurposes",
             "specialFeatures"
         ]
@@ -30,6 +31,7 @@ sub createButtonSections()
         end if
         categoryTypeOrder = [
             "categories",
+            "features",
             "specialPurposes",
             "specialFeatures"
         ]
@@ -40,16 +42,16 @@ sub createButtonSections()
                 categories = m.top.privacyManagerViewData[cType]
                 for each id in categories
                     listItem = categories[id]
-                    if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
+                    if (listItem.vendors <> invalid and listItem.vendors.count() > 0) or (listItem.disclosureOnly = true) or (listItem.requiringConsentVendors <> invalid and listItem.requiringConsentVendors.count() > 0) then
                         buttonSettings = {
                             categoryType: cType,
-                            on: categories[id].enabled,
+                            on: listItem.enabled,
                             settings: {},
-                            showCustom: categories[id].type = "CUSTOM"
+                            showCustom: listItem.type = "CUSTOM"
                         }
                         buttonSettings.settings.append(buttonCategorySettings)
                         buttonSettings.id = id
-                        buttonSettings.settings.text = categories[id].name
+                        buttonSettings.settings.text = listItem.name
                         buttons.push(buttonSettings)
                     end if
                 end for

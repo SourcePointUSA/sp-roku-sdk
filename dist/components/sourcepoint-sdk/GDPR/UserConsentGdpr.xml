@@ -9,10 +9,12 @@
         <field id="acceptLiCategory" type="string" alwaysNotify="true" />
         <field id="acceptVendor" type="string" alwaysNotify="true" />
         <field id="acceptLiVendor" type="string" alwaysNotify="true" />
+        <field id="acceptSpecialFeature" type="string" alwaysNotify="true" />
         <field id="rejectCategory" type="string" alwaysNotify="true" />
         <field id="rejectLiCategory" type="string" alwaysNotify="true" />
         <field id="rejectVendor" type="string" alwaysNotify="true" />
         <field id="rejectLiVendor" type="string" alwaysNotify="true" />
+        <field id="rejectSpecialFeature" type="string" alwaysNotify="true" />
         <field id="consentChanged" type="assocarray" />
         <function name="addConsentToPmvData" />
         <function name="getSaveAndExitVariables" />

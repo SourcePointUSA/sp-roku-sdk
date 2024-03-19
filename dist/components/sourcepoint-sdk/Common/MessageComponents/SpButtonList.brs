@@ -37,7 +37,6 @@ sub render(event as object)
     ]
     m.top.numRows = 8
     buttonSettings = invalid
-    hasSections = false
     first = true
     for each section in buttons
         if section.children <> invalid then
@@ -51,7 +50,6 @@ sub render(event as object)
                 sectionNode.description = stripHtmlTags(section.settingsDesc.text)
             end if
             sectionButtons = section.children
-            hasSections = true
         else
             sectionNode = m.buttonNodes
             sectionButtons = [

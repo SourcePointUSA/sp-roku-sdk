@@ -41,6 +41,10 @@ function __SourcepointSdk_builder()
             "env": m.env,
             "requestUUID": m.makeRequestUUID()
         }
+        if legislationsEnabled <> invalid and legislationsEnabled.ccpa <> invalid then
+            m.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+            m.globalConfig.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+        end if
         ' fetch messages and user consent, and messages
         if showMessages = true then
             m.getUserConsent()
@@ -76,6 +80,9 @@ function __SourcepointSdk_builder()
         endif
         if userConsent.ccpa <> invalid then
             formattedConsent["IABUSPrivacy_String"] = userConsent.ccpa.uspstring
+            if userConsent.ccpa["GPPData"] <> invalid then
+                formattedConsent.append(userConsent.ccpa["GPPData"])
+            endif
             formattedConsent["ccpa"] = {
                 applies: m.applies.ccpa,
                 consents: {
@@ -108,6 +115,7 @@ function __SourcepointSdk_builder()
             "authId",
             "campaignEnv",
             "consentLanguage",
+            "usnatFlags",
             "legislationsEnabled",
             "propertyHref",
             "pubData",
@@ -184,6 +192,10 @@ function __SourcepointSdk_builder()
         m.userConsent = invalid
         if legislationsEnabled <> invalid then
             m.legislationsEnabled = legislationsEnabled
+            if legislationsEnabled.ccpa <> invalid then
+                m.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+                m.globalConfig.usnatFlags = legislationsEnabled.ccpa.includeGPPData
+            end if
         end if
         return m.getUserConsent()
     end function
