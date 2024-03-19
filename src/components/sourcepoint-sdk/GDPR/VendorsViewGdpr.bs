@@ -21,11 +21,11 @@ sub changeVendors(event as Object)
     end if
 end sub
 
-sub observeVendorList(event as Object)
+sub observeVendorList()
     showVendor(m.vendorList.focusedContentNode)
 end sub
 
-sub observeVendorListLi(event as Object)
+sub observeVendorListLi()
     showVendor(m.vendorListLi.focusedContentNode, true)
 end sub
 
@@ -127,7 +127,7 @@ sub renderSlider()
 end sub
 
 sub renderView(event as Object)
-    hasPmvData = getPrivacyManagerViewData(1)
+    getPrivacyManagerViewData(1)
 
     renderRightColLoader()
 

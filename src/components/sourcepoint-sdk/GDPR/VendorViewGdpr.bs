@@ -1,7 +1,12 @@
+import "pkg:/source/sourcepoint-sdk/Helpers.bs"
+
 sub init()
     m.top.observeField("viewDataExtra", "renderView")
 
     m.navButtons = ["button_on", "button_off"]
+    m.rightColTabs = []
+    m.rightColTabUnderlines = []
+    m.currentRightColTab = 0
 end sub
 
 sub observeNav(event as Object)
@@ -26,11 +31,61 @@ sub observeNav(event as Object)
     changeView("_go_back_")
 end sub
 
-sub renderPrivacyPolicyUrl()
-    if m.vendorData.policyUrl = invalid then
+function onKeyEvent(key as String, press as Boolean) as Boolean
+    if m.rightColFocus <> invalid and m.rightColFocus.isInFocusChain() then
+        if key = "right" and (m.currentRightColTab + 1) < m.rightColTabs.count() then
+            if press = true then
+                m.currentRightColTab = m.currentRightColTab + 1
+                for i=0 to m.rightColTabs.count()-1 step 1
+                    if i = m.currentRightColTab then 
+                        m.rightColTabs[i].visible = true
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = true
+                        endif
+                        m.rightColFocus = m.rightColTabs[i] 
+                        m.rightColFocus.setFocus(true)
+                    else 
+                        m.rightColTabs[i].visible = false
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = false
+                        endif
+                    end if
+                end for
+            end if
+            return true
+        end if
+        if key = "left" and m.currentRightColTab > 0 then
+            if press = true then
+                m.currentRightColTab = m.currentRightColTab - 1
+                for i=0 to m.rightColTabs.count()-1 step 1
+                    if i = m.currentRightColTab then 
+                        m.rightColTabs[i].visible = true
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = true
+                        endif
+                        m.rightColFocus = m.rightColTabs[i] 
+                        m.rightColFocus.setFocus(true)
+                    else 
+                        m.rightColTabs[i].visible = false
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = false
+                        endif 
+                    end if
+                end for
+            end if
+            return true
+        end if
+    end if
+
+    return _onKeyEvent(key, press)
+end function
+
+sub renderPrivacyPolicyUrl(url, title as String, element_id as String)
+    if url = invalid then
         return
     end if
     
+    font = createFont({fontSize: 12})
     screenTitle = m.screenTitle
 
     textColor = "0x000000FF"
@@ -39,15 +94,16 @@ sub renderPrivacyPolicyUrl()
     end if
 
     ppHeader = createObject("roSGNode", "SimpleLabel")
-    ppHeader.text = "Privacy Policy Url:"
+    ppHeader.text = title
     ppHeader.color = textColor
 
     ppUrl = createObject("roSGNode", "Label")
-    ppUrl.id = "privacy_policy_url"
-    ppUrl.text = m.vendorData.policyUrl
+    ppUrl.id = element_id
+    ppUrl.text = url
     ppUrl.wrap = true
     ppUrl.color = textColor
     ppUrl.width = m.colLeftWidth * .8
+    ppUrl.font = font
 
     m.colLeft.appendChild(ppHeader)
     m.colLeft.appendChild(ppUrl)
@@ -64,45 +120,226 @@ sub renderRightCol()
     end for
     setFocus(m.nav)
 
-    categories = []
+    renderTabs()
+
+    m.tabContentTarget = createObject("roSGNode", "Group")
+    m.colRight.appendChild(m.tabContentTarget)
+
+    categoryData = {}
     if m.vendorData.isLi = true then
-        categories = m.vendorData.legIntCategories
+        categoryData.categories = m.vendorData.legIntCategories
     else
-        categories = m.vendorData.consentCategories
-    end if
+        categoryData = {
+            "categories": [],
+            "features": m.vendorData.iabFeatures,
+            "specialFeatures": m.vendorData.iabSpecialFeatures,
+            "specialPurposes": m.vendorData.iabSpecialPurposesObjs
+        }
 
-    if categories <> invalid and categories.count() > 0 then
-        m.categoryList = createObject("roSGNode", "SpButtonList")
-        m.categoryList.id = "category_list"
-        m.categoryList.width = m.colRightWidth
-        buttons = []
-        for each purpose in categories
-            if purpose <> invalid then
-                buttonSettings = { 
-                    carat: "",
-                    settings: {} 
-                } 
-                if m.components.button_vendor <> invalid then
-                    buttonSettings.settings.append(m.components.button_vendor.settings)
-                end if
-                buttonSettings.settings.text = purpose.name
-
-                buttons.push(buttonSettings)
-            end if
-        end for
-        m.categoryList.buttonComponents = buttons
-
-        if buttons.count() > 0 then
-            m.colRight.appendChild(m.categoryList)
-            m.rightColFocus = m.categoryList
+        if m.vendorData.consentCategories <> invalid then 
+            categoryData.categories.append(m.vendorData.consentCategories)
+        end if
+        if m.vendorData.disclosureOnlyCategories <> invalid then
+            categoryData.categories.append(m.vendorData.disclosureOnlyCategories)
         end if
     end if
+
+    categoryTypes = {
+        "categories": {
+            headerComponent: m.components.text_purposes_header_vendor,
+            headerRightComponent: m.components.text_retention,
+            defComponent: m.components.text_purposes_def
+        },
+        "features": {
+            headerComponent: m.components.text_features_header_vendor,
+            headerRightComponent: m.components.text_retention,
+            defComponent: m.components.text_features_def
+        },
+        "specialPurposes": {
+            headerComponent: m.components.text_special_purposes_header_vendor,
+            headerRightComponent: m.components.text_retention,
+            defComponent: m.components.text_special_purposes_def
+        }, 
+        "specialFeatures": {
+            headerComponent: m.components.text_special_features_header_vendor,
+            headerRightComponent: m.components.text_retention,
+            defComponent: m.components.text_special_features_def
+        }
+    }
+
+    buttonCategorySettings = {}
+
+    if m.components.button_vendor <> invalid and m.components.button_vendor.settings <> invalid then
+        buttonCategorySettings.append(m.components.button_vendor.settings)
+    end if
+
+    categoryTypeOrder = ["categories", "features", "specialPurposes", "specialFeatures"]
+    sections = []
+    for each cType in categoryTypeOrder
+        buttons = []
+
+        if categoryData[cType] <> invalid then
+            categories = categoryData[cType]
+            for each cat in categories
+                buttonSettings = {
+                    carat: "",  ' TODO - put retention here?
+                    categoryType: cType, 
+                    ' on: listItem.enabled,
+                    settings: {},
+                }
+
+                buttonSettings.settings.append(buttonCategorySettings)
+                ' buttonSettings.id = id
+                
+
+                if type(cat) = "roString" then
+                    buttonSettings.settings.text = cat
+                else 
+                    buttonSettings.settings.text = cat.name
+                    buttonSettings.showCustom = cat.type = "CUSTOM"
+                    if cat.retention <> invalid and type(cat.retention) = "roString" then
+                        buttonSettings.carat = cat.retention
+                    endif
+                endif
+        
+                buttons.push(buttonSettings)
+            end for
+        end if
+    
+        if buttons.count() > 0 then
+            section = {
+                children: buttons
+            }
+
+            if categoryTypes[cType].headerComponent <> invalid then
+                section.settings = categoryTypes[cType].headerComponent.settings
+            end if
+
+            if categoryTypes[cType].headerRightComponent <> invalid then
+                section.settingsHeaderRight = categoryTypes[cType].headerRightComponent.settings
+            end if
+
+            if categoryTypes[cType].defComponent <> invalid then
+                section.settingsDesc = categoryTypes[cType].defComponent.settings
+            end if
+
+            sections.push(section)
+        end if
+    end for
+
+    if sections <> invalid and sections.count() > 0 then
+        m.categoryList = createObject("roSGNode", "SpHeaderButtonList")
+        m.categoryList.id = "category_list"
+        m.categoryList.width = m.colRightWidth
+        m.categoryList.sectionSettings = sections[0].settings
+        m.categoryList.sectionSettingsRight = sections[0].settingsHeaderRight
+        m.categoryList.sectionDescSettings = sections[0].settingsDesc
+        m.categoryList.buttonComponents = sections
+
+        m.tabContentTarget.appendChild(m.categoryList)
+        m.rightColFocus = m.categoryList
+        m.rightColTabs.push(m.categoryList)
+    end if
+
+    if m.vendorData.iabDataCategories <> invalid then
+        collectedData = createObject("roSGNode", "SpNativeText")
+        collectedData.id = "collected_data"
+        collectedData.visible = false
+        collectedData.componentName = "ScrollableText"
+        collectedDataText = ""
+
+        if m.components.text_data_categories_list_header <> invalid and m.components.text_data_categories_list_header.settings <> invalid then
+            collectedDataText = m.components.text_data_categories_list_header.settings.text + chr(10) + chr(10)
+        endif
+
+        for each category in m.vendorData.iabDataCategories
+            collectedDataText = collectedDataText + category.name + chr(10) + chr(10) + category.description + chr(10) + chr(10)
+        end for
+        ' TODO - add text to actual settings
+        collectedData.settings = {
+            text: collectedDataText
+        }
+        collectedData.textComponent.width = m.colRightWidth
+        collectedData.textComponent.height = scalePixelDimension(530)
+        m.tabContentTarget.appendChild(collectedData)
+        m.rightColTabs.push(collectedData)
+    end if
 end sub
+
+sub renderTabs()
+    m.tabTarget = createObject("roSGNode", "LayoutGroup")
+    m.tabTarget.id = "vendor_tabs"
+    m.tabTarget.layoutDirection = "horiz"
+    m.tabTarget.itemSpacings = [scalePixelDimension(10)]
+    m.colRight.appendChild(m.tabTarget)
+
+    tabColor = "#800080"
+
+    if m.top.view <> invalid and m.top.view.settings <> invalid and m.top.view.settings.style <> invalid and m.top.view.settings.style.tabUnderlineColor <> invalid then
+        tabColor = m.top.view.settings.style.tabUnderlineColor
+    endif
+
+    tabColor = colorConvert(tabColor)
+    tabHeight = scalePixelDimension(2)
+    tabPadding = scalePixelDimension(10)
+
+    if m.components.text_purposes_header_text <> invalid then
+        purposesHeader = createObject("roSGNode", "SpNativeText")
+        purposesHeader.settings = m.components.text_purposes_header_text.settings
+
+        purposesUnderline = createObject("roSGNode", "Rectangle")
+        purposesUnderline.color = tabColor
+        purposesUnderline.height = tabHeight
+        purposesUnderline.width = purposesHeader.boundingRect().width
+        purposesUnderline.translation = [0, purposesHeader.boundingRect().height + tabPadding]
+        purposesHeader.appendChild(purposesUnderline)
+        m.rightColTabUnderlines.push(purposesUnderline)
+
+        m.tabTarget.appendChild(purposesHeader)
+    endif
+    if m.components.text_data_categories_header <> invalid then
+        categoriesHeader = createObject("roSGNode", "SpNativeText")
+        categoriesHeader.settings = m.components.text_data_categories_header.settings
+
+        categoriesUnderline = createObject("roSGNode", "Rectangle")
+        categoriesUnderline.color = tabColor
+        categoriesUnderline.height = tabHeight
+        categoriesUnderline.width = categoriesHeader.boundingRect().width
+        categoriesUnderline.translation = [0, categoriesHeader.boundingRect().height + tabPadding]
+        categoriesHeader.appendChild(categoriesUnderline)
+        categoriesUnderline.visible = false
+        m.rightColTabUnderlines.push(categoriesUnderline)
+
+        m.tabTarget.appendChild(categoriesHeader)
+    endif
+end sub
+
+function isDisclosureOnly() as boolean
+    if m.vendorData = invalid then
+        ' no vendor data
+        return false
+    else if m.vendorData.disclosureOnlyCategories = invalid or m.vendorData.disclosureOnlyCategories.count() = 0 then
+        ' no disclosure only categories
+        return false
+    else 
+        ' has disclosure only categories, make sure it has no toggleable types
+        ret = true
+        keys = ["consentCategories", "legIntCategories", "iabSpecialFeatures"]
+        for each key in keys 
+            if m.vendorData[key] = invalid or m.vendorData[key].count() > 0 then
+                ret = false
+                exit for
+            end if
+        end for
+
+        return ret
+    end if
+end function
 
 sub renderView(event as Object)
     m.vendorData = event.getData()
 
-    if m.vendorData.disclosureOnly = true then
+    if isDisclosureOnly() then
         m.navButtons = []
     end if
     
@@ -110,7 +347,8 @@ sub renderView(event as Object)
     mapComponents(view)
 
     renderHeader()
-    renderPrivacyPolicyUrl()
+    renderPrivacyPolicyUrl(m.vendorData.policyUrl, "Privacy Policy Url:", "privacy_policy_url")
+    renderPrivacyPolicyUrl(m.vendorData.legIntUrl, "Legitimate Interest Disclosure:", "legint_url")
     renderNav(m.navButtons)
 
     renderRightCol()

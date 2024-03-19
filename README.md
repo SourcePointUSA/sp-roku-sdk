@@ -129,7 +129,7 @@ npm install
 Run Brighterscript compiler with auto channel reloading:
 
 ```
-ROKU_DEV_HOST=[roku device ip] ROKU_DEV_PASSWORD=[roku device password] npm run develop
+ROKU_DEV_HOST=[roku device ip] ROKU_DEV_USER=[ device user ] ROKU_DEV_PASSWORD=[roku device password] npm run develop
 ```
 
 View debugging output
