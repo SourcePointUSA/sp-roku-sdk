@@ -39,12 +39,16 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 for i=0 to m.rightColTabs.count()-1 step 1
                     if i = m.currentRightColTab then 
                         m.rightColTabs[i].visible = true
-                        m.rightColTabUnderlines[i].visible = true
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = true
+                        endif
                         m.rightColFocus = m.rightColTabs[i] 
                         m.rightColFocus.setFocus(true)
                     else 
                         m.rightColTabs[i].visible = false
-                        m.rightColTabUnderlines[i].visible = false
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = false
+                        endif
                     end if
                 end for
             end if
@@ -56,12 +60,16 @@ function onKeyEvent(key as String, press as Boolean) as Boolean
                 for i=0 to m.rightColTabs.count()-1 step 1
                     if i = m.currentRightColTab then 
                         m.rightColTabs[i].visible = true
-                        m.rightColTabUnderlines[i].visible = true
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = true
+                        endif
                         m.rightColFocus = m.rightColTabs[i] 
                         m.rightColFocus.setFocus(true)
                     else 
                         m.rightColTabs[i].visible = false
-                        m.rightColTabUnderlines[i].visible = false
+                        if m.rightColTabUnderlines[i] <> invalid then 
+                            m.rightColTabUnderlines[i].visible = false
+                        endif 
                     end if
                 end for
             end if
