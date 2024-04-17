@@ -92,6 +92,7 @@ function getPrivacyManagerViewData(messageCategoryId) as boolean
     m.privacyManagerViewTask = m.top.privacyManagerViewTask
     m.privacyManagerViewTask.messageCategory = messageCategoryId
     m.privacyManagerViewTask.propertyId = m.global.sourcepointConfig.propertyId
+    m.privacyManagerViewTask.consentLanguage = m.global.sourcepointConfig.consentLanguage
     m.privacyManagerViewTask.control = "RUN"
     m.privacyManagerViewTask.observeField("state", "setPmvData")
     m.privacyManagerViewTask.observeField("data", "setPmvData")
