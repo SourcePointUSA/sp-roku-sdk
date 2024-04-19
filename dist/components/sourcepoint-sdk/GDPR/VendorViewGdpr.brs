@@ -79,7 +79,7 @@ function onKeyEvent(key as string, press as boolean) as boolean
     return _onKeyEvent(key, press)
 end function
 
-sub renderPrivacyPolicyUrl(url, title as string, element_id as string)
+sub renderPrivacyPolicyUrl(url, settings as object, element_id as string)
     if url = invalid then
         return
     end if
@@ -91,9 +91,9 @@ sub renderPrivacyPolicyUrl(url, title as string, element_id as string)
     if screenTitle <> invalid then
         textColor = screenTitle.textComponent.color
     end if
-    ppHeader = createObject("roSGNode", "SimpleLabel")
-    ppHeader.text = title
-    ppHeader.color = textColor
+    ppHeader = createObject("roSGNode", "SpNativeText")
+    ppHeader.componentName = "SimpleLabel"
+    ppHeader.settings = settings
     ppUrl = createObject("roSGNode", "Label")
     ppUrl.id = element_id
     ppUrl.text = url
@@ -322,9 +322,17 @@ sub renderView(event as object)
     end if
     view = m.top.view
     mapComponents(view)
+    policyUrlSettings = {}
+    if m.components.text_privacy_policy_link <> invalid and m.components.text_privacy_policy_link.settings <> invalid then
+        policyUrlSettings = m.components.text_privacy_policy_link.settings
+    endif
+    legIntUrlSettings = {}
+    if m.components.text_legint_disclosure_link <> invalid and m.components.text_legint_disclosure_link.settings <> invalid then
+        legIntUrlSettings = m.components.text_legint_disclosure_link.settings
+    endif
     renderHeader()
-    renderPrivacyPolicyUrl(m.vendorData.policyUrl, "Privacy Policy Url:", "privacy_policy_url")
-    renderPrivacyPolicyUrl(m.vendorData.legIntUrl, "Legitimate Interest Disclosure:", "legint_url")
+    renderPrivacyPolicyUrl(m.vendorData.policyUrl, policyUrlSettings, "privacy_policy_url")
+    renderPrivacyPolicyUrl(m.vendorData.legIntUrl, legIntUrlSettings, "legint_url")
     renderNav(m.navButtons)
     renderRightCol()
 end sub
