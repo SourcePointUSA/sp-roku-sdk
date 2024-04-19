@@ -43,6 +43,7 @@ sub init()
         "FeaturesDefinition": "text_features_def",
         "FeaturesText": "text_features_header_vendor",
         "Header": "text_header",
+        "LegitimateInterestDiscloureText": "text_legint_disclosure_link",
         "LogoImage": "image_logo",
         "OnButton": "button_on",
         "OffButton": "button_off",
@@ -50,6 +51,7 @@ sub init()
         "NavCustomButton": "button_nav_custom",
         "NavPrivacyPolicyButton": "button_nav_privacy_policy",
         "NavVendorsButton": "button_nav_vendors",
+        "PrivacyPolicyText": "text_privacy_policy_link",
         "PublisherDescription": "text_publisher_description",
         "PurposesDefinition": "text_purposes_definition",
         "PurposesHeader": "text_purposes_header",
@@ -92,6 +94,7 @@ function getPrivacyManagerViewData(messageCategoryId) as boolean
     m.privacyManagerViewTask = m.top.privacyManagerViewTask
     m.privacyManagerViewTask.messageCategory = messageCategoryId
     m.privacyManagerViewTask.propertyId = m.global.sourcepointConfig.propertyId
+    m.privacyManagerViewTask.consentLanguage = m.global.sourcepointConfig.consentLanguage
     m.privacyManagerViewTask.control = "RUN"
     m.privacyManagerViewTask.observeField("state", "setPmvData")
     m.privacyManagerViewTask.observeField("data", "setPmvData")
