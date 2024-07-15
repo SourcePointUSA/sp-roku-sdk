@@ -103,7 +103,7 @@ function getConsentedCategories() as object
                 }
                 ' if this category is also leg int enabled, say so
                 if legIntCategories[categoryId] <> invalid and legIntCategories[categoryId].enabled = true then
-                    consentedCat.legInt = true
+                    consentedCat["legInt"] = true
                 end if
                 consentedCategories.push(consentedCat)
             end for
@@ -144,7 +144,7 @@ function getConsentedVendors() as object
                     "_id": vendors[vendorId].vendorId
                 }
                 if legIntVendors[vendorId] <> invalid and legIntVendors[vendorId].enabled = true then
-                    consentedVendor.legInt = true
+                    consentedVendor["legInt"] = true
                 end if
                 consentedVendors.push(consentedVendor)
             end for
