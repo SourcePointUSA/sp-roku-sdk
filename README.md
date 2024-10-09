@@ -34,7 +34,9 @@ SourcepointSdk takes the following arguments:
 
 In order to return GPP Section data in the user's consent, add the `includeGPPData` key within the `legislationConfigs` argument of the `ccpa object`.
 
-If using the default value `{}` for the `includeGPPData` key, the following MSPA arguments will be set accordingly:
+The value of this key should be boolean `true` for default settings, or a JSON string representation of an object with the keys below and the values to set.
+
+If using the default value `true` for the `includeGPPData` key, the following MSPA arguments will be set accordingly:
 
 - `MspaCoveredTransaction`: `"no"`
 - `MspaOptOutOptionMode`: `"na"`
@@ -43,7 +45,7 @@ If using the default value `{}` for the `includeGPPData` key, the following MSPA
 Example:
 
 ```
-m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": {}}, "gdpr": {}}, {}, false)
+m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": true}, "gdpr": {}}, {}, false)
 ```
 
 Optionally, your organization can customize support for the MSPS by configuring the above attributes as part of the GPP config. [Click here](<https://github.com/SourcePointUSA/sp-roku-sdk/wiki/Global-Privacy-Platform-(GPP)-Multi%E2%80%90State-Privacy-(MSPS)>) for more information on each attribute, possible values, and examples for signatories and non-signatories of the MSPA.
@@ -51,7 +53,7 @@ Optionally, your organization can customize support for the MSPS by configuring 
 Example:
 
 ```
-m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": {"MspaCoveredTransaction": "yes", "MspaOptOutOptionMode": "yes", "MspaServiceProviderMode": "no"}}, "gdpr": {}}, {}, false)
+m.spSdk = new SourcepointSdk(accountId, propertyHref, {"ccpa": {"includeGPPData": formatjson({"MspaCoveredTransaction": "yes", "MspaOptOutOptionMode": "yes", "MspaServiceProviderMode": "no"})}, "gdpr": {}}, {}, false)
 ```
 ### Retrieve user consent
 ```
