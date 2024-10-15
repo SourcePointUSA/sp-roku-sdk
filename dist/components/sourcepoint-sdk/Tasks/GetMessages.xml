@@ -2,7 +2,6 @@
 <component name="GetMessages" extends="RequestTask">
     <interface>
         <field id="legislationsEnabled" type="assocarray" />
-        <field id="usnatFlags" type="assocarray" />
         <field id="propertyId" type="integer" />
         <field id="applies" type="assocarray" />
         <field id="campaigns" type="array" />
