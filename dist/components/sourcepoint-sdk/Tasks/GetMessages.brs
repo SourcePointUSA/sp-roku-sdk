@@ -18,7 +18,7 @@ sub getMessage()
             "customVendorsResponse": {
                 "type": "string"
             },
-            "GPPData": m.top.usnatFlags,
+            "GPPData": m.global.sourcepointConfig.usnatFlags,
             "TCData": {
                 "type": "RecordString"
             },
