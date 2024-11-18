@@ -23,7 +23,7 @@ sub observeHomeNav(event as Object)
     m.top.run_gdpr = true
   else if index = 4 then
     ' clear user data
-    setLocalState("")
+    m.top.clear_data = true
   else if index = 3 then
     ' open pm
     m.top.open_pm = true

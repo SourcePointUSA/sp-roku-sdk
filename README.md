@@ -93,6 +93,11 @@ Consent will be returned keyed by legislation. See below for keys and values. Yo
 | `purposeGrants` | Object<String: Boolean> | An object keyed by purpose ID, true if the user has consented to that purpose |
 | `vendorGrant`   | Boolean                 | True if the user has consented to this vendor, false otherwise                |
 
+### Clear User consent
+```
+m.spSdk.clearUserConsent()
+```
+
 ### Retrieve SDK errors
 ```
 errors = m.spSdk.getErrors()

@@ -162,6 +162,10 @@ class SourcepointSdk
         return m.formatUserConsent(m.userConsent)
     end function
 
+    public sub clearUserConsent()
+        setLocalState(invalid)
+    end sub
+
     public sub openPrivacyManager(legislation as string, messageId as integer) as Dynamic
         ' make sure we're lowercase
         legislation = LCase(legislation)
