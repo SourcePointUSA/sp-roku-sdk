@@ -65,13 +65,13 @@ sub setLocalState(localState)
     appInfo = CreateObject("roAppInfo")
     channelID = appInfo.GetID()
 
-    if localState = invalid then
-        registry.delete("localState_" + channelID)
-        return
-    end if
     if registry.exists("localState") then
         ' cleanup legacy localState key
         registry.delete("localState")
+    end if
+    if localState = invalid then
+        registry.delete("localState_" + channelID)
+        return
     end if
 
     registry.write("localState_" + channelID, localState)
