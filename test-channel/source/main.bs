@@ -22,6 +22,7 @@ sub showChannelSGScreen()
   scene.observeField("run_gdpr", m.port)
   scene.observeField("open_pm", m.port)
   scene.observeField("custom_config", m.port)
+  scene.observeField("clear_data", m.port)
 
   ' legislation configs
   ccpaConfig = {}
@@ -46,6 +47,8 @@ sub showChannelSGScreen()
         runCampaign({"gdpr": gdprConfig})
       else if field = "run_ccpa" then
         runCampaign({"ccpa": ccpaConfig})
+      else if field = "clear_data" then
+        m.spSdk.clearUserConsent()
       else if field = "custom_config" then
         data = msg.getData()
         m.spSdk = new SourcepointSdk(data.accountId.toInt(), data.propertyHref, {"ccpa": {}, "gdpr": {}}, {}, false)
