@@ -34,8 +34,14 @@ end function
 
 function getLocalState() as string
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
-    if registry.Exists("localState") then
-        return registry.read("localState")
+    appInfo = CreateObject("roAppInfo")
+    channelID = appInfo.GetID()
+    localStateKey = "localState_" + channelID
+    legacyLocalStateKey = "localState"
+    if registry.exists(localStateKey) then
+        return registry.read(localStateKey)
+    else if registry.exists(legacyLocalStateKey) then
+        return registry.read(legacyLocalStateKey)
     end if
     return ""
 end function
@@ -46,10 +52,17 @@ end function
 
 sub setLocalState(localState)
     registry = CreateObject("roRegistrySection", "SourcepointSdk")
-    if localState = invalid then
-        localState = ""
+    appInfo = CreateObject("roAppInfo")
+    channelID = appInfo.GetID()
+    if registry.exists("localState") then
+        ' cleanup legacy localState key
+        registry.delete("localState")
     end if
-    registry.write("localState", localState)
+    if localState = invalid then
+        registry.delete("localState_" + channelID)
+        return
+    end if
+    registry.write("localState_" + channelID, localState)
     registry.flush()
 end sub
 

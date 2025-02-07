@@ -146,6 +146,9 @@ function __SourcepointSdk_builder()
         m.showMessages(getMessageTask.campaigns)
         return m.formatUserConsent(m.userConsent)
     end function
+    instance.clearUserConsent = sub()
+        setLocalState(invalid)
+    end sub
     instance.openPrivacyManager = sub(legislation as string, messageId as integer) as dynamic
         ' make sure we're lowercase
         legislation = LCase(legislation)
